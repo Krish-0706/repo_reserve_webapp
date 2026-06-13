@@ -1,29 +1,17 @@
 // src/app/api/listings/route.ts
-//
-// POST /api/listings  — create a new listing (donor only)
-// GET  /api/listings  — fetch the authenticated donor's own listings
-//
-// Both routes require an active session. The server client reads the
-// session from cookies automatically via @supabase/ssr.
+// Updated: now accepts and validates `food_name`
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// POST — Create listing
-// Body: { food_type, quantity_kg, photo_url, address, lat, lng,
-//         pickup_start, pickup_end }
-// ─────────────────────────────────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
   const supabase = createClient();
 
-  // 1 — Confirm the user is authenticated
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
 
-  // 2 — Confirm the user is a donor with active status
   const { data: profile } = await supabase
     .from("users")
     .select("role, status")
@@ -34,7 +22,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  // 3 — Parse and validate the request body
   let body: Record<string, unknown>;
   try {
     body = await request.json();
@@ -42,9 +29,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { food_type, quantity_kg, photo_url, address, lat, lng, pickup_start, pickup_end } = body;
+  const { food_name, food_type, quantity_kg, photo_url, address, lat, lng, pickup_start, pickup_end } = body;
 
-  // Required field checks
+  // NEW — food_name validation
+  if (!food_name || typeof food_name !== "string" || food_name.trim() === "") {
+    return NextResponse.json({ error: "food_name is required" }, { status: 400 });
+  }
   if (!food_type || typeof food_type !== "string" || food_type.trim() === "") {
     return NextResponse.json({ error: "food_type is required" }, { status: 400 });
   }
@@ -61,7 +51,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "pickup_start and pickup_end are required" }, { status: 400 });
   }
 
-  // Pickup window logic — end must be after start, and start must be in the future
   const startDate = new Date(pickup_start as string);
   const endDate   = new Date(pickup_end as string);
   const now       = new Date();
@@ -76,12 +65,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Pickup end must be after pickup start" }, { status: 400 });
   }
 
-  // 4 — Insert into public.listings
-  // RLS policy "donors_manage_own" allows this because the session user is the donor
   const { data: listing, error: insertError } = await supabase
     .from("listings")
     .insert({
       donor_id:     user.id,
+      food_name:    (food_name as string).trim(),   // NEW
       food_type:    (food_type as string).trim(),
       quantity_kg:  quantity_kg as number,
       photo_url:    (photo_url as string | null) ?? null,
@@ -100,14 +88,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to create listing" }, { status: 500 });
   }
 
-  // 5 — Return the created listing
   return NextResponse.json({ data: listing }, { status: 201 });
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// GET — Fetch the authenticated donor's own listings
-// Returns all listings for this donor, ordered by most recent first
-// ─────────────────────────────────────────────────────────────────────────────
 export async function GET() {
   const supabase = createClient();
 
@@ -116,8 +99,6 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
 
-  // Fetch listings — RLS ensures only this donor's rows are returned
-  // We also mark any expired listings inline before returning
   const { data: listings, error: fetchError } = await supabase
     .from("listings")
     .select("*")
@@ -128,8 +109,6 @@ export async function GET() {
     return NextResponse.json({ error: "Failed to fetch listings" }, { status: 500 });
   }
 
-  // Auto-expire: if pickup_end has passed and status is still active,
-  // update to expired. This runs lazily on each GET rather than via cron.
   const now = new Date();
   const toExpire = (listings ?? []).filter(
     (l) => l.status === "active" && new Date(l.pickup_end) < now
@@ -137,15 +116,8 @@ export async function GET() {
 
   if (toExpire.length > 0) {
     const ids = toExpire.map((l) => l.id);
-    await supabase
-      .from("listings")
-      .update({ status: "expired" })
-      .in("id", ids);
-
-    // Update the local array so the response reflects reality
-    (listings ?? []).forEach((l) => {
-      if (ids.includes(l.id)) l.status = "expired";
-    });
+    await supabase.from("listings").update({ status: "expired" }).in("id", ids);
+    (listings ?? []).forEach((l) => { if (ids.includes(l.id)) l.status = "expired"; });
   }
 
   return NextResponse.json({ data: listings ?? [] }, { status: 200 });

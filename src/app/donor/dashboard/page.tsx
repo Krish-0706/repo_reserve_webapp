@@ -1,22 +1,21 @@
 "use client";
 // src/app/(donor)/dashboard/page.tsx
 //
-// Real donor dashboard — replaces the dummy.
-//
-// On load: fetches all listings for the authenticated donor via GET /api/listings
-// Shows: stat cards (total kg, meals, active count) + listing feed with status badges
-// "Post Listing" button navigates to /donor/listings/create
-// Each listing card links to /donor/listings/[id]
+// v2 changes:
+//  - PageLoader shown while navigating to create/detail pages
+//  - Refined spacing (more breathing room between sections)
+//  - Loading skeletons use shimmer animation
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import Sidebar from "@/components/shared/Sidebar";
+import { PageLoader } from "@/components/shared/Loader";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 type ListingStatus = "active" | "claimed" | "completed" | "expired";
 
 type Listing = {
   id: string;
+  food_name: string;
   food_type: string;
   quantity_kg: number;
   photo_url: string | null;
@@ -27,9 +26,6 @@ type Listing = {
   created_at: string;
 };
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-// Returns time remaining as a human-readable string
 function timeRemaining(pickupEnd: string): string {
   const diff = new Date(pickupEnd).getTime() - Date.now();
   if (diff <= 0) return "Expired";
@@ -39,7 +35,6 @@ function timeRemaining(pickupEnd: string): string {
   return `${minutes}m left`;
 }
 
-// Returns the status badge style based on listing status
 function statusStyle(status: ListingStatus): React.CSSProperties {
   const map: Record<ListingStatus, { bg: string; color: string }> = {
     active:    { bg: "rgba(29,158,117,0.12)",  color: "#1D9E75" },
@@ -49,191 +44,181 @@ function statusStyle(status: ListingStatus): React.CSSProperties {
   };
   const s = map[status];
   return {
-    display: "inline-block",
-    background: s.bg, color: s.color,
-    fontSize: "9px", fontWeight: 700,
-    fontFamily: "Syne, sans-serif",
-    letterSpacing: "0.08em",
-    textTransform: "uppercase",
+    display: "inline-block", background: s.bg, color: s.color,
+    fontSize: "9px", fontWeight: 700, fontFamily: "Syne, sans-serif",
+    letterSpacing: "0.08em", textTransform: "uppercase",
     padding: "3px 9px", borderRadius: "999px",
   };
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
+function EmptyListingsIllustration() {
+  return (
+    <svg width="140" height="110" viewBox="0 0 140 110" fill="none">
+      <rect x="20" y="20" width="100" height="70" rx="10" fill="#fff" stroke="#E0DDD8" strokeWidth="2"/>
+      <rect x="32" y="36" width="40" height="6" rx="3" fill="#E0DDD8"/>
+      <rect x="32" y="50" width="60" height="6" rx="3" fill="#F0EDE8"/>
+      <rect x="32" y="64" width="50" height="6" rx="3" fill="#F0EDE8"/>
+      <circle cx="100" cy="30" r="14" fill="#FEF0EA"/>
+      <path d="M100 24v12M94 30h12" stroke="#E8450A" strokeWidth="2.5" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
 export default function DonorDashboard() {
-  const router   = useRouter();
-  const supabase = createClient();
+  const router = useRouter();
 
-  const [listings, setListings] = useState<Listing[]>([]);
-  const [loading,  setLoading]  = useState(true);
-  const [error,    setError]    = useState("");
+  const [listings,   setListings]   = useState<Listing[]>([]);
+  const [loading,    setLoading]    = useState(true);
+  const [error,      setError]      = useState("");
+  const [navigating, setNavigating] = useState<string | null>(null);
 
-  // Fetch listings on mount
   useEffect(() => {
     fetch("/api/listings")
       .then((res) => res.json())
       .then((json) => {
-        if (json.error) { setError(json.error); }
-        else { setListings(json.data ?? []); }
+        if (json.error) setError(json.error);
+        else setListings(json.data ?? []);
         setLoading(false);
       })
       .catch(() => { setError("Failed to load listings."); setLoading(false); });
   }, []);
 
-  // ── Derived stats ──────────────────────────────────────────────────────────
+  const navigate = (path: string, label: string) => {
+    setNavigating(label);
+    router.push(path);
+  };
+
   const totalKg      = listings.reduce((sum, l) => sum + l.quantity_kg, 0);
-  const totalMeals   = Math.round(totalKg * 2.5);  // industry estimate: 1 kg ≈ 2.5 meals
+  const totalMeals   = Math.round(totalKg * 2.5);
   const activeCount  = listings.filter((l) => l.status === "active").length;
   const claimedCount = listings.filter((l) => l.status === "claimed").length;
 
-  const logout = async () => { await supabase.auth.signOut(); window.location.href = "/login"; };
-
-  // ─── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="dash-root">
+    <div style={{ minHeight: "100vh", background: "#F0EDE8", fontFamily: "DM Sans, sans-serif", display: "flex" }}>
 
-      {/* Sidebar */}
-      <aside className="dash-sidebar">
-        <div className="dash-logo">ReServe</div>
-        <div className="dash-nav-label">Main</div>
-        <button className="dash-nav-item active">
-          <span style={{ width:5, height:5, borderRadius:"50%", background:"#E8450A", flexShrink:0 }} />
-          Dashboard
-        </button>
-        <button className="dash-nav-item" onClick={() => router.push("/donor/listings/create")}>
-          <span style={{ width:5, height:5, borderRadius:"50%", background:"currentColor", flexShrink:0 }} />
-          Post Listing
-        </button>
-        <button className="dash-nav-item" onClick={() => router.push("/donor/impact")}>
-          <span style={{ width:5, height:5, borderRadius:"50%", background:"currentColor", flexShrink:0 }} />
-          Impact
-        </button>
-        <div className="dash-nav-label">Account</div>
-        <button className="dash-nav-item">
-          <span style={{ width:5, height:5, borderRadius:"50%", background:"currentColor", flexShrink:0 }} />
-          Notifications
-        </button>
-        <button className="dash-signout" onClick={logout}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
-          </svg>
-          Sign out
-        </button>
-      </aside>
+      {navigating && <PageLoader label={navigating} />}
 
-      {/* Main */}
-      <main className="dash-main">
+      <Sidebar
+        role="Donor"
+        items={[
+          { label: "Dashboard",     href: "/donor/dashboard",       icon: "grid" },
+          { label: "Post Listing",  href: "/donor/listings/create", icon: "plus" },
+          { label: "Impact",        href: "/donor/impact",          icon: "chart" },
+          { label: "Notifications", href: "/notifications",         icon: "bell" },
+        ]}
+      />
+
+      <main style={{ marginLeft: "240px", flex: 1, padding: "44px 52px 60px" }}>
 
         {/* Top bar */}
-        <div className="dash-topbar">
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "40px" }}>
           <div>
-            <div className="dash-greeting">Donor Dashboard</div>
-            <div className="dash-greeting-sub">Manage your food surplus listings</div>
+            <h1 style={{ fontFamily: "Syne, sans-serif", fontSize: "32px", fontWeight: 800, color: "#1A1714", letterSpacing: "-0.5px" }}>
+              Donor Dashboard
+            </h1>
+            <p style={{ fontSize: "14px", color: "#888", marginTop: "6px", fontWeight: 300 }}>
+              Manage your food surplus listings
+            </p>
           </div>
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            <div className="dash-badge">DONOR</div>
-            <button
-              onClick={() => router.push("/donor/listings/create")}
-              style={{
-                height: "38px", padding: "0 20px",
-                borderRadius: "999px",
-                background: "#E8450A", color: "#fff",
-                fontFamily: "Syne, sans-serif",
-                fontSize: "12px", fontWeight: 700,
-                border: "2px solid #1A1714",
-                boxShadow: "2px 2px 0px #1A1714",
-                cursor: "pointer",
-                letterSpacing: "0.03em",
-                transition: "transform 0.15s, box-shadow 0.15s",
-              }}
-            >
-              + Post Listing
-            </button>
-          </div>
+          <button
+            onClick={() => navigate("/donor/listings/create", "Opening listing form...")}
+            style={{
+              height: "48px", padding: "0 26px", borderRadius: "999px",
+              background: "#E8450A", color: "#fff",
+              fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700,
+              border: "2px solid #1A1714", boxShadow: "3px 3px 0px #1A1714",
+              cursor: "pointer", letterSpacing: "0.03em",
+              display: "flex", alignItems: "center", gap: "8px",
+              transition: "transform 0.15s, box-shadow 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.transform = "translate(-1px,-1px)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "4px 4px 0px #1A1714";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.transform = "translate(0,0)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "3px 3px 0px #1A1714";
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+            Post Listing
+          </button>
         </div>
 
-        {/* Stat cards */}
-        <div className="dash-stats">
-          <div className="stat-card">
-            <div className="stat-label">Total Donated</div>
-            <div className="stat-value orange">{totalKg.toFixed(1)} kg</div>
-            <div className="stat-sub">Across all listings</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">Meals Enabled</div>
-            <div className="stat-value green">{totalMeals}</div>
-            <div className="stat-sub">Est. at 2.5 meals / kg</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">Active Now</div>
-            <div className="stat-value">{activeCount}</div>
-            <div className="stat-sub">{claimedCount} claimed</div>
-          </div>
+        {/* Stats */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "18px", marginBottom: "44px" }}>
+          {[
+            { label: "Total Donated", value: `${totalKg.toFixed(1)} kg`, sub: "Across all listings", color: "#E8450A" },
+            { label: "Meals Enabled", value: totalMeals, sub: "Est. at 2.5 meals / kg", color: "#1D9E75" },
+            { label: "Active Now",    value: activeCount, sub: `${claimedCount} claimed`, color: "#1A1714" },
+          ].map((s) => (
+            <div key={s.label} style={{
+              background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "18px",
+              padding: "28px 28px", boxShadow: "4px 4px 10px rgba(0,0,0,0.04), -2px -2px 6px rgba(255,255,255,0.9)",
+            }}>
+              <div style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.09em", color: "#AAA", fontWeight: 500, marginBottom: "12px" }}>
+                {s.label}
+              </div>
+              <div style={{ fontFamily: "Syne, sans-serif", fontSize: "34px", fontWeight: 800, color: s.color, lineHeight: 1 }}>
+                {s.value}
+              </div>
+              <div style={{ fontSize: "11px", color: "#AAA", marginTop: "8px", fontWeight: 300 }}>
+                {s.sub}
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Listing feed */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
-          <div className="dash-section-title">My Listings</div>
-          {listings.length > 0 && (
-            <span style={{ fontSize: "11px", color: "#AAA" }}>
-              {listings.length} total
-            </span>
-          )}
+        {/* Listings header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
+          <div style={{ fontFamily: "Syne, sans-serif", fontSize: "14px", fontWeight: 700, color: "#1A1714", textTransform: "uppercase", letterSpacing: "0.07em" }}>
+            My Listings
+          </div>
+          {listings.length > 0 && <span style={{ fontSize: "12px", color: "#AAA" }}>{listings.length} total</span>}
         </div>
 
-        {/* Loading */}
+        {/* Loading skeletons with shimmer */}
         {loading && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             {[1,2,3].map((i) => (
               <div key={i} style={{
-                background: "#fff", border: "1.5px solid #E0DDD8",
-                borderRadius: "14px", height: "80px",
-                animation: "pulse 1.5s ease-in-out infinite",
-                opacity: 0.6,
+                background: "linear-gradient(90deg, #fff 25%, #F8F6F3 37%, #fff 63%)",
+                backgroundSize: "400% 100%",
+                animation: "reserve-shimmer 1.4s ease infinite",
+                border: "1.5px solid #E0DDD8", borderRadius: "16px", height: "88px",
               }} />
             ))}
+            <style>{`@keyframes reserve-shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }`}</style>
           </div>
         )}
 
-        {/* Error */}
         {!loading && error && (
-          <div style={{
-            background: "#FEF2F2", border: "1px solid #FECACA",
-            borderRadius: "10px", padding: "14px 16px",
-            fontSize: "13px", color: "#DC2626",
-          }}>
+          <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "12px", padding: "14px 18px", fontSize: "13px", color: "#DC2626" }}>
             {error}
           </div>
         )}
 
-        {/* Empty state */}
         {!loading && !error && listings.length === 0 && (
-          <div className="coming-soon-card">
-            <div style={{
-              width: "48px", height: "48px",
-              background: "#F0EDE8", borderRadius: "12px",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 16px",
-            }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#AAA" strokeWidth="1.5">
-                <path d="M12 5v14M5 12h14"/>
-              </svg>
+          <div style={{
+            background: "#fff", border: "2px dashed #E0DDD8", borderRadius: "22px",
+            padding: "64px 32px", textAlign: "center",
+          }}>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "18px" }}>
+              <EmptyListingsIllustration />
             </div>
-            <div className="coming-soon-title" style={{ fontSize: "18px" }}>No listings yet</div>
-            <div className="coming-soon-body" style={{ marginBottom: "20px" }}>
+            <div style={{ fontFamily: "Syne, sans-serif", fontSize: "20px", fontWeight: 700, color: "#1A1714", marginBottom: "8px" }}>
+              No listings yet
+            </div>
+            <div style={{ fontSize: "14px", color: "#AAA", marginBottom: "26px", fontWeight: 300 }}>
               Post your first surplus food listing to get started.
             </div>
             <button
-              onClick={() => router.push("/donor/listings/create")}
+              onClick={() => navigate("/donor/listings/create", "Opening listing form...")}
               style={{
-                height: "44px", padding: "0 28px",
-                borderRadius: "10px",
+                height: "48px", padding: "0 32px", borderRadius: "12px",
                 background: "#E8450A", color: "#fff",
-                fontFamily: "Syne, sans-serif",
-                fontSize: "13px", fontWeight: 700,
-                border: "2px solid #1A1714",
-                boxShadow: "2px 2px 0px #1A1714",
-                cursor: "pointer",
+                fontFamily: "Syne, sans-serif", fontSize: "14px", fontWeight: 700,
+                border: "2px solid #1A1714", boxShadow: "3px 3px 0px #1A1714", cursor: "pointer",
               }}
             >
               Post Listing →
@@ -241,28 +226,21 @@ export default function DonorDashboard() {
           </div>
         )}
 
-        {/* Listing cards */}
         {!loading && !error && listings.length > 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             {listings.map((listing) => (
               <div
                 key={listing.id}
-                onClick={() => router.push(`/donor/listings/${listing.id}`)}
+                onClick={() => navigate(`/donor/listings/${listing.id}`, "Loading listing details...")}
                 style={{
-                  background: "#fff",
-                  border: "1.5px solid #E0DDD8",
-                  borderRadius: "14px",
-                  padding: "16px 20px",
-                  display: "grid",
-                  gridTemplateColumns: "56px 1fr auto",
-                  gap: "14px",
-                  alignItems: "center",
-                  cursor: "pointer",
-                  transition: "box-shadow 0.15s, transform 0.15s",
+                  background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "16px",
+                  padding: "20px 26px", display: "grid",
+                  gridTemplateColumns: "64px 1fr auto", gap: "20px", alignItems: "center",
+                  cursor: "pointer", transition: "box-shadow 0.15s, transform 0.15s",
                   boxShadow: "2px 2px 6px rgba(0,0,0,0.04)",
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "3px 3px 0px #E0DDD8";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "4px 4px 0px #E0DDD8";
                   (e.currentTarget as HTMLDivElement).style.transform = "translate(-1px,-1px)";
                 }}
                 onMouseLeave={(e) => {
@@ -270,55 +248,35 @@ export default function DonorDashboard() {
                   (e.currentTarget as HTMLDivElement).style.transform = "translate(0,0)";
                 }}
               >
-                {/* Photo or placeholder */}
                 <div style={{
-                  width: "56px", height: "56px",
-                  borderRadius: "10px",
-                  overflow: "hidden",
-                  background: "#F0EDE8",
-                  flexShrink: 0,
+                  width: "64px", height: "64px", borderRadius: "12px", overflow: "hidden",
+                  background: "#F0EDE8", flexShrink: 0,
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
                   {listing.photo_url ? (
-                    <img
-                      src={listing.photo_url}
-                      alt={listing.food_type}
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
+                    <img src={listing.photo_url} alt={listing.food_name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   ) : (
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5">
-                      <rect x="3" y="3" width="18" height="18" rx="3"/>
-                      <circle cx="8.5" cy="8.5" r="1.5"/>
-                      <polyline points="21 15 16 10 5 21"/>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5">
+                      <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
                     </svg>
                   )}
                 </div>
 
-                {/* Info */}
                 <div>
-                  <div style={{
-                    fontFamily: "Syne, sans-serif",
-                    fontSize: "14px", fontWeight: 600,
-                    color: "#1A1714", marginBottom: "3px",
-                  }}>
-                    {listing.food_type}
+                  <div style={{ fontFamily: "Syne, sans-serif", fontSize: "15px", fontWeight: 700, color: "#1A1714", marginBottom: "4px" }}>
+                    {listing.food_name || listing.food_type}
                   </div>
                   <div style={{ fontSize: "12px", color: "#888", fontWeight: 300 }}>
-                    {listing.quantity_kg} kg · {listing.address.split(",")[0]}
+                    {listing.food_type} · {listing.quantity_kg} kg · {listing.address.split(",")[0]}
                   </div>
-                  <div style={{ fontSize: "11px", color: listing.status === "active" ? "#E8450A" : "#AAA", marginTop: "3px" }}>
+                  <div style={{ fontSize: "11px", color: listing.status === "active" ? "#E8450A" : "#AAA", marginTop: "5px" }}>
                     {listing.status === "active" ? timeRemaining(listing.pickup_end) : ""}
                   </div>
                 </div>
 
-                {/* Status badge + arrow */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
-                  <span style={statusStyle(listing.status)}>
-                    {listing.status}
-                  </span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="2">
-                    <path d="M9 18l6-6-6-6"/>
-                  </svg>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "12px" }}>
+                  <span style={statusStyle(listing.status)}>{listing.status}</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
                 </div>
               </div>
             ))}
