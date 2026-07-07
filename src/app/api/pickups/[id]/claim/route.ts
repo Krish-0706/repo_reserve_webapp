@@ -64,35 +64,18 @@ export async function POST(_req: NextRequest, { params }: Params) {
         return NextResponse.json({ error: "Pickup window has closed for this listing" }, { status: 409 });
     }
 
-    // 4 — Update listing status to claimed
-    const { error: updateError } = await supabase
-        .from("listings")
-        .update({ status: "claimed" })
-        .eq("id", listingId);
+    // 4 — Claim the listing atomically via RPC
+    const { data: pickup, error: claimError } = await supabase
+        .rpc('claim_listing', { p_listing_id: listingId });
 
-    if (updateError) {
-        console.error("Claim update error:", updateError);
-        return NextResponse.json({ error: "Failed to claim listing" }, { status: 500 });
-    }
-
-    // 5 — Insert pickup row
-    const { data: pickup, error: pickupError } = await supabase
-        .from("pickups")
-        .insert({
-            listing_id: listingId,
-            ngo_id: user.id,
-            volunteer_id: null,           // assigned later by NGO via PATCH /assign
-            status: "claimed",
-            claimed_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
-
-    if (pickupError) {
-        console.error("Pickup insert error:", pickupError);
-        // Rollback the listing status update
-        await supabase.from("listings").update({ status: "active" }).eq("id", listingId);
-        return NextResponse.json({ error: "Failed to create pickup record" }, { status: 500 });
+    if (claimError) {
+        console.error("Claim error:", claimError);
+        const message = claimError.message.includes("no longer available")
+            ? "This listing has already been claimed."
+            : claimError.message.includes("Only NGOs")
+                ? "Only NGOs can claim listings."
+                : "Failed to claim listing.";
+        return NextResponse.json({ error: message }, { status: 409 });
     }
 
     // 6 — Insert notification for the donor
