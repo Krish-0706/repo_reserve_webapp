@@ -2337,3 +2337,26 @@ h6,
     text-align: center;
   }
 }
+
+/* ─── Leaflet overrides — protect from Tailwind Preflight resets ─────────── */
+/* Tailwind base sets img { display:block } and strips border styles,
+   which collapses Leaflet tiles and hides DivIcon markers.              */
+.leaflet-container img {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.leaflet-container .leaflet-tile-pane img {
+  display: inline !important;
+}
+
+.leaflet-container .leaflet-marker-icon,
+.leaflet-container .leaflet-marker-shadow {
+  display: block !important;
+}
+
+/* Ensure DivIcon containers don't collapse */
+.leaflet-container .leaflet-div-icon {
+  background: transparent !important;
+  border: none !important;
+}

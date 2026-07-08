@@ -363,7 +363,7 @@ export default function NGOMapPage() {
             <MapView
               listings={listings}
               selectedId={selected?.id ?? null}
-              onPinClick={(listing) => {
+              onPinClickAction={(listing) => {
                 setSelected(listing);
                 setClaimError("");
               }}

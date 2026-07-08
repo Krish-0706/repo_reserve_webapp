@@ -3,7 +3,7 @@
 //
 // Leaflet map component — dynamically imported (no SSR).
 // Renders listing pins colour-coded by time urgency.
-// Clicking a pin triggers onPinClick with the full listing object.
+// Clicking a pin triggers onPinClickAction with the full listing object.
 //
 // Import leaflet-fix before Leaflet to patch marker icon resolution.
 
@@ -17,15 +17,15 @@ import "leaflet/dist/leaflet.css";
 
 // ─── Custom pin SVG — colour based on time remaining ─────────────────────────
 function pinSvg(color: string, selected: boolean): string {
-    const size = selected ? 36 : 28;
-    const shadow = selected ? `filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35));` : "";
+    const w = selected ? 24 : 20;
+    const h = selected ? 34 : 28;
+    const shadow = selected ? `filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));` : `filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));`;
     return `
     <div style="${shadow} transition: all 0.2s;">
-      <svg width="${size}" height="${size * 1.3}" viewBox="0 0 36 47" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 29 18 29S36 31.5 36 18C36 8.06 27.94 0 18 0z"
-          fill="${color}" stroke="#fff" stroke-width="2"/>
-        <circle cx="18" cy="18" r="7" fill="#fff"/>
-        <circle cx="18" cy="18" r="4" fill="${color}"/>
+      <svg width="${w}" height="${h}" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 0C4.48 0 0 4.48 0 10c0 7.5 10 18 10 18s10-10.5 10-18C20 4.48 15.52 0 10 0z"
+          fill="${color}"/>
+        <circle cx="10" cy="10" r="4" fill="#fff" opacity="0.95"/>
       </svg>
     </div>`;
 }
@@ -40,10 +40,13 @@ function getPinColor(pickupEnd: string): string {
 
 function makeIcon(listing: MapListing, selected: boolean): L.DivIcon {
     const color = getPinColor(listing.pickup_end);
+    const w = selected ? 24 : 20;
+    const h = selected ? 34 : 28;
     return L.divIcon({
         html: pinSvg(color, selected),
-        iconAnchor: [selected ? 18 : 14, selected ? 47 : 36],
-        popupAnchor: [0, -36],
+        iconSize: [w, h],
+        iconAnchor: [w / 2, h],
+        popupAnchor: [0, -h],
         className: "",
     });
 }
@@ -52,11 +55,11 @@ function makeIcon(listing: MapListing, selected: boolean): L.DivIcon {
 type MapViewProps = {
     listings: MapListing[];
     selectedId: string | null;
-    onPinClick: (listing: MapListing) => void;
+    onPinClickAction: (listing: MapListing) => void;
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
-export default function MapView({ listings, selectedId, onPinClick }: MapViewProps) {
+export default function MapView({ listings, selectedId, onPinClickAction }: MapViewProps) {
     const mapRef = useRef<L.Map | null>(null);
     const markersRef = useRef<Map<string, L.Marker>>(new Map());
     const containerRef = useRef<HTMLDivElement>(null);
@@ -86,6 +89,7 @@ export default function MapView({ listings, selectedId, onPinClick }: MapViewPro
         return () => {
             map.remove();
             mapRef.current = null;
+            markersRef.current.clear();
         };
     }, []);
 
@@ -119,7 +123,7 @@ export default function MapView({ listings, selectedId, onPinClick }: MapViewPro
                     zIndexOffset: isSelected ? 1000 : 0,
                 });
 
-                marker.on("click", () => onPinClick(listing));
+                marker.on("click", () => onPinClickAction(listing));
 
                 // Tooltip on hover
                 marker.bindTooltip(
@@ -140,7 +144,7 @@ export default function MapView({ listings, selectedId, onPinClick }: MapViewPro
             const bounds = L.latLngBounds(listings.map((l) => [l.lat, l.lng]));
             map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
         }
-    }, [listings, selectedId, onPinClick]);
+    }, [listings, selectedId, onPinClickAction]);
 
     // ── Pan to selected pin ───────────────────────────────────────────────────
     useEffect(() => {
