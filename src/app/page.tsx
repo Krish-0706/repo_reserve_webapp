@@ -53,7 +53,7 @@ export default function LandingPage() {
         <div className="hero-content">
           <div className="hero-kicker">
             <div className="hero-kicker-dot" />
-            Mumbai · Food Redistribution Platform
+            Food Redistribution Platform
           </div>
           <h1 className="hero-title">
             Food that<br />
