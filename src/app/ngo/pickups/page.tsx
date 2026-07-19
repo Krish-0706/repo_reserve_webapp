@@ -7,8 +7,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Sidebar from "@/components/shared/Sidebar";
-import { PageLoader, Spinner } from "@/components/shared/Loader";
+import { PageLoader } from "@/components/shared/Loader";
 
 type PickupStatus = "claimed" | "in_progress" | "completed" | "cancelled";
 
@@ -37,11 +38,7 @@ type Pickup = {
     } | null;
 };
 
-function formatDate(iso: string) {
-    return new Date(iso).toLocaleString("en-IN", {
-        day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
-    });
-}
+
 
 function statusColor(s: PickupStatus) {
     const map: Record<PickupStatus, { bg: string; fg: string }> = {
@@ -208,11 +205,11 @@ function PickupCard({ pickup }: { pickup: Pickup }) {
         }}>
             <div style={{
                 width: "56px", height: "56px", borderRadius: "12px",
-                overflow: "hidden", background: "#F0EDE8", flexShrink: 0,
+                overflow: "hidden", background: "#F0EDE8", flexShrink: 0, position: "relative",
                 display: "flex", alignItems: "center", justifyContent: "center",
             }}>
                 {l.photo_url
-                    ? <img src={l.photo_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ? <Image src={l.photo_url} alt="" fill style={{ objectFit: "cover" }} unoptimized />
                     : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
                 }
             </div>

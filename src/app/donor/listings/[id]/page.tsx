@@ -7,6 +7,7 @@
 //  - Spinner / PageLoader for loading states
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { useRouter, useParams } from "next/navigation";
 import Sidebar from "@/components/shared/Sidebar";
 import { Spinner, PageLoader } from "@/components/shared/Loader";
@@ -159,9 +160,9 @@ export default function ListingDetailPage() {
                 <div style={{
                   width: "100%", height: "300px", borderRadius: "16px", overflow: "hidden",
                   marginBottom: "20px", border: "1.5px solid #E0DDD8",
-                  boxShadow: "4px 4px 10px rgba(0,0,0,0.05)",
+                  boxShadow: "4px 4px 10px rgba(0,0,0,0.05)", position: "relative",
                 }}>
-                  <img src={listing.photo_url} alt={listing.food_name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  <Image src={listing.photo_url} alt={listing.food_name} fill style={{ objectFit: "cover" }} unoptimized />
                 </div>
               ) : (
                 <div style={{

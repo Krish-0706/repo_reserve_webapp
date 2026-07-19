@@ -12,11 +12,12 @@
 // Realtime: Supabase subscription on public.listings keeps pins live.
 // Claim: POST /api/pickups/[id]/claim → removes pin, updates panel.
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/client";
 import Sidebar from "@/components/shared/Sidebar";
-import { Spinner, PageLoader } from "@/components/shared/Loader";
+import { Spinner } from "@/components/shared/Loader";
 
 // Leaflet must be dynamically imported — it uses browser-only APIs
 const MapView = dynamic(() => import("@/components/ngo/MapView"), {
@@ -81,9 +82,9 @@ function ListingPanel({
     }}>
       {/* Photo */}
       {listing.photo_url ? (
-        <div style={{ height: "200px", flexShrink: 0, overflow: "hidden" }}>
-          <img src={listing.photo_url} alt={listing.food_name}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        <div style={{ height: "200px", flexShrink: 0, overflow: "hidden", position: "relative" }}>
+          <Image src={listing.photo_url} alt={listing.food_name}
+            fill style={{ objectFit: "cover" }} unoptimized />
         </div>
       ) : (
         <div style={{
@@ -232,11 +233,11 @@ function ListingCard({ listing, onClick }: { listing: MapListing; onClick: () =>
     >
       <div style={{
         width: "52px", height: "52px", borderRadius: "10px",
-        overflow: "hidden", background: "#F0EDE8", flexShrink: 0,
+        overflow: "hidden", background: "#F0EDE8", flexShrink: 0, position: "relative",
         display: "flex", alignItems: "center", justifyContent: "center",
       }}>
         {listing.photo_url
-          ? <img src={listing.photo_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          ? <Image src={listing.photo_url} alt="" fill style={{ objectFit: "cover" }} unoptimized />
           : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
         }
       </div>
@@ -264,7 +265,7 @@ export default function NGOMapPage() {
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [claimError, setClaimError] = useState("");
-  const [navigating, setNavigating] = useState(false);
+
   const [toast, setToast] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -338,7 +339,7 @@ export default function NGOMapPage() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", fontFamily: "DM Sans, sans-serif" }}>
 
-      {navigating && <PageLoader label="Loading..." />}
+
 
       <Sidebar
         role="NGO"

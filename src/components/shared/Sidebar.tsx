@@ -49,6 +49,7 @@ function Icon({ name }: { name: IconName }) {
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function Sidebar({ role, items }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();

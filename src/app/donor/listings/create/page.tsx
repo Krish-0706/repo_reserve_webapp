@@ -33,13 +33,13 @@ async function uploadToCloudinary(file: File): Promise<string> {
 function FoodBowlIllustration() {
   return (
     <svg width="160" height="120" viewBox="0 0 160 120" fill="none">
-      <path d="M60 20c0 8-8 8-8 16s8 8 8 16" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" opacity="0.3"/>
-      <path d="M80 14c0 8-8 8-8 16s8 8 8 16" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" opacity="0.4"/>
-      <path d="M100 20c0 8-8 8-8 16s8 8 8 16" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" opacity="0.3"/>
-      <path d="M30 65h100l-8 30a12 12 0 01-12 10H50a12 12 0 01-12-10l-8-30z" fill="#F0EDE8" stroke="#1A1714" strokeWidth="2"/>
-      <ellipse cx="80" cy="65" rx="50" ry="10" fill="#E8450A" opacity="0.15"/>
-      <ellipse cx="80" cy="63" rx="42" ry="7" fill="#E8450A"/>
-      <path d="M30 65h100" stroke="#1A1714" strokeWidth="2"/>
+      <path d="M60 20c0 8-8 8-8 16s8 8 8 16" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
+      <path d="M80 14c0 8-8 8-8 16s8 8 8 16" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+      <path d="M100 20c0 8-8 8-8 16s8 8 8 16" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
+      <path d="M30 65h100l-8 30a12 12 0 01-12 10H50a12 12 0 01-12-10l-8-30z" fill="#F0EDE8" stroke="#1A1714" strokeWidth="2" />
+      <ellipse cx="80" cy="65" rx="50" ry="10" fill="#E8450A" opacity="0.15" />
+      <ellipse cx="80" cy="63" rx="42" ry="7" fill="#E8450A" />
+      <path d="M30 65h100" stroke="#1A1714" strokeWidth="2" />
     </svg>
   );
 }
@@ -50,23 +50,23 @@ export default function CreateListingPage() {
   const [step, setStep] = useState<1 | 2>(1);
   const [navigating, setNavigating] = useState(false);
 
-  const [photoFile,    setPhotoFile]    = useState<File | null>(null);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const [photoUrl,     setPhotoUrl]     = useState<string | null>(null);
-  const [foodName,     setFoodName]     = useState("");
-  const [foodType,     setFoodType]     = useState<FoodType | "">("");
-  const [quantityKg,   setQuantityKg]   = useState<string>("");
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [foodName, setFoodName] = useState("");
+  const [foodType, setFoodType] = useState<FoodType | "">("");
+  const [quantityKg, setQuantityKg] = useState<string>("");
   const [uploadingImg, setUploadingImg] = useState(false);
 
-  const [address,      setAddress]      = useState("");
-  const [lat,          setLat]          = useState<number | null>(null);
-  const [lng,          setLng]          = useState<number | null>(null);
-  const [locLoading,   setLocLoading]   = useState(false);
-  const [pickupStart,  setPickupStart]  = useState("");
-  const [pickupEnd,    setPickupEnd]    = useState("");
+  const [address, setAddress] = useState("");
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
+  const [locLoading, setLocLoading] = useState(false);
+  const [pickupStart, setPickupStart] = useState("");
+  const [pickupEnd, setPickupEnd] = useState("");
 
-  const [error,        setError]        = useState("");
-  const [submitting,   setSubmitting]   = useState(false);
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -74,7 +74,7 @@ export default function CreateListingPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith("image/")) { setError("Please select an image file."); return; }
-    if (file.size > 5 * 1024 * 1024)    { setError("Image must be under 5MB."); return; }
+    if (file.size > 5 * 1024 * 1024) { setError("Image must be under 5MB."); return; }
     setError("");
     setPhotoFile(file);
     const reader = new FileReader();
@@ -95,8 +95,8 @@ export default function CreateListingPage() {
 
   const handleStep1Next = async () => {
     setError("");
-    if (!foodName.trim())  { setError("Please enter a food item name."); return; }
-    if (!foodType)         { setError("Please select a food category."); return; }
+    if (!foodName.trim()) { setError("Please enter a food item name."); return; }
+    if (!foodType) { setError("Please select a food category."); return; }
     if (!quantityKg || isNaN(Number(quantityKg)) || Number(quantityKg) <= 0) {
       setError("Enter a valid quantity in kg."); return;
     }
@@ -114,11 +114,11 @@ export default function CreateListingPage() {
     e.preventDefault();
     setError("");
     if (!address.trim()) { setError("Please enter a pickup address."); return; }
-    if (!pickupStart)    { setError("Please set a pickup start time."); return; }
-    if (!pickupEnd)      { setError("Please set a pickup end time."); return; }
+    if (!pickupStart) { setError("Please set a pickup start time."); return; }
+    if (!pickupEnd) { setError("Please set a pickup end time."); return; }
 
     const startDate = new Date(pickupStart);
-    const endDate   = new Date(pickupEnd);
+    const endDate = new Date(pickupEnd);
     if (endDate <= startDate) { setError("Pickup end must be after start."); return; }
 
     setSubmitting(true);
@@ -175,10 +175,10 @@ export default function CreateListingPage() {
       <Sidebar
         role="Donor"
         items={[
-          { label: "Dashboard",    href: "/donor/dashboard",          icon: "grid" },
-          { label: "Post Listing", href: "/donor/listings/create",     icon: "plus" },
-          { label: "Impact",       href: "/donor/impact",              icon: "chart" },
-          { label: "Notifications",href: "/notifications",             icon: "bell" },
+          { label: "Dashboard", href: "/donor/dashboard", icon: "grid" },
+          { label: "Post Listing", href: "/donor/listings/create", icon: "plus" },
+          { label: "Impact", href: "/donor/impact", icon: "chart" },
+          { label: "Notifications", href: "/notifications", icon: "bell" },
         ]}
       />
 
@@ -260,6 +260,7 @@ export default function CreateListingPage() {
                   >
                     {photoPreview ? (
                       <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={photoPreview} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.35)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                           <span style={{ fontSize: "13px", color: "#fff", fontWeight: 500 }}>Click to change photo</span>
@@ -364,7 +365,7 @@ export default function CreateListingPage() {
                   >
                     {locLoading
                       ? <Spinner size={15} color="#888" />
-                      : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+                      : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="10" r="3" /><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /></svg>
                     }
                     {locLoading ? "Getting your location..." : lat ? `Location captured (${lat.toFixed(4)}, ${lng!.toFixed(4)})` : "Use my current location"}
                   </button>
@@ -375,11 +376,11 @@ export default function CreateListingPage() {
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
                     <div>
                       <div style={{ fontSize: "12px", color: "#AAA", marginBottom: "8px" }}>Available from</div>
-                      <input type="datetime-local" value={pickupStart} onChange={(e) => setPickupStart(e.target.value)} style={inputStyle} min={new Date().toISOString().slice(0,16)} />
+                      <input type="datetime-local" value={pickupStart} onChange={(e) => setPickupStart(e.target.value)} style={inputStyle} min={new Date().toISOString().slice(0, 16)} />
                     </div>
                     <div>
                       <div style={{ fontSize: "12px", color: "#AAA", marginBottom: "8px" }}>Available until</div>
-                      <input type="datetime-local" value={pickupEnd} onChange={(e) => setPickupEnd(e.target.value)} style={inputStyle} min={pickupStart || new Date().toISOString().slice(0,16)} />
+                      <input type="datetime-local" value={pickupEnd} onChange={(e) => setPickupEnd(e.target.value)} style={inputStyle} min={pickupStart || new Date().toISOString().slice(0, 16)} />
                     </div>
                   </div>
                 </div>
@@ -445,7 +446,10 @@ export default function CreateListingPage() {
                 overflow: "hidden", position: "relative", zIndex: 1,
               }}>
                 {photoPreview
-                  ? <img src={photoPreview} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  ? <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={photoPreview} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    </>
                   : <div style={{ opacity: 0.3 }}><FoodBowlIllustration /></div>
                 }
               </div>
@@ -467,7 +471,7 @@ export default function CreateListingPage() {
                     <span style={{ color: "rgba(240,237,232,0.4)" }}>Window</span>
                     <span style={{ color: "#E8450A" }}>
                       {pickupStart && pickupEnd
-                        ? `${new Date(pickupStart).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})} – ${new Date(pickupEnd).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})}`
+                        ? `${new Date(pickupStart).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })} – ${new Date(pickupEnd).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}`
                         : "—"}
                     </span>
                   </div>
@@ -487,66 +491,66 @@ export default function CreateListingPage() {
 
             {/* Impact card — only on step 1 */}
             {step === 1 && (
-            <div style={{
-              background: "#fff", border: "1.5px solid #E0DDD8",
-              borderRadius: "22px", padding: "32px",
-              boxShadow: "3px 3px 8px rgba(0,0,0,0.03)",
-              flex: 1,
-              display: "flex", flexDirection: "column", justifyContent: "space-between",
-            }}>
-              <div>
-                <div style={{ fontSize: "11px", fontWeight: 600, color: "#AAA", textTransform: "uppercase", letterSpacing: "0.09em", marginBottom: "14px" }}>
-                  Estimated Impact
-                </div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
-                  <span style={{ fontFamily: "Syne, sans-serif", fontSize: "48px", fontWeight: 800, color: "#1D9E75" }}>
-                    {quantityKg ? Math.round(Number(quantityKg) * 2.5) : 0}
-                  </span>
-                  <span style={{ fontSize: "14px", color: "#888" }}>meals enabled</span>
-                </div>
-                <div style={{ fontSize: "12px", color: "#CCC", marginTop: "8px" }}>
-                  Based on 2.5 meals per kg of surplus food
-                </div>
-              </div>
-
-              {/* Divider */}
-              <div style={{ borderTop: "1px solid #F0EDE8", margin: "28px 0" }} />
-
-              {/* Secondary impact metrics */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                <div>
-                  <div style={{ fontFamily: "Syne, sans-serif", fontSize: "24px", fontWeight: 800, color: "#E8450A" }}>
-                    {quantityKg ? Number(quantityKg).toFixed(1) : "0.0"} <span style={{ fontSize: "14px" }}>kg</span>
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>Food rescued</div>
-                </div>
-                <div>
-                  <div style={{ fontFamily: "Syne, sans-serif", fontSize: "24px", fontWeight: 800, color: "#185FA5" }}>
-                    {quantityKg ? (Number(quantityKg) * 2.5).toFixed(1) : "0.0"} <span style={{ fontSize: "14px" }}>kg</span>
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>CO₂ offset</div>
-                </div>
-              </div>
-
-              {/* Bottom illustration strip */}
               <div style={{
-                marginTop: "28px", paddingTop: "24px", borderTop: "1px solid #F0EDE8",
-                display: "flex", alignItems: "center", gap: "14px",
+                background: "#fff", border: "1.5px solid #E0DDD8",
+                borderRadius: "22px", padding: "32px",
+                boxShadow: "3px 3px 8px rgba(0,0,0,0.03)",
+                flex: 1,
+                display: "flex", flexDirection: "column", justifyContent: "space-between",
               }}>
-                <div style={{
-                  width: "40px", height: "40px", borderRadius: "10px",
-                  background: "#FEF0EA", display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0,
-                }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-                  </svg>
+                <div>
+                  <div style={{ fontSize: "11px", fontWeight: 600, color: "#AAA", textTransform: "uppercase", letterSpacing: "0.09em", marginBottom: "14px" }}>
+                    Estimated Impact
+                  </div>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
+                    <span style={{ fontFamily: "Syne, sans-serif", fontSize: "48px", fontWeight: 800, color: "#1D9E75" }}>
+                      {quantityKg ? Math.round(Number(quantityKg) * 2.5) : 0}
+                    </span>
+                    <span style={{ fontSize: "14px", color: "#888" }}>meals enabled</span>
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#CCC", marginTop: "8px" }}>
+                    Based on 2.5 meals per kg of surplus food
+                  </div>
                 </div>
-                <div style={{ fontSize: "12px", color: "#888", fontWeight: 300, lineHeight: 1.5 }}>
-                  Every listing you post helps reduce Mumbai's <strong style={{ color: "#1A1714", fontWeight: 600 }}>7.4K tonnes</strong> of daily food waste.
+
+                {/* Divider */}
+                <div style={{ borderTop: "1px solid #F0EDE8", margin: "28px 0" }} />
+
+                {/* Secondary impact metrics */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                  <div>
+                    <div style={{ fontFamily: "Syne, sans-serif", fontSize: "24px", fontWeight: 800, color: "#E8450A" }}>
+                      {quantityKg ? Number(quantityKg).toFixed(1) : "0.0"} <span style={{ fontSize: "14px" }}>kg</span>
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>Food rescued</div>
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: "Syne, sans-serif", fontSize: "24px", fontWeight: 800, color: "#185FA5" }}>
+                      {quantityKg ? (Number(quantityKg) * 2.5).toFixed(1) : "0.0"} <span style={{ fontSize: "14px" }}>kg</span>
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>CO₂ offset</div>
+                  </div>
+                </div>
+
+                {/* Bottom illustration strip */}
+                <div style={{
+                  marginTop: "28px", paddingTop: "24px", borderTop: "1px solid #F0EDE8",
+                  display: "flex", alignItems: "center", gap: "14px",
+                }}>
+                  <div style={{
+                    width: "40px", height: "40px", borderRadius: "10px",
+                    background: "#FEF0EA", display: "flex", alignItems: "center", justifyContent: "center",
+                    flexShrink: 0,
+                  }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+                    </svg>
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#888", fontWeight: 300, lineHeight: 1.5 }}>
+                    Every listing you post helps reduce Mumbai&apos;s <strong style={{ color: "#1A1714", fontWeight: 600 }}>7.4K tonnes</strong> of daily food waste.
+                  </div>
                 </div>
               </div>
-            </div>
             )}
           </div>
         </div>

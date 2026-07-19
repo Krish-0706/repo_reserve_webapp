@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Sidebar from "@/components/shared/Sidebar";
 import { PageLoader } from "@/components/shared/Loader";
 
@@ -250,11 +251,11 @@ export default function DonorDashboard() {
               >
                 <div style={{
                   width: "64px", height: "64px", borderRadius: "12px", overflow: "hidden",
-                  background: "#F0EDE8", flexShrink: 0,
+                  background: "#F0EDE8", flexShrink: 0, position: "relative",
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
                   {listing.photo_url ? (
-                    <img src={listing.photo_url} alt={listing.food_name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <Image src={listing.photo_url} alt={listing.food_name} fill style={{ objectFit: "cover" }} unoptimized />
                   ) : (
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5">
                       <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>

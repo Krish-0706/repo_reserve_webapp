@@ -2,6 +2,7 @@
 // ReServe Landing Page — no <style> tags, all CSS in reserve.css
 
 import Link from "next/link";
+import Image from "next/image";
 import heroImg from "./images/hero.jpg";
 
 export default function LandingPage() {
@@ -38,8 +39,8 @@ export default function LandingPage() {
           <div className="hero-visual">
             <div className="hero-visual-frame" />
             <div className="hero-visual-photo">
-              <img
-                src={heroImg.src}
+              <Image
+                src={heroImg}
                 width={900}
                 height={600}
                 alt="Restaurant kitchen preparing food"

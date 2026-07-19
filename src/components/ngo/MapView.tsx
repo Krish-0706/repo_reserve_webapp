@@ -108,10 +108,11 @@ export default function MapView({ listings, selectedId, onPinClickAction }: MapV
             );
         }
         // Cleanup
+        const markers = markersRef.current;
         return () => {
             map.remove();
             mapRef.current = null;
-            markersRef.current.clear();
+            markers.clear();
         };
     }, []);
 
