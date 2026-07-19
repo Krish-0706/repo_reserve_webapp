@@ -35,23 +35,23 @@ type SidebarProps = {
 function Icon({ name }: { name: IconName }) {
   const props = { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.75, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
   switch (name) {
-    case "grid":   return <svg {...props}><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>;
-    case "plus":   return <svg {...props}><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>;
-    case "chart":  return <svg {...props}><path d="M3 3v18h18"/><path d="M7 16l4-6 4 3 5-8"/></svg>;
-    case "bell":   return <svg {...props}><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>;
-    case "map":    return <svg {...props}><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>;
-    case "truck":  return <svg {...props}><rect x="1" y="5" width="14" height="12" rx="1"/><path d="M15 9h4l3 3v5h-7z"/><circle cx="6" cy="19" r="1.5"/><circle cx="17.5" cy="19" r="1.5"/></svg>;
-    case "list":   return <svg {...props}><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>;
-    case "users":  return <svg {...props}><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>;
-    case "shield": return <svg {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>;
-    case "star":   return <svg {...props}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
+    case "grid": return <svg {...props}><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>;
+    case "plus": return <svg {...props}><circle cx="12" cy="12" r="9" /><path d="M12 8v8M8 12h8" /></svg>;
+    case "chart": return <svg {...props}><path d="M3 3v18h18" /><path d="M7 16l4-6 4 3 5-8" /></svg>;
+    case "bell": return <svg {...props}><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 01-3.46 0" /></svg>;
+    case "map": return <svg {...props}><circle cx="12" cy="10" r="3" /><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /></svg>;
+    case "truck": return <svg {...props}><rect x="1" y="5" width="14" height="12" rx="1" /><path d="M15 9h4l3 3v5h-7z" /><circle cx="6" cy="19" r="1.5" /><circle cx="17.5" cy="19" r="1.5" /></svg>;
+    case "list": return <svg {...props}><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>;
+    case "users": return <svg {...props}><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></svg>;
+    case "shield": return <svg {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>;
+    case "star": return <svg {...props}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>;
   }
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function Sidebar({ role, items }: SidebarProps) {
   const pathname = usePathname();
-  const router   = useRouter();
+  const router = useRouter();
   const supabase = createClient();
 
   const logout = async () => {
@@ -72,10 +72,14 @@ export default function Sidebar({ role, items }: SidebarProps) {
     }}>
 
       {/* Logo */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: "10px",
-        padding: "0 10px", marginBottom: "4px",
-      }}>
+      <div
+        onClick={() => router.push(items[0]?.href ?? "/")}
+        style={{
+          display: "flex", alignItems: "center", gap: "10px",
+          padding: "0 10px", marginBottom: "16px",
+          cursor: "pointer",
+        }}
+      >
         <div style={{
           width: "32px", height: "32px",
           border: "2px solid #E8450A", borderRadius: "50%",
@@ -83,8 +87,8 @@ export default function Sidebar({ role, items }: SidebarProps) {
           flexShrink: 0,
         }}>
           <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="7" stroke="#E8450A" strokeWidth="1.5"/>
-            <path d="M7 10h6M10 7v6" stroke="#E8450A" strokeWidth="1.5" strokeLinecap="round"/>
+            <circle cx="10" cy="10" r="7" stroke="#E8450A" strokeWidth="1.5" />
+            <path d="M7 10h6M10 7v6" stroke="#E8450A" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
         </div>
         <span style={{
@@ -94,16 +98,6 @@ export default function Sidebar({ role, items }: SidebarProps) {
         }}>
           ReServe
         </span>
-      </div>
-
-      {/* Role tag */}
-      <div style={{
-        fontSize: "9px", fontWeight: 600,
-        color: "rgba(240,237,232,0.25)",
-        textTransform: "uppercase", letterSpacing: "0.14em",
-        padding: "0 10px", marginBottom: "32px",
-      }}>
-        {role} Account
       </div>
 
       {/* Nav items */}
@@ -189,7 +183,7 @@ export default function Sidebar({ role, items }: SidebarProps) {
         }}
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
         </svg>
         Sign out
       </button>

@@ -85,6 +85,28 @@ export default function MapView({ listings, selectedId, onPinClickAction }: MapV
 
         mapRef.current = map;
 
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    // Guard: the map may have been removed (React Strict Mode
+                    // double-mount, or user navigated away) before the async
+                    // geolocation callback fires.
+                    if (mapRef.current) {
+                        mapRef.current.setView(
+                            [pos.coords.latitude, pos.coords.longitude],
+                            15,
+                            { animate: true }
+                        );
+                    }
+                },
+                () => {
+                    // Denied or unavailable — silently keep the Mumbai fallback.
+                    // No error UI: a missing "nice to have" recenter shouldn't
+                    // read as a broken map.
+                },
+                { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+            );
+        }
         // Cleanup
         return () => {
             map.remove();
