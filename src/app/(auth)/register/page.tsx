@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 
 type Role = "donor" | "ngo" | "volunteer";
 
+
 const ROLES: { value: Role; tag: string; label: string; description: string }[] = [
   { value: "donor",     tag: "RESTAURANT / CATERER",   label: "Donor",     description: "Post surplus food listings with pickup windows" },
   { value: "ngo",       tag: "ORGANISATION / SHELTER", label: "NGO",       description: "Discover and claim nearby food listings" },
@@ -15,11 +16,13 @@ const ROLES: { value: Role; tag: string; label: string; description: string }[] 
 
 export default function RegisterPage() {
   const supabase = createClient();
-  const [role,        setRole]        = useState<Role | "">("");
-  const [orgName,     setOrgName]     = useState("");
-  const [email,       setEmail]       = useState("");
-  const [password,    setPassword]    = useState("");
-  const [confirm,     setConfirm]     = useState("");
+  const [role,         setRole]         = useState<Role | "">("");
+  const [orgName,      setOrgName]      = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [volName,      setVolName]      = useState("");
+  const [email,        setEmail]        = useState("");
+  const [password,     setPassword]     = useState("");
+  const [confirm,      setConfirm]      = useState("");
   const [showPass,    setShowPass]    = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [error,       setError]       = useState("");
@@ -29,6 +32,8 @@ export default function RegisterPage() {
   const validate = () => {
     if (!role)                                         { setError("Please select a role."); return false; }
     if (role === "ngo" && !orgName.trim())             { setError("Organisation name is required."); return false; }
+    if (role === "ngo" && !contactPhone.trim())        { setError("Contact phone number is required."); return false; }
+    if (role === "volunteer" && !volName.trim())       { setError("Your name is required."); return false; }
     if (!email.includes("@") || !email.includes(".")) { setError("Enter a valid email address."); return false; }
     if (password.length < 8)                          { setError("Password must be at least 8 characters."); return false; }
     if (password !== confirm)                          { setError("Passwords do not match."); return false; }
@@ -59,12 +64,12 @@ export default function RegisterPage() {
 
     if (role === "ngo") {
       await supabase.from("ngos").insert({
-        id: userId, org_name: orgName.trim(), kyc_status: "pending", contact_phone: "",
+        id: userId, org_name: orgName.trim(), kyc_status: "pending", contact_phone: contactPhone.trim(),
       });
     }
     if (role === "volunteer") {
       await supabase.from("volunteers").insert({
-        id: userId, hours_logged: 0, rating: 0, tasks_completed: 0,
+        id: userId, hours_logged: 0, rating: 0, tasks_completed: 0, vol_name: volName.trim(),
       });
     }
 
@@ -141,14 +146,39 @@ export default function RegisterPage() {
             <div className="reg-fields">
 
               {role === "ngo" && (
+                <>
+                  <div className="form-group field-full">
+                    <label className="form-label">Organisation Name</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g. Mumbai Food Bank"
+                      value={orgName}
+                      onChange={(e) => setOrgName(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group field-full">
+                    <label className="form-label">Contact Phone</label>
+                    <input
+                      type="tel"
+                      className="form-input"
+                      placeholder="e.g. +91 98765 43210"
+                      value={contactPhone}
+                      onChange={(e) => setContactPhone(e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
+
+              {role === "volunteer" && (
                 <div className="form-group field-full">
-                  <label className="form-label">Organisation Name</label>
+                  <label className="form-label">Full Name</label>
                   <input
                     type="text"
                     className="form-input"
-                    placeholder="e.g. Mumbai Food Bank"
-                    value={orgName}
-                    onChange={(e) => setOrgName(e.target.value)}
+                    placeholder="e.g. Rahul Sharma"
+                    value={volName}
+                    onChange={(e) => setVolName(e.target.value)}
                   />
                 </div>
               )}

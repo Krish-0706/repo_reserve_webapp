@@ -43,6 +43,19 @@ export async function middleware(request: NextRequest) {
       .eq("id", user.id)
       .single();
 
+    if (profile?.role === "volunteer") {
+      // Check if volunteer has selected an NGO
+      const { data: vol } = await supabase
+        .from("volunteers")
+        .select("ngo_id")
+        .eq("id", user.id)
+        .single();
+
+      if (!vol?.ngo_id) {
+        return NextResponse.redirect(new URL("/volunteer/select-ngo", request.url));
+      }
+    }
+
     const destinations: Record<string, string> = {
       donor:     "/donor/dashboard",
       ngo:       "/ngo/map",
@@ -54,6 +67,28 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(
         new URL(destinations[profile.role], request.url)
       );
+    }
+  }
+
+  // Volunteer onboarding guard: if they haven't selected an NGO yet,
+  // redirect them to the selection page (unless they're already there)
+  if (user && pathname.startsWith("/volunteer") && pathname !== "/volunteer/select-ngo") {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.role === "volunteer") {
+      const { data: vol } = await supabase
+        .from("volunteers")
+        .select("ngo_id")
+        .eq("id", user.id)
+        .single();
+
+      if (!vol?.ngo_id) {
+        return NextResponse.redirect(new URL("/volunteer/select-ngo", request.url));
+      }
     }
   }
 

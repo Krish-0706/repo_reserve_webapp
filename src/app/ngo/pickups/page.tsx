@@ -2,16 +2,16 @@
 // src/app/(ngo)/pickups/page.tsx
 //
 // Active Pickups — shows all pickups claimed by this NGO
-// Status: claimed → in_progress → completed
+// Status: claimed → assigned → in_progress → completed
 // NGO can assign a volunteer from this page
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Sidebar from "@/components/shared/Sidebar";
-import { PageLoader } from "@/components/shared/Loader";
+import { PageLoader, Spinner } from "@/components/shared/Loader";
 
-type PickupStatus = "claimed" | "in_progress" | "completed" | "cancelled";
+type PickupStatus = "claimed" | "assigned" | "in_progress" | "completed" | "cancelled";
 
 type Pickup = {
     id: string;
@@ -32,17 +32,27 @@ type Pickup = {
     };
     volunteers: {
         id: string;
+        vol_name: string;
         hours_logged: number;
         rating: number;
         users: { email: string };
     } | null;
 };
 
+type AvailableVolunteer = {
+    id: string;
+    vol_name: string;
+    hours_logged: number;
+    rating: number;
+    tasks_completed: number;
+    users: { email: string };
+};
 
 
 function statusColor(s: PickupStatus) {
     const map: Record<PickupStatus, { bg: string; fg: string }> = {
         claimed: { bg: "rgba(24,95,165,0.1)", fg: "#185FA5" },
+        assigned: { bg: "rgba(186,117,23,0.1)", fg: "#BA7517" },
         in_progress: { bg: "rgba(186,117,23,0.1)", fg: "#BA7517" },
         completed: { bg: "rgba(29,158,117,0.12)", fg: "#1D9E75" },
         cancelled: { bg: "rgba(136,136,128,0.12)", fg: "#888880" },
@@ -72,6 +82,12 @@ export default function NGOPickupsPage() {
     const [error, setError] = useState("");
     const [navigating, setNavigating] = useState(false);
 
+    // Volunteer assignment state
+    const [volunteers, setVolunteers] = useState<AvailableVolunteer[]>([]);
+    const [volunteersLoaded, setVolunteersLoaded] = useState(false);
+    const [assigningPickupId, setAssigningPickupId] = useState<string | null>(null); // which pickup has the selector open
+    const [assignLoading, setAssignLoading] = useState(false);
+
     const nav = (path: string) => { setNavigating(true); router.push(path); };
 
     useEffect(() => {
@@ -85,7 +101,72 @@ export default function NGOPickupsPage() {
             .catch(() => { setError("Failed to load pickups."); setLoading(false); });
     }, []);
 
-    const active = pickups.filter((p) => ["claimed", "in_progress"].includes(p.status));
+    // Fetch available volunteers when needed
+    const loadVolunteers = async () => {
+        if (volunteersLoaded) return;
+        try {
+            const res = await fetch("/api/volunteers/available");
+            const json = await res.json();
+            if (!json.error) {
+                setVolunteers(json.data ?? []);
+            }
+            setVolunteersLoaded(true);
+        } catch {
+            console.error("Failed to load volunteers");
+        }
+    };
+
+    // Open volunteer selector for a pickup
+    const openAssignSelector = async (pickupId: string) => {
+        if (assigningPickupId === pickupId) {
+            setAssigningPickupId(null);
+            return;
+        }
+        setAssigningPickupId(pickupId);
+        await loadVolunteers();
+    };
+
+    // Assign a volunteer
+    const handleAssign = async (pickupId: string, volunteerId: string) => {
+        setAssignLoading(true);
+        setError("");
+        try {
+            const res = await fetch(`/api/pickups/${pickupId}/assign`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ volunteer_id: volunteerId }),
+            });
+            const json = await res.json();
+            if (json.error) {
+                setError(json.error);
+            } else {
+                // Update the pickup in state
+                const assignedVol = volunteers.find((v) => v.id === volunteerId);
+                setPickups((prev) => prev.map((p) =>
+                    p.id === pickupId
+                        ? {
+                            ...p,
+                            status: "assigned" as PickupStatus,
+                            volunteer_id: volunteerId,
+                            volunteers: assignedVol ? {
+                                id: assignedVol.id,
+                                vol_name: assignedVol.vol_name,
+                                hours_logged: assignedVol.hours_logged,
+                                rating: assignedVol.rating,
+                                users: assignedVol.users,
+                            } : null,
+                        }
+                        : p
+                ));
+                setAssigningPickupId(null);
+            }
+        } catch {
+            setError("Failed to assign volunteer.");
+        }
+        setAssignLoading(false);
+    };
+
+    const active = pickups.filter((p) => ["claimed", "assigned", "in_progress"].includes(p.status));
     const completed = pickups.filter((p) => p.status === "completed");
 
     return (
@@ -131,8 +212,16 @@ export default function NGOPickupsPage() {
                 </div>
 
                 {error && (
-                    <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "12px", padding: "14px 18px", fontSize: "13px", color: "#DC2626", marginBottom: "24px" }}>
-                        {error}
+                    <div style={{
+                        background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "12px",
+                        padding: "14px 18px", fontSize: "13px", color: "#DC2626", marginBottom: "24px",
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                    }}>
+                        <span>{error}</span>
+                        <button onClick={() => setError("")} style={{
+                            background: "none", border: "none", color: "#DC2626",
+                            cursor: "pointer", fontSize: "16px", lineHeight: 1,
+                        }}>×</button>
                     </div>
                 )}
 
@@ -168,7 +257,15 @@ export default function NGOPickupsPage() {
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "36px" }}>
                             {active.map((pickup) => (
-                                <PickupCard key={pickup.id} pickup={pickup} />
+                                <PickupCard
+                                    key={pickup.id}
+                                    pickup={pickup}
+                                    isAssigning={assigningPickupId === pickup.id}
+                                    assignLoading={assignLoading}
+                                    volunteers={volunteers}
+                                    onToggleAssign={() => openAssignSelector(pickup.id)}
+                                    onAssign={(volId) => handleAssign(pickup.id, volId)}
+                                />
                             ))}
                         </div>
                     </>
@@ -181,7 +278,15 @@ export default function NGOPickupsPage() {
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
                             {completed.map((pickup) => (
-                                <PickupCard key={pickup.id} pickup={pickup} />
+                                <PickupCard
+                                    key={pickup.id}
+                                    pickup={pickup}
+                                    isAssigning={false}
+                                    assignLoading={false}
+                                    volunteers={[]}
+                                    onToggleAssign={() => {}}
+                                    onAssign={() => {}}
+                                />
                             ))}
                         </div>
                     </>
@@ -191,62 +296,179 @@ export default function NGOPickupsPage() {
     );
 }
 
-function PickupCard({ pickup }: { pickup: Pickup }) {
+function PickupCard({
+    pickup,
+    isAssigning,
+    assignLoading,
+    volunteers,
+    onToggleAssign,
+    onAssign,
+}: {
+    pickup: Pickup;
+    isAssigning: boolean;
+    assignLoading: boolean;
+    volunteers: AvailableVolunteer[];
+    onToggleAssign: () => void;
+    onAssign: (volunteerId: string) => void;
+}) {
     const sc = statusColor(pickup.status);
     const l = pickup.listings;
     if (!l) return null;
 
+    const canAssign = pickup.status === "claimed" && !pickup.volunteer_id;
+
     return (
         <div style={{
             background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "16px",
-            padding: "20px 24px", display: "grid",
-            gridTemplateColumns: "56px 1fr auto", gap: "18px", alignItems: "center",
+            padding: "20px 24px",
             boxShadow: "2px 2px 6px rgba(0,0,0,0.04)",
         }}>
-            <div style={{
-                width: "56px", height: "56px", borderRadius: "12px",
-                overflow: "hidden", background: "#F0EDE8", flexShrink: 0, position: "relative",
-                display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-                {l.photo_url
-                    ? <Image src={l.photo_url} alt="" fill style={{ objectFit: "cover" }} unoptimized />
-                    : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
-                }
-            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "56px 1fr auto", gap: "18px", alignItems: "center" }}>
+                <div style={{
+                    width: "56px", height: "56px", borderRadius: "12px",
+                    overflow: "hidden", background: "#F0EDE8", flexShrink: 0, position: "relative",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                    {l.photo_url
+                        ? <Image src={l.photo_url} alt="" fill style={{ objectFit: "cover" }} unoptimized />
+                        : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
+                    }
+                </div>
 
-            <div>
-                <div style={{ fontFamily: "Syne, sans-serif", fontSize: "15px", fontWeight: 700, color: "#1A1714", marginBottom: "3px" }}>
-                    {l.food_name || l.food_type}
+                <div>
+                    <div style={{ fontFamily: "Syne, sans-serif", fontSize: "15px", fontWeight: 700, color: "#1A1714", marginBottom: "3px" }}>
+                        {l.food_name || l.food_type}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "#888", fontWeight: 300 }}>
+                        {l.food_type} · {l.quantity_kg} kg · {l.address.split(",")[0]}
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>
+                        Claimed {new Date(pickup.claimed_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                        {pickup.volunteers && (
+                            <span style={{ marginLeft: "10px", color: "#1D9E75" }}>
+                                · Volunteer: {pickup.volunteers.vol_name || pickup.volunteers.users?.email?.split("@")[0] || "Assigned"}
+                            </span>
+                        )}
+                    </div>
                 </div>
-                <div style={{ fontSize: "12px", color: "#888", fontWeight: 300 }}>
-                    {l.food_type} · {l.quantity_kg} kg · {l.address.split(",")[0]}
-                </div>
-                <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>
-                    Claimed {new Date(pickup.claimed_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
-                    {pickup.volunteers && (
-                        <span style={{ marginLeft: "10px", color: "#1D9E75" }}>
-                            · Volunteer: {pickup.volunteers.users?.email?.split("@")[0] ?? "Assigned"}
+
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px" }}>
+                    <span style={{
+                        background: sc.bg, color: sc.fg,
+                        fontSize: "10px", fontWeight: 700,
+                        fontFamily: "Syne, sans-serif",
+                        letterSpacing: "0.07em", textTransform: "uppercase",
+                        padding: "4px 10px", borderRadius: "999px",
+                    }}>
+                        {pickup.status.replace("_", " ")}
+                    </span>
+                    {pickup.status === "completed" && pickup.completed_at && (
+                        <span style={{ fontSize: "11px", color: "#AAA" }}>
+                            {new Date(pickup.completed_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
                         </span>
                     )}
                 </div>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px" }}>
-                <span style={{
-                    background: sc.bg, color: sc.fg,
-                    fontSize: "10px", fontWeight: 700,
-                    fontFamily: "Syne, sans-serif",
-                    letterSpacing: "0.07em", textTransform: "uppercase",
-                    padding: "4px 10px", borderRadius: "999px",
+            {/* Assign Volunteer button — only for claimed pickups without a volunteer */}
+            {canAssign && (
+                <div style={{ marginTop: "14px", borderTop: "1px solid #F0EDE8", paddingTop: "14px" }}>
+                    <button
+                        onClick={onToggleAssign}
+                        style={{
+                            height: "36px", padding: "0 18px", borderRadius: "10px",
+                            background: isAssigning ? "#F0EDE8" : "#fff",
+                            color: "#1A1714",
+                            fontFamily: "Syne, sans-serif", fontSize: "12px", fontWeight: 700,
+                            border: "1.5px solid #E0DDD8", cursor: "pointer",
+                            display: "flex", alignItems: "center", gap: "6px",
+                            transition: "all 0.15s",
+                        }}
+                    >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" />
+                            <line x1="20" y1="8" x2="20" y2="14" /><line x1="17" y1="11" x2="23" y2="11" />
+                        </svg>
+                        {isAssigning ? "Cancel" : "Assign Volunteer"}
+                    </button>
+
+                    {/* Volunteer selector dropdown */}
+                    {isAssigning && (
+                        <div style={{
+                            marginTop: "12px", background: "#FAFAF8", border: "1.5px solid #E0DDD8",
+                            borderRadius: "14px", padding: "14px", maxHeight: "240px", overflowY: "auto",
+                        }}>
+                            {volunteers.length === 0 ? (
+                                <div style={{ fontSize: "13px", color: "#AAA", textAlign: "center", padding: "12px 0" }}>
+                                    No volunteers available
+                                </div>
+                            ) : (
+                                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                    {volunteers.map((vol) => (
+                                        <button
+                                            key={vol.id}
+                                            onClick={() => onAssign(vol.id)}
+                                            disabled={assignLoading}
+                                            style={{
+                                                display: "flex", alignItems: "center", justifyContent: "space-between",
+                                                padding: "10px 14px", borderRadius: "10px",
+                                                background: "#fff", border: "1px solid #E0DDD8",
+                                                cursor: assignLoading ? "wait" : "pointer",
+                                                transition: "all 0.15s",
+                                                width: "100%", textAlign: "left",
+                                            }}
+                                        >
+                                            <div>
+                                                <div style={{
+                                                    fontFamily: "Syne, sans-serif", fontSize: "13px",
+                                                    fontWeight: 700, color: "#1A1714",
+                                                }}>
+                                                    {vol.vol_name || vol.users?.email?.split("@")[0] || "Volunteer"}
+                                                </div>
+                                                <div style={{ fontSize: "11px", color: "#888", marginTop: "2px" }}>
+                                                    {vol.tasks_completed} tasks · {Number(vol.rating).toFixed(1)} rating · {Number(vol.hours_logged).toFixed(0)}h logged
+                                                </div>
+                                            </div>
+                                            <div style={{
+                                                fontSize: "11px", fontWeight: 700, fontFamily: "Syne, sans-serif",
+                                                color: "#E8450A", display: "flex", alignItems: "center", gap: "4px",
+                                            }}>
+                                                {assignLoading ? <Spinner /> : "Assign"}
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Show assigned volunteer info for assigned/in_progress pickups */}
+            {(pickup.status === "assigned" || pickup.status === "in_progress") && pickup.volunteers && (
+                <div style={{
+                    marginTop: "14px", borderTop: "1px solid #F0EDE8", paddingTop: "14px",
+                    display: "flex", alignItems: "center", gap: "10px",
                 }}>
-                    {pickup.status.replace("_", " ")}
-                </span>
-                {pickup.status === "completed" && pickup.completed_at && (
-                    <span style={{ fontSize: "11px", color: "#AAA" }}>
-                        {new Date(pickup.completed_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
-                    </span>
-                )}
-            </div>
+                    <div style={{
+                        width: "28px", height: "28px", borderRadius: "8px",
+                        background: "rgba(29,158,117,0.08)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                    }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span style={{ fontSize: "12px", color: "#1A1714", fontWeight: 500 }}>
+                            {pickup.volunteers.vol_name || pickup.volunteers.users?.email?.split("@")[0] || "Volunteer"}
+                        </span>
+                        <span style={{ fontSize: "11px", color: "#AAA", marginLeft: "8px" }}>
+                            {pickup.status === "assigned" ? "Awaiting acceptance" : "En route"}
+                        </span>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

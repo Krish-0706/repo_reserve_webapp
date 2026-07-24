@@ -29,7 +29,7 @@ export async function GET() {
         photo_url, address, pickup_start, pickup_end
       ),
       volunteers (
-        id, hours_logged, rating,
+        id, vol_name, hours_logged, rating,
         users ( email )
       )
     `)

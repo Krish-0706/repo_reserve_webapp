@@ -6,7 +6,7 @@
 export type UserRole    = "donor" | "ngo" | "volunteer" | "admin";
 export type UserStatus  = "pending" | "active" | "suspended";
 export type ListingStatus = "active" | "claimed" | "completed" | "expired";
-export type PickupStatus  = "claimed" | "in_progress" | "completed" | "cancelled";
+export type PickupStatus  = "claimed" | "assigned" | "in_progress" | "completed" | "cancelled";
 export type KYCStatus     = "pending" | "approved" | "rejected";
 
 export interface Database {
@@ -76,6 +76,8 @@ export interface Database {
       volunteers: {
         Row: {
           id:              string;
+          vol_name:        string;
+          ngo_id:          string | null;
           hours_logged:    number;
           rating:          number;
           tasks_completed: number;
