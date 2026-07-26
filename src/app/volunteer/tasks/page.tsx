@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Sidebar from "@/components/shared/Sidebar";
 import { PageLoader, Spinner } from "@/components/shared/Loader";
-
+import { useUnreadCount } from "@/hooks/useUnreadCount";
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TaskStatus = "assigned" | "in_progress";
 
@@ -109,6 +109,7 @@ function StarIcon() {
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function VolunteerTasksPage() {
     const router = useRouter();
+    const unread = useUnreadCount();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [stats, setStats] = useState<VolunteerStats>({ hours_logged: 0, rating: 0, tasks_completed: 0 });
     const [loading, setLoading] = useState(true);
@@ -175,7 +176,7 @@ export default function VolunteerTasksPage() {
                 items={[
                     { label: "Task Feed", href: "/volunteer/tasks", icon: "list" },
                     { label: "My Stats", href: "/volunteer/stats", icon: "star" },
-                    { label: "Notifications", href: "/notifications", icon: "bell" },
+                    { label: "Notifications", href: "/notifications", icon: "bell", badge: unread },
                 ]}
             />
 

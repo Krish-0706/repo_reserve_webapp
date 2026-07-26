@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Sidebar from "@/components/shared/Sidebar";
 import { PageLoader } from "@/components/shared/Loader";
+import { useUnreadCount } from "@/hooks/useUnreadCount";
 
 type ListingStatus = "active" | "claimed" | "completed" | "expired";
 
@@ -30,7 +31,7 @@ type Listing = {
 function timeRemaining(pickupEnd: string): string {
   const diff = new Date(pickupEnd).getTime() - Date.now();
   if (diff <= 0) return "Expired";
-  const hours   = Math.floor(diff / 3600000);
+  const hours = Math.floor(diff / 3600000);
   const minutes = Math.floor((diff % 3600000) / 60000);
   if (hours > 0) return `${hours}h ${minutes}m left`;
   return `${minutes}m left`;
@@ -38,10 +39,10 @@ function timeRemaining(pickupEnd: string): string {
 
 function statusStyle(status: ListingStatus): React.CSSProperties {
   const map: Record<ListingStatus, { bg: string; color: string }> = {
-    active:    { bg: "rgba(29,158,117,0.12)",  color: "#1D9E75" },
-    claimed:   { bg: "rgba(24,95,165,0.1)",    color: "#185FA5" },
-    completed: { bg: "rgba(29,158,117,0.12)",  color: "#1D9E75" },
-    expired:   { bg: "rgba(136,136,128,0.12)", color: "#888880" },
+    active: { bg: "rgba(29,158,117,0.12)", color: "#1D9E75" },
+    claimed: { bg: "rgba(24,95,165,0.1)", color: "#185FA5" },
+    completed: { bg: "rgba(29,158,117,0.12)", color: "#1D9E75" },
+    expired: { bg: "rgba(136,136,128,0.12)", color: "#888880" },
   };
   const s = map[status];
   return {
@@ -55,22 +56,22 @@ function statusStyle(status: ListingStatus): React.CSSProperties {
 function EmptyListingsIllustration() {
   return (
     <svg width="140" height="110" viewBox="0 0 140 110" fill="none">
-      <rect x="20" y="20" width="100" height="70" rx="10" fill="#fff" stroke="#E0DDD8" strokeWidth="2"/>
-      <rect x="32" y="36" width="40" height="6" rx="3" fill="#E0DDD8"/>
-      <rect x="32" y="50" width="60" height="6" rx="3" fill="#F0EDE8"/>
-      <rect x="32" y="64" width="50" height="6" rx="3" fill="#F0EDE8"/>
-      <circle cx="100" cy="30" r="14" fill="#FEF0EA"/>
-      <path d="M100 24v12M94 30h12" stroke="#E8450A" strokeWidth="2.5" strokeLinecap="round"/>
+      <rect x="20" y="20" width="100" height="70" rx="10" fill="#fff" stroke="#E0DDD8" strokeWidth="2" />
+      <rect x="32" y="36" width="40" height="6" rx="3" fill="#E0DDD8" />
+      <rect x="32" y="50" width="60" height="6" rx="3" fill="#F0EDE8" />
+      <rect x="32" y="64" width="50" height="6" rx="3" fill="#F0EDE8" />
+      <circle cx="100" cy="30" r="14" fill="#FEF0EA" />
+      <path d="M100 24v12M94 30h12" stroke="#E8450A" strokeWidth="2.5" strokeLinecap="round" />
     </svg>
   );
 }
 
 export default function DonorDashboard() {
   const router = useRouter();
-
-  const [listings,   setListings]   = useState<Listing[]>([]);
-  const [loading,    setLoading]    = useState(true);
-  const [error,      setError]      = useState("");
+  const unread = useUnreadCount();
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [navigating, setNavigating] = useState<string | null>(null);
 
   useEffect(() => {
@@ -89,9 +90,9 @@ export default function DonorDashboard() {
     router.push(path);
   };
 
-  const totalKg      = listings.reduce((sum, l) => sum + l.quantity_kg, 0);
-  const totalMeals   = Math.round(totalKg * 2.5);
-  const activeCount  = listings.filter((l) => l.status === "active").length;
+  const totalKg = listings.reduce((sum, l) => sum + l.quantity_kg, 0);
+  const totalMeals = Math.round(totalKg * 2.5);
+  const activeCount = listings.filter((l) => l.status === "active").length;
   const claimedCount = listings.filter((l) => l.status === "claimed").length;
 
   return (
@@ -102,10 +103,10 @@ export default function DonorDashboard() {
       <Sidebar
         role="Donor"
         items={[
-          { label: "Dashboard",     href: "/donor/dashboard",       icon: "grid" },
-          { label: "Post Listing",  href: "/donor/listings/create", icon: "plus" },
-          { label: "Impact",        href: "/donor/impact",          icon: "chart" },
-          { label: "Notifications", href: "/notifications",         icon: "bell" },
+          { label: "Dashboard", href: "/donor/dashboard", icon: "grid" },
+          { label: "Post Listing", href: "/donor/listings/create", icon: "plus" },
+          { label: "Impact", href: "/donor/impact", icon: "chart" },
+          { label: "Notifications", href: "/notifications", icon: "bell", badge: unread },
         ]}
       />
 
@@ -141,7 +142,7 @@ export default function DonorDashboard() {
               (e.currentTarget as HTMLButtonElement).style.boxShadow = "3px 3px 0px #1A1714";
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="9" /><path d="M12 8v8M8 12h8" /></svg>
             Post Listing
           </button>
         </div>
@@ -151,7 +152,7 @@ export default function DonorDashboard() {
           {[
             { label: "Total Donated", value: `${totalKg.toFixed(1)} kg`, sub: "Across all listings", color: "#E8450A" },
             { label: "Meals Enabled", value: totalMeals, sub: "Est. at 2.5 meals / kg", color: "#1D9E75" },
-            { label: "Active Now",    value: activeCount, sub: `${claimedCount} claimed`, color: "#1A1714" },
+            { label: "Active Now", value: activeCount, sub: `${claimedCount} claimed`, color: "#1A1714" },
           ].map((s) => (
             <div key={s.label} style={{
               background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "18px",
@@ -181,7 +182,7 @@ export default function DonorDashboard() {
         {/* Loading skeletons with shimmer */}
         {loading && (
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-            {[1,2,3].map((i) => (
+            {[1, 2, 3].map((i) => (
               <div key={i} style={{
                 background: "linear-gradient(90deg, #fff 25%, #F8F6F3 37%, #fff 63%)",
                 backgroundSize: "400% 100%",
@@ -258,7 +259,7 @@ export default function DonorDashboard() {
                     <Image src={listing.photo_url} alt={listing.food_name} fill style={{ objectFit: "cover" }} unoptimized />
                   ) : (
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5">
-                      <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                      <rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
                     </svg>
                   )}
                 </div>
@@ -277,7 +278,7 @@ export default function DonorDashboard() {
 
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "12px" }}>
                   <span style={statusStyle(listing.status)}>{listing.status}</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
                 </div>
               </div>
             ))}

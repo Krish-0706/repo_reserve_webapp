@@ -18,6 +18,7 @@ import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/client";
 import Sidebar from "@/components/shared/Sidebar";
 import { Spinner } from "@/components/shared/Loader";
+import { useUnreadCount } from "@/hooks/useUnreadCount";
 
 // Leaflet must be dynamically imported — it uses browser-only APIs
 const MapView = dynamic(() => import("@/components/ngo/MapView"), {
@@ -259,7 +260,7 @@ function ListingCard({ listing, onClick }: { listing: MapListing; onClick: () =>
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function NGOMapPage() {
   const supabase = createClient();
-
+  const unread = useUnreadCount();
   const [listings, setListings] = useState<MapListing[]>([]);
   const [selected, setSelected] = useState<MapListing | null>(null);
   const [loading, setLoading] = useState(true);
@@ -347,7 +348,7 @@ export default function NGOMapPage() {
           { label: "Live Map", href: "/ngo/map", icon: "map", badge: listings.length },
           { label: "Active Pickups", href: "/ngo/pickups", icon: "truck" },
           { label: "Impact Report", href: "/ngo/impact", icon: "chart" },
-          { label: "Notifications", href: "/notifications", icon: "bell" },
+          { label: "Notifications", href: "/notifications", icon: "bell", badge: unread },
         ]}
       />
 
