@@ -62,7 +62,7 @@ function TypeIcon({ type }: { type: string }) {
 function typeColor(type: string): string {
     if (type === "task_declined") return "#E24B4A";
     if (type === "listing_expiring" || type === "pickup_reminder") return "#BA7517";
-    if (type === "task_completed" || type === "task_accepted" || type === "listing_claimed") return "#1D9E75";
+    if (type === "task_completed" || type === "task_accepted" || type === "listing_claimed") return "#10B981";
     return "#E8450A";
 }
 
@@ -71,14 +71,14 @@ function EmptyState() {
     return (
         <div style={{ textAlign: "center", padding: "80px 24px", animation: "fadeIn 0.3s ease" }}>
             <svg width="72" height="72" viewBox="0 0 80 80" fill="none" style={{ display: "block", margin: "0 auto 18px" }}>
-                <circle cx="40" cy="40" r="36" fill="#F0EDE8" />
+                <circle cx="40" cy="40" r="36" fill="#FAFAFA" />
                 <path d="M40 24c-8 0-14 6-14 14v10l-4 6h36l-4-6V38c0-8-6-14-14-14z" stroke="#CCC" strokeWidth="2" fill="none" />
                 <path d="M34 58a6 6 0 0012 0" stroke="#CCC" strokeWidth="2" fill="none" />
             </svg>
-            <div style={{ fontFamily: "Syne, sans-serif", fontSize: "16px", fontWeight: 700, color: "#1A1714", marginBottom: "6px" }}>
+            <div style={{ fontFamily: "Geist, sans-serif", fontSize: "16px", fontWeight: 700, color: "#111111", marginBottom: "6px" }}>
                 You`&apos;`re all caught up
             </div>
-            <div style={{ fontSize: "13px", color: "#AAA", fontWeight: 300 }}>
+            <div style={{ fontSize: "13px", color: "#9CA3AF", fontWeight: 400 }}>
                 New activity on your listings and tasks will show up here.
             </div>
         </div>
@@ -140,8 +140,8 @@ export default function NotificationsPage() {
             style={{
                 display: "flex", alignItems: "flex-start", gap: "13px",
                 padding: "15px 18px", borderRadius: "12px",
-                background: n.is_read ? "#fff" : "#FEF0EA",
-                border: "1.5px solid #E0DDD8",
+                background: n.is_read ? "#fff" : "#FFF4ED",
+                border: "1px solid #E5E7EB",
                 cursor: n.is_read ? "default" : "pointer",
                 transition: "transform 0.15s, box-shadow 0.15s, background 0.4s",
                 animation: `slideIn 0.35s ease ${index * 0.04}s backwards`,
@@ -167,17 +167,17 @@ export default function NotificationsPage() {
                     <div style={{
                         position: "absolute", top: "-2px", right: "-2px",
                         width: "9px", height: "9px", borderRadius: "50%",
-                        background: "#E8450A", border: "2px solid #FEF0EA",
+                        background: "#E8450A", border: "2px solid #FFF4ED",
                         animation: "reserve-pulse 2s ease-in-out infinite",
                     }} />
                 )}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700, color: "#1A1714", marginBottom: "3px" }}>
+                <div style={{ fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700, color: "#111111", marginBottom: "3px" }}>
                     {n.title}
                 </div>
                 <div style={{ fontSize: "12px", color: "#666", marginBottom: "4px", lineHeight: 1.4 }}>{n.body}</div>
-                <div style={{ fontSize: "10px", color: "#AAA", fontFamily: "Syne, sans-serif", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                <div style={{ fontSize: "10px", color: "#9CA3AF", fontFamily: "Geist, sans-serif", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>
                     {timeAgo(n.created_at)}
                 </div>
             </div>
@@ -185,18 +185,18 @@ export default function NotificationsPage() {
     );
 
     return (
-        <div style={{ minHeight: "100vh", background: "#F0EDE8", fontFamily: "DM Sans, sans-serif", display: "flex" }}>
+        <div style={{ minHeight: "100vh", background: "#FAFAFA", fontFamily: "Geist, sans-serif", display: "flex" }}>
             {loading && <PageLoader label="Loading notifications..." />}
 
             <Sidebar role={role.charAt(0).toUpperCase() + role.slice(1)} items={getNavItems(role, unread)} />
 
-            <main style={{ marginLeft: "240px", flex: 1, padding: "44px 52px 60px" }}>
+            <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "28px" }}>
                     <div>
-                        <h1 style={{ fontFamily: "Syne, sans-serif", fontSize: "24px", fontWeight: 700, color: "#1A1714" }}>
+                        <h1 style={{ fontFamily: "Geist, sans-serif", fontSize: "24px", fontWeight: 700, color: "#111111" }}>
                             Notifications
                         </h1>
-                        <p style={{ fontSize: "12px", color: "#AAA", marginTop: "3px" }}>
+                        <p style={{ fontSize: "12px", color: "#9CA3AF", marginTop: "3px" }}>
                             {unread > 0 ? `${unread} unread` : "You're all caught up"}
                         </p>
                     </div>
@@ -206,11 +206,11 @@ export default function NotificationsPage() {
                             disabled={markingAll}
                             style={{
                                 height: "38px", padding: "0 16px", borderRadius: "10px",
-                                border: "1.5px solid #E0DDD8", background: "#fff",
+                                border: "1px solid #E5E7EB", background: "#fff",
                                 color: "#555", fontSize: "12px", fontWeight: 500,
                                 cursor: markingAll ? "not-allowed" : "pointer",
                                 display: "flex", alignItems: "center", gap: "8px",
-                                fontFamily: "DM Sans, sans-serif",
+                                fontFamily: "Geist, sans-serif",
                             }}
                         >
                             {markingAll && <Spinner size={13} />}
@@ -223,7 +223,7 @@ export default function NotificationsPage() {
 
                 {todayItems.length > 0 && (
                     <>
-                        <div style={{ fontSize: "11px", fontWeight: 600, color: "#AAA", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "10px", fontFamily: "Syne, sans-serif" }}>
+                        <div style={{ fontSize: "11px", fontWeight: 600, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "10px", fontFamily: "Geist, sans-serif" }}>
                             Today
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "28px" }}>
@@ -234,7 +234,7 @@ export default function NotificationsPage() {
 
                 {earlierItems.length > 0 && (
                     <>
-                        <div style={{ fontSize: "11px", fontWeight: 600, color: "#AAA", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "10px", fontFamily: "Syne, sans-serif" }}>
+                        <div style={{ fontSize: "11px", fontWeight: 600, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "10px", fontFamily: "Geist, sans-serif" }}>
                             Earlier
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>

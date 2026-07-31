@@ -69,14 +69,14 @@ function formatWindow(start: string, end: string) {
 function EmptyTasks() {
     return (
         <svg width="140" height="110" viewBox="0 0 140 110" fill="none">
-            <rect x="20" y="18" width="100" height="70" rx="14" fill="#fff" stroke="#E0DDD8" strokeWidth="1.5" />
-            <rect x="36" y="34" width="40" height="5" rx="2.5" fill="#E0DDD8" />
-            <rect x="36" y="46" width="60" height="5" rx="2.5" fill="#F0EDE8" />
-            <rect x="36" y="58" width="48" height="5" rx="2.5" fill="#F0EDE8" />
-            <circle cx="108" cy="26" r="16" fill="#FEF0EA" stroke="#E8450A" strokeWidth="1.5" strokeDasharray="3 3" />
+            <rect x="20" y="18" width="100" height="70" rx="14" fill="#fff" stroke="#E5E7EB" strokeWidth="1.5" />
+            <rect x="36" y="34" width="40" height="5" rx="2.5" fill="#E5E7EB" />
+            <rect x="36" y="46" width="60" height="5" rx="2.5" fill="#FAFAFA" />
+            <rect x="36" y="58" width="48" height="5" rx="2.5" fill="#FAFAFA" />
+            <circle cx="108" cy="26" r="16" fill="#FFF4ED" stroke="#E8450A" strokeWidth="1.5" strokeDasharray="3 3" />
             <path d="M108 20v10M103 25h10" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" />
-            <rect x="30" y="70" width="24" height="8" rx="4" fill="#F0EDE8" />
-            <rect x="60" y="70" width="24" height="8" rx="4" fill="#F0EDE8" />
+            <rect x="30" y="70" width="24" height="8" rx="4" fill="#FAFAFA" />
+            <rect x="60" y="70" width="24" height="8" rx="4" fill="#FAFAFA" />
         </svg>
     );
 }
@@ -91,7 +91,7 @@ function TasksIcon() {
 }
 function ClockIcon() {
     return (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
         </svg>
     );
@@ -167,7 +167,7 @@ export default function VolunteerTasksPage() {
     const inProgress = tasks.filter((t) => t.status === "in_progress");
 
     return (
-        <div style={{ minHeight: "100vh", background: "#F0EDE8", fontFamily: "DM Sans, sans-serif", display: "flex" }}>
+        <div style={{ minHeight: "100vh", background: "#FAFAFA", fontFamily: "Geist, sans-serif", display: "flex" }}>
             {navigating && <PageLoader label="Loading..." />}
             {loading && <PageLoader label="Loading tasks..." />}
 
@@ -180,21 +180,21 @@ export default function VolunteerTasksPage() {
                 ]}
             />
 
-            <main style={{ marginLeft: "240px", flex: 1, padding: "44px 52px 60px" }}>
+            <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
                 {/* ─── Header ─────────────────────────────────────────────── */}
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "36px" }}>
                     <div>
-                        <h1 style={{ fontFamily: "Syne, sans-serif", fontSize: "32px", fontWeight: 800, color: "#1A1714", letterSpacing: "-0.5px" }}>
+                        <h1 style={{ fontFamily: "Geist, sans-serif", fontSize: "32px", fontWeight: 700, color: "#111111", letterSpacing: "-0.02em" }}>
                             Task Feed
                         </h1>
-                        <p style={{ fontSize: "14px", color: "#888", marginTop: "6px", fontWeight: 300 }}>
+                        <p style={{ fontSize: "14px", color: "#6B7280", marginTop: "6px", fontWeight: 400 }}>
                             View and manage your assigned pickup tasks
                         </p>
                     </div>
                     <div style={{
                         background: "rgba(186,117,23,0.1)", color: "#BA7517",
-                        fontSize: "11px", fontWeight: 700, fontFamily: "Syne, sans-serif",
-                        letterSpacing: "0.08em", textTransform: "uppercase",
+                        fontSize: "11px", fontWeight: 700, fontFamily: "Geist, sans-serif",
+                        letterSpacing: "0.06em", textTransform: "uppercase",
                         padding: "8px 18px", borderRadius: "999px",
                     }}>
                         VOLUNTEER
@@ -205,54 +205,54 @@ export default function VolunteerTasksPage() {
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "18px", marginBottom: "36px" }}>
                     {/* Tasks completed */}
                     <div style={{
-                        background: "#fff", borderRadius: "18px", padding: "22px 26px",
-                        border: "1.5px solid #E0DDD8",
-                        boxShadow: "4px 4px 10px rgba(0,0,0,0.04), -2px -2px 6px rgba(255,255,255,0.9)",
+                        background: "#fff", borderRadius: "12px", padding: "22px 26px",
+                        border: "1px solid #E5E7EB",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
                     }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
                             <div style={{ width: "38px", height: "38px", borderRadius: "10px", background: "rgba(232,69,10,0.08)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 <TasksIcon />
                             </div>
-                            <span style={{ fontSize: "12px", color: "#888", fontWeight: 500 }}>Tasks Completed</span>
+                            <span style={{ fontSize: "12px", color: "#6B7280", fontWeight: 500 }}>Tasks Completed</span>
                         </div>
-                        <div style={{ fontFamily: "Syne, sans-serif", fontSize: "34px", fontWeight: 800, color: "#E8450A", letterSpacing: "-1px" }}>
+                        <div style={{ fontFamily: "Geist, sans-serif", fontSize: "34px", fontWeight: 700, color: "#E8450A", letterSpacing: "-0.03em" }}>
                             {stats.tasks_completed}
                         </div>
-                        <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>All time</div>
+                        <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>All time</div>
                     </div>
                     {/* Hours logged */}
                     <div style={{
-                        background: "#fff", borderRadius: "18px", padding: "22px 26px",
-                        border: "1.5px solid #E0DDD8",
-                        boxShadow: "4px 4px 10px rgba(0,0,0,0.04), -2px -2px 6px rgba(255,255,255,0.9)",
+                        background: "#fff", borderRadius: "12px", padding: "22px 26px",
+                        border: "1px solid #E5E7EB",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
                     }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
                             <div style={{ width: "38px", height: "38px", borderRadius: "10px", background: "rgba(29,158,117,0.08)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 <ClockIcon />
                             </div>
-                            <span style={{ fontSize: "12px", color: "#888", fontWeight: 500 }}>Hours Logged</span>
+                            <span style={{ fontSize: "12px", color: "#6B7280", fontWeight: 500 }}>Hours Logged</span>
                         </div>
-                        <div style={{ fontFamily: "Syne, sans-serif", fontSize: "34px", fontWeight: 800, color: "#1D9E75", letterSpacing: "-1px" }}>
+                        <div style={{ fontFamily: "Geist, sans-serif", fontSize: "34px", fontWeight: 700, color: "#10B981", letterSpacing: "-0.03em" }}>
                             {Number(stats.hours_logged).toFixed(1)}
                         </div>
-                        <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>Total volunteer hours</div>
+                        <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>Total volunteer hours</div>
                     </div>
                     {/* Rating */}
                     <div style={{
-                        background: "#fff", borderRadius: "18px", padding: "22px 26px",
-                        border: "1.5px solid #E0DDD8",
-                        boxShadow: "4px 4px 10px rgba(0,0,0,0.04), -2px -2px 6px rgba(255,255,255,0.9)",
+                        background: "#fff", borderRadius: "12px", padding: "22px 26px",
+                        border: "1px solid #E5E7EB",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
                     }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
                             <div style={{ width: "38px", height: "38px", borderRadius: "10px", background: "rgba(186,117,23,0.08)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 <StarIcon />
                             </div>
-                            <span style={{ fontSize: "12px", color: "#888", fontWeight: 500 }}>Rating</span>
+                            <span style={{ fontSize: "12px", color: "#6B7280", fontWeight: 500 }}>Rating</span>
                         </div>
-                        <div style={{ fontFamily: "Syne, sans-serif", fontSize: "34px", fontWeight: 800, color: "#BA7517", letterSpacing: "-1px" }}>
+                        <div style={{ fontFamily: "Geist, sans-serif", fontSize: "34px", fontWeight: 700, color: "#BA7517", letterSpacing: "-0.03em" }}>
                             {Number(stats.rating) > 0 ? Number(stats.rating).toFixed(1) : "—"}
                         </div>
-                        <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>
+                        <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>
                             {Number(stats.rating) > 0 ? "Out of 5.0" : "Complete tasks to earn"}
                         </div>
                     </div>
@@ -262,12 +262,12 @@ export default function VolunteerTasksPage() {
                 {error && (
                     <div style={{
                         background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "12px",
-                        padding: "14px 18px", fontSize: "13px", color: "#DC2626", marginBottom: "24px",
+                        padding: "14px 18px", fontSize: "13px", color: "#EF4444", marginBottom: "24px",
                         display: "flex", alignItems: "center", justifyContent: "space-between",
                     }}>
                         <span>{error}</span>
                         <button onClick={() => setError("")} style={{
-                            background: "none", border: "none", color: "#DC2626",
+                            background: "none", border: "none", color: "#EF4444",
                             cursor: "pointer", fontSize: "16px", lineHeight: 1,
                         }}>×</button>
                     </div>
@@ -276,16 +276,16 @@ export default function VolunteerTasksPage() {
                 {/* ─── Empty state ────────────────────────────────────────── */}
                 {!loading && tasks.length === 0 && (
                     <div style={{
-                        background: "#fff", border: "2px dashed #E0DDD8", borderRadius: "22px",
+                        background: "#fff", border: "1px dashed #E5E7EB", borderRadius: "16px",
                         padding: "64px 32px", textAlign: "center",
                     }}>
                         <div style={{ display: "flex", justifyContent: "center", marginBottom: "18px" }}>
                             <EmptyTasks />
                         </div>
-                        <div style={{ fontFamily: "Syne, sans-serif", fontSize: "20px", fontWeight: 700, color: "#1A1714", marginBottom: "8px" }}>
+                        <div style={{ fontFamily: "Geist, sans-serif", fontSize: "20px", fontWeight: 700, color: "#111111", marginBottom: "8px" }}>
                             No tasks assigned yet
                         </div>
-                        <div style={{ fontSize: "14px", color: "#AAA", fontWeight: 300, maxWidth: "360px", margin: "0 auto" }}>
+                        <div style={{ fontSize: "14px", color: "#9CA3AF", fontWeight: 400, maxWidth: "360px", margin: "0 auto" }}>
                             When an NGO assigns you a pickup task, it will appear here. Check back soon.
                         </div>
                     </div>
@@ -295,8 +295,8 @@ export default function VolunteerTasksPage() {
                 {!loading && pending.length > 0 && (
                     <>
                         <div style={{
-                            fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700,
-                            color: "#1A1714", textTransform: "uppercase", letterSpacing: "0.07em",
+                            fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700,
+                            color: "#111111", textTransform: "uppercase", letterSpacing: "0.04em",
                             marginBottom: "16px",
                         }}>
                             Pending Acceptance — {pending.length}
@@ -320,8 +320,8 @@ export default function VolunteerTasksPage() {
                 {!loading && inProgress.length > 0 && (
                     <>
                         <div style={{
-                            fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700,
-                            color: "#1A1714", textTransform: "uppercase", letterSpacing: "0.07em",
+                            fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700,
+                            color: "#111111", textTransform: "uppercase", letterSpacing: "0.04em",
                             marginBottom: "16px",
                         }}>
                             In Progress — {inProgress.length}
@@ -367,7 +367,7 @@ function TaskCard({
 
     return (
         <div style={{
-            background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "18px",
+            background: "#fff", border: "1px solid #E5E7EB", borderRadius: "12px",
             padding: "22px 26px",
             boxShadow: "3px 3px 10px rgba(0,0,0,0.03)",
             transition: "box-shadow 0.2s",
@@ -378,7 +378,7 @@ function TaskCard({
                     onClick={onView}
                     style={{
                         width: "56px", height: "56px", borderRadius: "12px",
-                        overflow: "hidden", background: "#F0EDE8", flexShrink: 0,
+                        overflow: "hidden", background: "#FAFAFA", flexShrink: 0,
                         position: "relative", cursor: "pointer",
                         display: "flex", alignItems: "center", justifyContent: "center",
                     }}
@@ -394,20 +394,20 @@ function TaskCard({
                     <div
                         onClick={onView}
                         style={{
-                            fontFamily: "Syne, sans-serif", fontSize: "15px", fontWeight: 700,
-                            color: "#1A1714", marginBottom: "3px", cursor: "pointer",
+                            fontFamily: "Geist, sans-serif", fontSize: "15px", fontWeight: 700,
+                            color: "#111111", marginBottom: "3px", cursor: "pointer",
                         }}
                     >
                         {l.food_name || l.food_type}
                     </div>
-                    <div style={{ fontSize: "12px", color: "#888", fontWeight: 300 }}>
+                    <div style={{ fontSize: "12px", color: "#6B7280", fontWeight: 400 }}>
                         {l.food_type} · {l.quantity_kg} kg · {l.address.split(",")[0]}
                     </div>
-                    <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>
+                    <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>
                         {formatWindow(l.pickup_start, l.pickup_end)}
                     </div>
                     {n && (
-                        <div style={{ fontSize: "11px", color: "#1D9E75", marginTop: "3px", fontWeight: 500 }}>
+                        <div style={{ fontSize: "11px", color: "#10B981", marginTop: "3px", fontWeight: 500 }}>
                             {n.org_name}
                         </div>
                     )}
@@ -417,8 +417,8 @@ function TaskCard({
                 <span style={{
                     background: sc.bg, color: sc.fg,
                     fontSize: "10px", fontWeight: 700,
-                    fontFamily: "Syne, sans-serif",
-                    letterSpacing: "0.07em", textTransform: "uppercase",
+                    fontFamily: "Geist, sans-serif",
+                    letterSpacing: "0.04em", textTransform: "uppercase",
                     padding: "4px 10px", borderRadius: "999px",
                     whiteSpace: "nowrap",
                 }}>
@@ -433,9 +433,9 @@ function TaskCard({
                     onClick={onView}
                     style={{
                         height: "38px", padding: "0 20px", borderRadius: "10px",
-                        background: "#F0EDE8", color: "#1A1714",
-                        fontFamily: "Syne, sans-serif", fontSize: "12px", fontWeight: 700,
-                        border: "1.5px solid #E0DDD8", cursor: "pointer",
+                        background: "#FAFAFA", color: "#111111",
+                        fontFamily: "Geist, sans-serif", fontSize: "12px", fontWeight: 700,
+                        border: "1px solid #E5E7EB", cursor: "pointer",
                         transition: "all 0.15s",
                     }}
                 >
@@ -449,9 +449,9 @@ function TaskCard({
                         disabled={isLoading}
                         style={{
                             height: "38px", padding: "0 22px", borderRadius: "10px",
-                            background: "#1D9E75", color: "#fff",
-                            fontFamily: "Syne, sans-serif", fontSize: "12px", fontWeight: 700,
-                            border: "2px solid #1A1714", boxShadow: "3px 3px 0px #1A1714",
+                            background: "#10B981", color: "#fff",
+                            fontFamily: "Geist, sans-serif", fontSize: "12px", fontWeight: 700,
+                            border: "2px solid #111111", boxShadow: "3px 3px 0px #111111",
                             cursor: isLoading ? "wait" : "pointer",
                             opacity: isLoading ? 0.7 : 1,
                             display: "flex", alignItems: "center", gap: "6px",
@@ -470,8 +470,8 @@ function TaskCard({
                         disabled={isLoading}
                         style={{
                             height: "38px", padding: "0 20px", borderRadius: "10px",
-                            background: "#fff", color: "#DC2626",
-                            fontFamily: "Syne, sans-serif", fontSize: "12px", fontWeight: 700,
+                            background: "#fff", color: "#EF4444",
+                            fontFamily: "Geist, sans-serif", fontSize: "12px", fontWeight: 700,
                             border: "1.5px solid #FECACA", cursor: isLoading ? "wait" : "pointer",
                             opacity: isLoading ? 0.7 : 1,
                             transition: "all 0.15s",

@@ -47,10 +47,10 @@ function statusStyle(s: TaskStatus): { bg: string; fg: string } {
     const map: Record<TaskStatus, { bg: string; fg: string }> = {
         assigned: { bg: "rgba(186,117,23,0.1)", fg: "#BA7517" },
         in_progress: { bg: "rgba(24,95,165,0.1)", fg: "#185FA5" },
-        completed: { bg: "rgba(29,158,117,0.12)", fg: "#1D9E75" },
-        cancelled: { bg: "rgba(136,136,128,0.12)", fg: "#888880" },
+        completed: { bg: "rgba(29,158,117,0.12)", fg: "#10B981" },
+        cancelled: { bg: "rgba(136,136,128,0.12)", fg: "#6B7280" },
     };
-    return map[s] ?? { bg: "#F0EDE8", fg: "#888" };
+    return map[s] ?? { bg: "#FAFAFA", fg: "#888" };
 }
 
 // ─── Timeline step component ─────────────────────────────────────────────────
@@ -61,13 +61,13 @@ function TimelineStep({ label, timestamp, isActive, isLast }: { label: string; t
             {!isLast && (
                 <div style={{
                     position: "absolute", left: "9px", top: "22px", width: "2px",
-                    height: "calc(100% + 4px)", background: isActive ? "#E8450A" : "#E0DDD8",
+                    height: "calc(100% + 4px)", background: isActive ? "#E8450A" : "#E5E7EB",
                 }} />
             )}
             {/* Dot */}
             <div style={{
                 width: "20px", height: "20px", borderRadius: "50%", flexShrink: 0,
-                border: `2px solid ${isActive ? "#E8450A" : "#E0DDD8"}`,
+                border: `2px solid ${isActive ? "#E8450A" : "#E5E7EB"}`,
                 background: isActive ? "#E8450A" : "#fff",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 zIndex: 1,
@@ -81,13 +81,13 @@ function TimelineStep({ label, timestamp, isActive, isLast }: { label: string; t
             {/* Content */}
             <div style={{ paddingBottom: isLast ? 0 : "20px" }}>
                 <div style={{
-                    fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700,
-                    color: isActive ? "#1A1714" : "#BBB",
+                    fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700,
+                    color: isActive ? "#111111" : "#BBB",
                 }}>
                     {label}
                 </div>
                 {timestamp && (
-                    <div style={{ fontSize: "11px", color: "#AAA", marginTop: "2px" }}>
+                    <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "2px" }}>
                         {new Date(timestamp).toLocaleString("en-IN", {
                             day: "numeric", month: "short", year: "numeric",
                             hour: "2-digit", minute: "2-digit", hour12: true,
@@ -211,7 +211,7 @@ export default function TaskDetailPage() {
     const currentIdx = task ? statusOrder.indexOf(task.status) : -1;
 
     return (
-        <div style={{ minHeight: "100vh", background: "#F0EDE8", fontFamily: "DM Sans, sans-serif", display: "flex" }}>
+        <div style={{ minHeight: "100vh", background: "#FAFAFA", fontFamily: "Geist, sans-serif", display: "flex" }}>
             {navigating && <PageLoader label="Loading..." />}
             {loading && <PageLoader label="Loading task..." />}
 
@@ -224,15 +224,15 @@ export default function TaskDetailPage() {
                 ]}
             />
 
-            <main style={{ marginLeft: "240px", flex: 1, padding: "44px 52px 60px", maxWidth: "900px" }}>
+            <main style={{ marginLeft: "220px", flex: 1, padding: "40px", maxWidth: "900px" }}>
                 {/* ─── Back button + header ────────────────────────────────── */}
                 <button
                     onClick={() => nav("/volunteer/tasks")}
                     style={{
                         display: "flex", alignItems: "center", gap: "6px",
-                        background: "none", border: "none", color: "#888",
+                        background: "none", border: "none", color: "#6B7280",
                         fontSize: "13px", cursor: "pointer", marginBottom: "24px",
-                        fontFamily: "DM Sans, sans-serif", fontWeight: 500,
+                        fontFamily: "Geist, sans-serif", fontWeight: 500,
                     }}
                 >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -244,7 +244,7 @@ export default function TaskDetailPage() {
                 {error && !task && (
                     <div style={{
                         background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "12px",
-                        padding: "14px 18px", fontSize: "13px", color: "#DC2626",
+                        padding: "14px 18px", fontSize: "13px", color: "#EF4444",
                     }}>
                         {error}
                     </div>
@@ -256,13 +256,13 @@ export default function TaskDetailPage() {
                         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                             {/* Listing card */}
                             <div style={{
-                                background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "18px",
+                                background: "#fff", border: "1px solid #E5E7EB", borderRadius: "12px",
                                 padding: "28px", boxShadow: "3px 3px 10px rgba(0,0,0,0.03)",
                             }}>
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
                                     <h2 style={{
-                                        fontFamily: "Syne, sans-serif", fontSize: "22px", fontWeight: 800,
-                                        color: "#1A1714", letterSpacing: "-0.3px",
+                                        fontFamily: "Geist, sans-serif", fontSize: "22px", fontWeight: 700,
+                                        color: "#111111", letterSpacing: "-0.3px",
                                     }}>
                                         {l.food_name || l.food_type}
                                     </h2>
@@ -270,8 +270,8 @@ export default function TaskDetailPage() {
                                         background: statusStyle(task.status).bg,
                                         color: statusStyle(task.status).fg,
                                         fontSize: "10px", fontWeight: 700,
-                                        fontFamily: "Syne, sans-serif",
-                                        letterSpacing: "0.07em", textTransform: "uppercase",
+                                        fontFamily: "Geist, sans-serif",
+                                        letterSpacing: "0.04em", textTransform: "uppercase",
                                         padding: "5px 12px", borderRadius: "999px",
                                     }}>
                                         {task.status.replace("_", " ")}
@@ -283,7 +283,7 @@ export default function TaskDetailPage() {
                                     <div style={{
                                         width: "100%", height: "200px", borderRadius: "14px",
                                         overflow: "hidden", marginBottom: "20px", position: "relative",
-                                        background: "#F0EDE8",
+                                        background: "#FAFAFA",
                                     }}>
                                         <Image src={l.photo_url} alt={l.food_name || "Food"} fill style={{ objectFit: "cover" }} unoptimized />
                                     </div>
@@ -292,20 +292,20 @@ export default function TaskDetailPage() {
                                 {/* Info grid */}
                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                                     <div>
-                                        <div style={{ fontSize: "11px", color: "#AAA", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Food Type</div>
-                                        <div style={{ fontSize: "14px", color: "#1A1714", fontWeight: 500 }}>{l.food_type}</div>
+                                        <div style={{ fontSize: "11px", color: "#9CA3AF", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Food Type</div>
+                                        <div style={{ fontSize: "14px", color: "#111111", fontWeight: 500 }}>{l.food_type}</div>
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: "11px", color: "#AAA", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Quantity</div>
-                                        <div style={{ fontSize: "14px", color: "#1A1714", fontWeight: 500 }}>{l.quantity_kg} kg</div>
+                                        <div style={{ fontSize: "11px", color: "#9CA3AF", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Quantity</div>
+                                        <div style={{ fontSize: "14px", color: "#111111", fontWeight: 500 }}>{l.quantity_kg} kg</div>
                                     </div>
                                     <div style={{ gridColumn: "1 / -1" }}>
-                                        <div style={{ fontSize: "11px", color: "#AAA", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Pickup Address</div>
-                                        <div style={{ fontSize: "14px", color: "#1A1714", fontWeight: 500 }}>{l.address}</div>
+                                        <div style={{ fontSize: "11px", color: "#9CA3AF", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Pickup Address</div>
+                                        <div style={{ fontSize: "14px", color: "#111111", fontWeight: 500 }}>{l.address}</div>
                                     </div>
                                     <div style={{ gridColumn: "1 / -1" }}>
-                                        <div style={{ fontSize: "11px", color: "#AAA", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Pickup Window</div>
-                                        <div style={{ fontSize: "14px", color: "#1A1714", fontWeight: 500 }}>
+                                        <div style={{ fontSize: "11px", color: "#9CA3AF", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Pickup Window</div>
+                                        <div style={{ fontSize: "14px", color: "#111111", fontWeight: 500 }}>
                                             {new Date(l.pickup_start).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", hour12: true })}
                                             {" — "}
                                             {new Date(l.pickup_end).toLocaleString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true })}
@@ -317,12 +317,12 @@ export default function TaskDetailPage() {
                             {/* NGO card */}
                             {n && (
                                 <div style={{
-                                    background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "18px",
+                                    background: "#fff", border: "1px solid #E5E7EB", borderRadius: "12px",
                                     padding: "22px 28px", boxShadow: "3px 3px 10px rgba(0,0,0,0.03)",
                                 }}>
                                     <div style={{
-                                        fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700,
-                                        color: "#1A1714", textTransform: "uppercase", letterSpacing: "0.07em",
+                                        fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700,
+                                        color: "#111111", textTransform: "uppercase", letterSpacing: "0.04em",
                                         marginBottom: "14px",
                                     }}>
                                         Deliver To — NGO
@@ -333,16 +333,16 @@ export default function TaskDetailPage() {
                                             background: "rgba(29,158,117,0.08)",
                                             display: "flex", alignItems: "center", justifyContent: "center",
                                         }}>
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                                                 <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" />
                                                 <path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" />
                                             </svg>
                                         </div>
                                         <div>
-                                            <div style={{ fontFamily: "Syne, sans-serif", fontSize: "15px", fontWeight: 700, color: "#1A1714" }}>
+                                            <div style={{ fontFamily: "Geist, sans-serif", fontSize: "15px", fontWeight: 700, color: "#111111" }}>
                                                 {n.org_name}
                                             </div>
-                                            <div style={{ fontSize: "12px", color: "#888", fontWeight: 300, marginTop: "2px" }}>
+                                            <div style={{ fontSize: "12px", color: "#6B7280", fontWeight: 400, marginTop: "2px" }}>
                                                 {n.contact_phone}
                                             </div>
                                         </div>
@@ -353,8 +353,8 @@ export default function TaskDetailPage() {
                                             style={{
                                                 marginTop: "14px", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
                                                 height: "40px", borderRadius: "10px",
-                                                background: "rgba(29,158,117,0.08)", color: "#1D9E75",
-                                                fontFamily: "Syne, sans-serif", fontSize: "12px", fontWeight: 700,
+                                                background: "rgba(29,158,117,0.08)", color: "#10B981",
+                                                fontFamily: "Geist, sans-serif", fontSize: "12px", fontWeight: 700,
                                                 border: "1.5px solid rgba(29,158,117,0.2)", textDecoration: "none",
                                                 cursor: "pointer", transition: "all 0.15s",
                                             }}
@@ -376,8 +376,8 @@ export default function TaskDetailPage() {
                                 style={{
                                     height: "50px", borderRadius: "14px",
                                     background: "#E8450A", color: "#fff",
-                                    fontFamily: "Syne, sans-serif", fontSize: "14px", fontWeight: 700,
-                                    border: "2px solid #1A1714", boxShadow: "4px 4px 0px #1A1714",
+                                    fontFamily: "Geist, sans-serif", fontSize: "14px", fontWeight: 700,
+                                    border: "2px solid #111111", boxShadow: "4px 4px 0px #111111",
                                     cursor: "pointer", textDecoration: "none",
                                     display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
                                     transition: "all 0.15s",
@@ -392,17 +392,17 @@ export default function TaskDetailPage() {
                             {/* ─── Complete Pickup section ────────────────── */}
                             {task.status === "in_progress" && !completionSuccess && (
                                 <div style={{
-                                    background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "18px",
+                                    background: "#fff", border: "1px solid #E5E7EB", borderRadius: "12px",
                                     padding: "28px", boxShadow: "3px 3px 10px rgba(0,0,0,0.03)",
                                 }}>
                                     <div style={{
-                                        fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700,
-                                        color: "#1A1714", textTransform: "uppercase", letterSpacing: "0.07em",
+                                        fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700,
+                                        color: "#111111", textTransform: "uppercase", letterSpacing: "0.04em",
                                         marginBottom: "18px",
                                     }}>
                                         Complete Pickup
                                     </div>
-                                    <p style={{ fontSize: "13px", color: "#888", marginBottom: "18px", fontWeight: 300 }}>
+                                    <p style={{ fontSize: "13px", color: "#6B7280", marginBottom: "18px", fontWeight: 400 }}>
                                         Upload a photo of the food pickup as proof of completion. This will be shared with the NGO.
                                     </p>
 
@@ -412,7 +412,7 @@ export default function TaskDetailPage() {
                                             display: "flex", flexDirection: "column", alignItems: "center",
                                             justifyContent: "center", gap: "10px",
                                             height: "140px", borderRadius: "14px",
-                                            border: "2px dashed #E0DDD8", background: "#FAFAF8",
+                                            border: "1px dashed #E5E7EB", background: "#FAFAF8",
                                             cursor: uploading ? "wait" : "pointer",
                                             transition: "all 0.15s",
                                         }}>
@@ -424,7 +424,7 @@ export default function TaskDetailPage() {
                                                 disabled={uploading}
                                             />
                                             {uploading ? (
-                                                <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#888" }}>
+                                                <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#6B7280" }}>
                                                     <Spinner /> Uploading...
                                                 </div>
                                             ) : (
@@ -434,7 +434,7 @@ export default function TaskDetailPage() {
                                                         <circle cx="8.5" cy="8.5" r="1.5" />
                                                         <polyline points="21 15 16 10 5 21" />
                                                     </svg>
-                                                    <span style={{ fontSize: "13px", color: "#AAA", fontWeight: 400 }}>
+                                                    <span style={{ fontSize: "13px", color: "#9CA3AF", fontWeight: 400 }}>
                                                         Click to upload proof photo
                                                     </span>
                                                 </>
@@ -444,7 +444,7 @@ export default function TaskDetailPage() {
                                         <div style={{ position: "relative" }}>
                                             <div style={{
                                                 width: "100%", height: "160px", borderRadius: "14px",
-                                                overflow: "hidden", position: "relative", background: "#F0EDE8",
+                                                overflow: "hidden", position: "relative", background: "#FAFAFA",
                                             }}>
                                                 <Image src={proofUrl} alt="Proof" fill style={{ objectFit: "cover" }} unoptimized />
                                             </div>
@@ -467,7 +467,7 @@ export default function TaskDetailPage() {
                                     {error && (
                                         <div style={{
                                             background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "10px",
-                                            padding: "10px 14px", fontSize: "12px", color: "#DC2626", marginTop: "14px",
+                                            padding: "10px 14px", fontSize: "12px", color: "#EF4444", marginTop: "14px",
                                         }}>
                                             {error}
                                         </div>
@@ -480,11 +480,11 @@ export default function TaskDetailPage() {
                                         style={{
                                             width: "100%", height: "48px", marginTop: "18px",
                                             borderRadius: "12px",
-                                            background: proofUrl ? "#1D9E75" : "#E0DDD8",
+                                            background: proofUrl ? "#10B981" : "#E5E7EB",
                                             color: proofUrl ? "#fff" : "#AAA",
-                                            fontFamily: "Syne, sans-serif", fontSize: "14px", fontWeight: 700,
-                                            border: proofUrl ? "2px solid #1A1714" : "1.5px solid #E0DDD8",
-                                            boxShadow: proofUrl ? "3px 3px 0px #1A1714" : "none",
+                                            fontFamily: "Geist, sans-serif", fontSize: "14px", fontWeight: 700,
+                                            border: proofUrl ? "2px solid #111111" : "1.5px solid #E5E7EB",
+                                            boxShadow: proofUrl ? "3px 3px 0px #111111" : "none",
                                             cursor: proofUrl && !completing ? "pointer" : "not-allowed",
                                             display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
                                             transition: "all 0.15s",
@@ -500,28 +500,28 @@ export default function TaskDetailPage() {
                             {completionSuccess && (
                                 <div style={{
                                     background: "rgba(29,158,117,0.08)", border: "1.5px solid rgba(29,158,117,0.2)",
-                                    borderRadius: "18px", padding: "28px", textAlign: "center",
+                                    borderRadius: "12px", padding: "28px", textAlign: "center",
                                 }}>
-                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "12px" }}>
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "12px" }}>
                                         <circle cx="12" cy="12" r="10" />
                                         <polyline points="16 8 10 16 7 13" />
                                     </svg>
                                     <div style={{
-                                        fontFamily: "Syne, sans-serif", fontSize: "18px", fontWeight: 800,
-                                        color: "#1D9E75", marginBottom: "6px",
+                                        fontFamily: "Geist, sans-serif", fontSize: "18px", fontWeight: 700,
+                                        color: "#10B981", marginBottom: "6px",
                                     }}>
                                         Pickup Completed
                                     </div>
-                                    <div style={{ fontSize: "13px", color: "#888", fontWeight: 300, marginBottom: "20px" }}>
+                                    <div style={{ fontSize: "13px", color: "#6B7280", fontWeight: 400, marginBottom: "20px" }}>
                                         Great work! The NGO and donor have been notified.
                                     </div>
                                     <button
                                         onClick={() => nav("/volunteer/tasks")}
                                         style={{
                                             height: "42px", padding: "0 28px", borderRadius: "10px",
-                                            background: "#1D9E75", color: "#fff",
-                                            fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700,
-                                            border: "2px solid #1A1714", boxShadow: "3px 3px 0px #1A1714",
+                                            background: "#10B981", color: "#fff",
+                                            fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700,
+                                            border: "2px solid #111111", boxShadow: "3px 3px 0px #111111",
                                             cursor: "pointer",
                                         }}
                                     >
@@ -534,13 +534,13 @@ export default function TaskDetailPage() {
                         {/* ─── Right column: Timeline ─────────────────────── */}
                         <div>
                             <div style={{
-                                background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "18px",
+                                background: "#fff", border: "1px solid #E5E7EB", borderRadius: "12px",
                                 padding: "24px", boxShadow: "3px 3px 10px rgba(0,0,0,0.03)",
                                 position: "sticky", top: "44px",
                             }}>
                                 <div style={{
-                                    fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700,
-                                    color: "#1A1714", textTransform: "uppercase", letterSpacing: "0.07em",
+                                    fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700,
+                                    color: "#111111", textTransform: "uppercase", letterSpacing: "0.04em",
                                     marginBottom: "22px",
                                 }}>
                                     Status Timeline

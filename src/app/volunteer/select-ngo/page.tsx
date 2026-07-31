@@ -69,8 +69,8 @@ export default function SelectNgoPage() {
 
     return (
         <div style={{
-            minHeight: "100vh", background: "#F0EDE8",
-            fontFamily: "DM Sans, sans-serif",
+            minHeight: "100vh", background: "#FAFAFA",
+            fontFamily: "Geist, sans-serif",
             display: "flex", alignItems: "center", justifyContent: "center",
         }}>
             {navigating && <PageLoader label="Loading your dashboard..." />}
@@ -82,8 +82,8 @@ export default function SelectNgoPage() {
                 <div style={{ textAlign: "center", marginBottom: "36px" }}>
                     <div style={{
                         display: "inline-flex", alignItems: "center", gap: "10px",
-                        fontFamily: "Syne, sans-serif", fontSize: "28px", fontWeight: 800,
-                        color: "#1A1714", letterSpacing: "-0.5px",
+                        fontFamily: "Geist, sans-serif", fontSize: "28px", fontWeight: 700,
+                        color: "#111111", letterSpacing: "-0.02em",
                     }}>
                         <div style={{
                             width: "14px", height: "14px", borderRadius: "50%",
@@ -92,7 +92,7 @@ export default function SelectNgoPage() {
                         ReServe
                     </div>
                     <div style={{
-                        fontSize: "13px", color: "#888", fontWeight: 300, marginTop: "6px",
+                        fontSize: "13px", color: "#6B7280", fontWeight: 400, marginTop: "6px",
                     }}>
                         One last step before you get started
                     </div>
@@ -100,19 +100,19 @@ export default function SelectNgoPage() {
 
                 {/* Card */}
                 <div style={{
-                    background: "#fff", borderRadius: "22px",
-                    border: "1.5px solid #E0DDD8",
+                    background: "#fff", borderRadius: "16px",
+                    border: "1px solid #E5E7EB",
                     boxShadow: "6px 6px 16px rgba(0,0,0,0.04), -3px -3px 10px rgba(255,255,255,0.9)",
                     padding: "36px 32px",
                 }}>
                     <div style={{
-                        fontFamily: "Syne, sans-serif", fontSize: "22px", fontWeight: 800,
-                        color: "#1A1714", letterSpacing: "-0.3px", marginBottom: "8px",
+                        fontFamily: "Geist, sans-serif", fontSize: "22px", fontWeight: 700,
+                        color: "#111111", letterSpacing: "-0.3px", marginBottom: "8px",
                     }}>
                         Choose Your NGO
                     </div>
                     <div style={{
-                        fontSize: "14px", color: "#888", fontWeight: 300, marginBottom: "28px",
+                        fontSize: "14px", color: "#6B7280", fontWeight: 400, marginBottom: "28px",
                         lineHeight: "1.5",
                     }}>
                         Select the organisation you&apos;d like to volunteer with. You&apos;ll receive task assignments from this NGO.
@@ -121,7 +121,7 @@ export default function SelectNgoPage() {
                     {error && (
                         <div style={{
                             background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "10px",
-                            padding: "12px 16px", fontSize: "13px", color: "#DC2626", marginBottom: "18px",
+                            padding: "12px 16px", fontSize: "13px", color: "#EF4444", marginBottom: "18px",
                         }}>
                             {error}
                         </div>
@@ -130,13 +130,13 @@ export default function SelectNgoPage() {
                     {loading ? (
                         <div style={{
                             display: "flex", alignItems: "center", justifyContent: "center",
-                            padding: "40px 0", color: "#888", gap: "10px", fontSize: "14px",
+                            padding: "40px 0", color: "#6B7280", gap: "10px", fontSize: "14px",
                         }}>
                             <Spinner /> Loading NGOs...
                         </div>
                     ) : ngoList.length === 0 ? (
                         <div style={{
-                            background: "#FAFAF8", border: "2px dashed #E0DDD8", borderRadius: "14px",
+                            background: "#FAFAF8", border: "1px dashed #E5E7EB", borderRadius: "14px",
                             padding: "32px 20px", textAlign: "center",
                         }}>
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5" style={{ marginBottom: "10px" }}>
@@ -144,12 +144,12 @@ export default function SelectNgoPage() {
                                 <path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" />
                             </svg>
                             <div style={{
-                                fontFamily: "Syne, sans-serif", fontSize: "16px", fontWeight: 700,
-                                color: "#1A1714", marginBottom: "6px",
+                                fontFamily: "Geist, sans-serif", fontSize: "16px", fontWeight: 700,
+                                color: "#111111", marginBottom: "6px",
                             }}>
                                 No NGOs available yet
                             </div>
-                            <div style={{ fontSize: "13px", color: "#AAA", fontWeight: 300 }}>
+                            <div style={{ fontSize: "13px", color: "#9CA3AF", fontWeight: 400 }}>
                                 NGOs are being reviewed. Check back soon or contact support.
                             </div>
                         </div>
@@ -166,7 +166,7 @@ export default function SelectNgoPage() {
                                         background: selectedNgoId === ngo.id ? "rgba(232,69,10,0.06)" : "#FAFAF8",
                                         border: selectedNgoId === ngo.id
                                             ? "2px solid #E8450A"
-                                            : "1.5px solid #E0DDD8",
+                                            : "1.5px solid #E5E7EB",
                                         cursor: "pointer", transition: "all 0.15s",
                                         textAlign: "left", width: "100%",
                                     }}
@@ -180,7 +180,7 @@ export default function SelectNgoPage() {
                                         flexShrink: 0,
                                     }}>
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                            stroke={selectedNgoId === ngo.id ? "#E8450A" : "#1D9E75"}
+                                            stroke={selectedNgoId === ngo.id ? "#E8450A" : "#10B981"}
                                             strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" />
                                             <path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" />
@@ -188,8 +188,8 @@ export default function SelectNgoPage() {
                                     </div>
                                     <div style={{ flex: 1 }}>
                                         <div style={{
-                                            fontFamily: "Syne, sans-serif", fontSize: "15px",
-                                            fontWeight: 700, color: "#1A1714",
+                                            fontFamily: "Geist, sans-serif", fontSize: "15px",
+                                            fontWeight: 700, color: "#111111",
                                         }}>
                                             {ngo.org_name}
                                         </div>
@@ -218,11 +218,11 @@ export default function SelectNgoPage() {
                             style={{
                                 width: "100%", height: "52px", marginTop: "24px",
                                 borderRadius: "14px",
-                                background: selectedNgoId ? "#E8450A" : "#E0DDD8",
+                                background: selectedNgoId ? "#E8450A" : "#E5E7EB",
                                 color: selectedNgoId ? "#fff" : "#AAA",
-                                fontFamily: "Syne, sans-serif", fontSize: "15px", fontWeight: 700,
-                                border: selectedNgoId ? "2px solid #1A1714" : "1.5px solid #E0DDD8",
-                                boxShadow: selectedNgoId ? "4px 4px 0px #1A1714" : "none",
+                                fontFamily: "Geist, sans-serif", fontSize: "15px", fontWeight: 700,
+                                border: selectedNgoId ? "2px solid #111111" : "1.5px solid #E5E7EB",
+                                boxShadow: selectedNgoId ? "4px 4px 0px #111111" : "none",
                                 cursor: selectedNgoId && !saving ? "pointer" : "not-allowed",
                                 display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
                                 transition: "all 0.2s",

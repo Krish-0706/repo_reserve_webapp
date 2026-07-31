@@ -36,10 +36,10 @@ function FoodBowlIllustration() {
       <path d="M60 20c0 8-8 8-8 16s8 8 8 16" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
       <path d="M80 14c0 8-8 8-8 16s8 8 8 16" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
       <path d="M100 20c0 8-8 8-8 16s8 8 8 16" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
-      <path d="M30 65h100l-8 30a12 12 0 01-12 10H50a12 12 0 01-12-10l-8-30z" fill="#F0EDE8" stroke="#1A1714" strokeWidth="2" />
+      <path d="M30 65h100l-8 30a12 12 0 01-12 10H50a12 12 0 01-12-10l-8-30z" fill="#F3F4F6" stroke="#111111" strokeWidth="2" />
       <ellipse cx="80" cy="65" rx="50" ry="10" fill="#E8450A" opacity="0.15" />
       <ellipse cx="80" cy="63" rx="42" ry="7" fill="#E8450A" />
-      <path d="M30 65h100" stroke="#1A1714" strokeWidth="2" />
+      <path d="M30 65h100" stroke="#111111" strokeWidth="2" />
     </svg>
   );
 }
@@ -149,26 +149,26 @@ export default function CreateListingPage() {
   };
 
   const inputStyle: React.CSSProperties = {
-    width: "100%", height: "54px",
-    borderRadius: "12px",
-    border: "1.5px solid #E0DDD8",
-    background: "#F8F6F3",
-    padding: "0 18px",
-    fontSize: "15px", color: "#1A1714",
-    fontFamily: "DM Sans, sans-serif",
+    width: "100%", height: "44px",
+    borderRadius: "8px",
+    border: "1px solid #E5E7EB",
+    background: "#FFFFFF",
+    padding: "0 16px",
+    fontSize: "15px", color: "#111111",
+    fontFamily: "Geist, sans-serif",
     outline: "none",
-    boxShadow: "inset 2px 2px 4px rgba(0,0,0,0.05), inset -1px -1px 3px rgba(255,255,255,0.9)",
+    boxShadow: "none",
     boxSizing: "border-box",
   };
 
   const labelStyle: React.CSSProperties = {
-    display: "block", fontSize: "11px", fontWeight: 600,
-    color: "#888", textTransform: "uppercase",
-    letterSpacing: "0.1em", marginBottom: "10px",
+    display: "block", fontSize: "11px", fontWeight: 500,
+    color: "#6B7280", textTransform: "uppercase",
+    letterSpacing: "0.06em", marginBottom: "8px",
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F0EDE8", fontFamily: "DM Sans, sans-serif", display: "flex" }}>
+    <div style={{ minHeight: "100vh", background: "#FAFAFA", fontFamily: "Geist, sans-serif", display: "flex" }}>
 
       {navigating && <PageLoader label="Opening your listing..." />}
 
@@ -182,43 +182,43 @@ export default function CreateListingPage() {
         ]}
       />
 
-      <main style={{ marginLeft: "240px", flex: 1, padding: "44px 52px 60px" }}>
+      <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
 
         {/* Top bar */}
         <div style={{ marginBottom: "10px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
             <span style={{
-              background: "#1A1714", color: "#E8450A",
-              fontFamily: "Syne, sans-serif", fontSize: "11px", fontWeight: 700,
-              padding: "5px 12px", borderRadius: "999px", letterSpacing: "0.05em",
+              background: "#111111", color: "#E8450A",
+              fontFamily: "Geist, sans-serif", fontSize: "11px", fontWeight: 600,
+              padding: "5px 12px", borderRadius: "999px", letterSpacing: "0.04em",
             }}>
               STEP {step} OF 2
             </span>
-            <span style={{ fontSize: "13px", color: "#AAA" }}>
+            <span style={{ fontSize: "13px", color: "#9CA3AF" }}>
               {step === 1 ? "Tell us what you're donating" : "Where and when can it be picked up?"}
             </span>
           </div>
           <h1 style={{
-            fontFamily: "Syne, sans-serif", fontSize: "32px", fontWeight: 800,
-            color: "#1A1714", letterSpacing: "-0.5px",
+            fontFamily: "Geist, sans-serif", fontSize: "28px", fontWeight: 700,
+            color: "#111111", letterSpacing: "-0.02em",
           }}>
             {step === 1 ? "What's on the menu?" : "Set the pickup details"}
           </h1>
         </div>
 
         {/* Progress bar */}
-        <div style={{ background: "#E0DDD8", borderRadius: "4px", height: "5px", margin: "26px 0 40px" }}>
+        <div style={{ background: "#E5E7EB", borderRadius: "4px", height: "4px", margin: "24px 0 32px" }}>
           <div style={{
             background: "#E8450A", width: step === 1 ? "50%" : "100%",
-            height: "5px", borderRadius: "4px", transition: "width 0.35s ease",
+            height: "4px", borderRadius: "4px", transition: "width 0.35s ease",
           }} />
         </div>
 
         {error && (
           <div style={{
             background: "#FEF2F2", border: "1px solid #FECACA",
-            borderRadius: "12px", padding: "14px 18px",
-            fontSize: "13px", color: "#DC2626", marginBottom: "26px",
+            borderRadius: "8px", padding: "14px 18px",
+            fontSize: "13px", color: "#EF4444", marginBottom: "24px",
           }}>
             {error}
           </div>
@@ -229,9 +229,9 @@ export default function CreateListingPage() {
 
           {/* ── LEFT — FORM ── */}
           <div style={{
-            background: "#fff", border: "1.5px solid #E0DDD8",
-            borderRadius: "22px", padding: "40px",
-            boxShadow: "4px 4px 14px rgba(0,0,0,0.04)",
+            background: "#fff", border: "1px solid #E5E7EB",
+            borderRadius: "16px", padding: "32px",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.04)",
           }}>
 
             {step === 1 && (
@@ -240,8 +240,8 @@ export default function CreateListingPage() {
                   <label style={labelStyle}>Food Item Name</label>
                   <input
                     type="text" value={foodName} onChange={(e) => setFoodName(e.target.value)}
-                    placeholder="e.g. Vegetable Biryani, Dal & Rotis, Fresh Sandwiches"
-                    style={{ ...inputStyle, fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "16px" }}
+                    placeholder="e.g. Vegetable Biryani"
+                    style={{ ...inputStyle, fontFamily: "Geist, sans-serif", fontWeight: 600, fontSize: "16px" }}
                   />
                 </div>
 
@@ -250,12 +250,12 @@ export default function CreateListingPage() {
                   <div
                     onClick={() => fileInputRef.current?.click()}
                     style={{
-                      border: "2px dashed", borderColor: photoPreview ? "#E8450A" : "#E0DDD8",
-                      borderRadius: "16px", height: "230px",
+                      border: "2px dashed", borderColor: photoPreview ? "#E8450A" : "#E5E7EB",
+                      borderRadius: "12px", height: "200px",
                       display: "flex", flexDirection: "column",
                       alignItems: "center", justifyContent: "center",
                       cursor: "pointer", overflow: "hidden", position: "relative",
-                      background: "#F8F6F3", transition: "border-color 0.2s",
+                      background: "#F9FAFB", transition: "border-color 0.2s",
                     }}
                   >
                     {photoPreview ? (
@@ -269,7 +269,7 @@ export default function CreateListingPage() {
                     ) : (
                       <>
                         <div style={{ marginBottom: "14px", opacity: 0.5 }}><FoodBowlIllustration /></div>
-                        <span style={{ fontSize: "14px", color: "#888", fontWeight: 400 }}>Click to upload a photo</span>
+                        <span style={{ fontSize: "14px", color: "#6B7280", fontWeight: 400 }}>Click to upload a photo</span>
                         <span style={{ fontSize: "12px", color: "#CCC", marginTop: "4px" }}>JPG or PNG, up to 5MB — optional but recommended</span>
                       </>
                     )}
@@ -285,12 +285,12 @@ export default function CreateListingPage() {
                         key={type} type="button" onClick={() => setFoodType(type)}
                         style={{
                           padding: "16px 12px", borderRadius: "12px",
-                          border: `1.5px solid ${foodType === type ? "#E8450A" : "#E0DDD8"}`,
-                          background: foodType === type ? "#FEF0EA" : "#F8F6F3",
-                          color: foodType === type ? "#E8450A" : "#888",
+                          border: `1px solid ${foodType === type ? "#E8450A" : "#E5E7EB"}`,
+                          background: foodType === type ? "#FFF4ED" : "#F9FAFB",
+                          color: foodType === type ? "#E8450A" : "#6B7280",
                           fontSize: "13px", fontWeight: foodType === type ? 600 : 400,
                           cursor: "pointer", transition: "all 0.15s",
-                          fontFamily: "Syne, sans-serif",
+                          fontFamily: "Geist, sans-serif",
                         }}
                       >
                         {type}
@@ -306,13 +306,13 @@ export default function CreateListingPage() {
                       type="number" min="0.1" step="0.5" value={quantityKg}
                       onChange={(e) => setQuantityKg(e.target.value)}
                       placeholder="0"
-                      style={{ ...inputStyle, fontFamily: "Syne, sans-serif", fontSize: "20px", fontWeight: 700, maxWidth: "180px" }}
+                      style={{ ...inputStyle, fontFamily: "Geist, sans-serif", fontSize: "20px", fontWeight: 700, maxWidth: "180px" }}
                     />
                     <div style={{
-                      background: "#1A1714", color: "#E8450A", borderRadius: "12px",
-                      padding: "0 24px", height: "54px",
+                      background: "#111111", color: "#E8450A", borderRadius: "8px",
+                      padding: "0 24px", height: "44px",
                       display: "flex", alignItems: "center",
-                      fontSize: "15px", fontWeight: 700, fontFamily: "Syne, sans-serif",
+                      fontSize: "14px", fontWeight: 600, fontFamily: "Geist, sans-serif",
                     }}>
                       kilograms
                     </div>
@@ -322,12 +322,12 @@ export default function CreateListingPage() {
                 <button
                   type="button" onClick={handleStep1Next} disabled={uploadingImg}
                   style={{
-                    height: "56px", width: "100%", borderRadius: "14px",
+                    height: "48px", width: "100%", borderRadius: "10px",
                     background: uploadingImg ? "#E89070" : "#E8450A",
-                    color: "#fff", fontFamily: "Syne, sans-serif",
-                    fontSize: "15px", fontWeight: 700, border: "2px solid #1A1714",
+                    color: "#fff", fontFamily: "Geist, sans-serif",
+                    fontSize: "15px", fontWeight: 600, border: "2px solid #111111",
                     cursor: uploadingImg ? "not-allowed" : "pointer",
-                    boxShadow: "4px 4px 0px #1A1714", letterSpacing: "0.02em",
+                    boxShadow: "4px 4px 0px #111111", letterSpacing: "0.01em",
                     display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
                   }}
                 >
@@ -355,16 +355,16 @@ export default function CreateListingPage() {
                     style={{
                       display: "flex", alignItems: "center", gap: "10px",
                       padding: "16px 20px", borderRadius: "12px", width: "100%",
-                      border: `1.5px solid ${lat ? "#1D9E75" : "#E0DDD8"}`,
-                      background: lat ? "#E6F7F2" : "#F8F6F3",
-                      color: lat ? "#1D9E75" : "#888",
+                      border: `1px solid ${lat ? "#10B981" : "#E5E7EB"}`,
+                      background: lat ? "#ECFDF5" : "#F9FAFB",
+                      color: lat ? "#10B981" : "#6B7280",
                       fontSize: "14px", fontWeight: 500,
                       cursor: locLoading ? "not-allowed" : "pointer",
-                      fontFamily: "DM Sans, sans-serif",
+                      fontFamily: "Geist, sans-serif",
                     }}
                   >
                     {locLoading
-                      ? <Spinner size={15} color="#888" />
+                      ? <Spinner size={15} color="#6B7280" />
                       : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="10" r="3" /><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /></svg>
                     }
                     {locLoading ? "Getting your location..." : lat ? `Location captured (${lat.toFixed(4)}, ${lng!.toFixed(4)})` : "Use my current location"}
@@ -375,11 +375,11 @@ export default function CreateListingPage() {
                   <label style={labelStyle}>Pickup Window</label>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
                     <div>
-                      <div style={{ fontSize: "12px", color: "#AAA", marginBottom: "8px" }}>Available from</div>
+                      <div style={{ fontSize: "12px", color: "#9CA3AF", marginBottom: "8px" }}>Available from</div>
                       <input type="datetime-local" value={pickupStart} onChange={(e) => setPickupStart(e.target.value)} style={inputStyle} min={new Date().toISOString().slice(0, 16)} />
                     </div>
                     <div>
-                      <div style={{ fontSize: "12px", color: "#AAA", marginBottom: "8px" }}>Available until</div>
+                      <div style={{ fontSize: "12px", color: "#9CA3AF", marginBottom: "8px" }}>Available until</div>
                       <input type="datetime-local" value={pickupEnd} onChange={(e) => setPickupEnd(e.target.value)} style={inputStyle} min={pickupStart || new Date().toISOString().slice(0, 16)} />
                     </div>
                   </div>
@@ -389,10 +389,10 @@ export default function CreateListingPage() {
                   <button
                     type="button" onClick={() => { setStep(1); setError(""); }}
                     style={{
-                      height: "56px", padding: "0 28px", borderRadius: "14px",
-                      background: "transparent", color: "#888",
-                      fontFamily: "DM Sans, sans-serif", fontSize: "15px",
-                      border: "1.5px solid #E0DDD8", cursor: "pointer",
+                      height: "48px", padding: "0 28px", borderRadius: "10px",
+                      background: "transparent", color: "#6B7280",
+                      fontFamily: "Geist, sans-serif", fontSize: "15px",
+                      border: "1px solid #E5E7EB", cursor: "pointer",
                     }}
                   >
                     ← Back
@@ -400,12 +400,12 @@ export default function CreateListingPage() {
                   <button
                     type="submit" disabled={submitting}
                     style={{
-                      flex: 1, height: "56px", borderRadius: "14px",
+                      flex: 1, height: "48px", borderRadius: "10px",
                       background: submitting ? "#E89070" : "#E8450A",
-                      color: "#fff", fontFamily: "Syne, sans-serif",
-                      fontSize: "15px", fontWeight: 700, border: "2px solid #1A1714",
+                      color: "#fff", fontFamily: "Geist, sans-serif",
+                      fontSize: "15px", fontWeight: 600, border: "2px solid #111111",
                       cursor: submitting ? "not-allowed" : "pointer",
-                      boxShadow: "4px 4px 0px #1A1714", letterSpacing: "0.02em",
+                      boxShadow: "4px 4px 0px #111111", letterSpacing: "0.01em",
                       display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
                     }}
                   >
@@ -422,8 +422,8 @@ export default function CreateListingPage() {
 
             {/* Preview card */}
             <div style={{
-              background: "#1A1714", borderRadius: "22px",
-              padding: "30px", color: "#F0EDE8",
+              background: "#111111", borderRadius: "16px",
+              padding: "28px", color: "#FAFAFA",
               position: "relative", overflow: "hidden",
             }}>
               <div style={{
@@ -432,43 +432,43 @@ export default function CreateListingPage() {
                 background: "radial-gradient(circle, rgba(232,69,10,0.15) 0%, transparent 70%)",
               }} />
               <div style={{
-                fontSize: "10px", fontWeight: 700, color: "rgba(240,237,232,0.3)",
-                textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "18px",
-                fontFamily: "Syne, sans-serif",
+                fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.3)",
+                textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "16px",
+                fontFamily: "Geist, sans-serif",
               }}>
                 Live Preview
               </div>
 
               <div style={{
                 width: "100%", height: "150px", borderRadius: "14px",
-                background: "rgba(240,237,232,0.05)", marginBottom: "20px",
+                background: "rgba(255,255,255,0.05)", marginBottom: "18px",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 overflow: "hidden", position: "relative", zIndex: 1,
               }}>
                 {photoPreview
                   ? <>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={photoPreview} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    </>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={photoPreview} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  </>
                   : <div style={{ opacity: 0.3 }}><FoodBowlIllustration /></div>
                 }
               </div>
 
-              <div style={{ fontFamily: "Syne, sans-serif", fontSize: "21px", fontWeight: 700, marginBottom: "5px", position: "relative", zIndex: 1 }}>
+              <div style={{ fontFamily: "Geist, sans-serif", fontSize: "20px", fontWeight: 600, marginBottom: "5px", position: "relative", zIndex: 1 }}>
                 {foodName || "Your food item"}
               </div>
-              <div style={{ fontSize: "13px", color: "rgba(240,237,232,0.45)", marginBottom: "18px", position: "relative", zIndex: 1 }}>
+              <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.45)", marginBottom: "16px", position: "relative", zIndex: 1 }}>
                 {foodType || "Category"} · {quantityKg ? `${quantityKg} kg` : "Quantity"}
               </div>
 
               {step === 2 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", position: "relative", zIndex: 1, borderTop: "1px solid rgba(240,237,232,0.08)", paddingTop: "16px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", position: "relative", zIndex: 1, borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "14px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px" }}>
-                    <span style={{ color: "rgba(240,237,232,0.4)" }}>Address</span>
-                    <span style={{ color: "#F0EDE8", maxWidth: "160px", textAlign: "right" }}>{address || "—"}</span>
+                    <span style={{ color: "rgba(255,255,255,0.4)" }}>Address</span>
+                    <span style={{ color: "#FAFAFA", maxWidth: "160px", textAlign: "right" }}>{address || "—"}</span>
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px" }}>
-                    <span style={{ color: "rgba(240,237,232,0.4)" }}>Window</span>
+                    <span style={{ color: "rgba(255,255,255,0.4)" }}>Window</span>
                     <span style={{ color: "#E8450A" }}>
                       {pickupStart && pickupEnd
                         ? `${new Date(pickupStart).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })} – ${new Date(pickupEnd).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}`
@@ -480,10 +480,10 @@ export default function CreateListingPage() {
 
               <div style={{
                 position: "absolute", top: "30px", right: "30px",
-                background: "rgba(29,158,117,0.15)", color: "#1D9E75",
-                fontSize: "9px", fontWeight: 700, padding: "4px 10px",
-                borderRadius: "999px", letterSpacing: "0.08em",
-                fontFamily: "Syne, sans-serif", zIndex: 1,
+                background: "rgba(16,185,129,0.15)", color: "#10B981",
+                fontSize: "9px", fontWeight: 600, padding: "4px 10px",
+                borderRadius: "999px", letterSpacing: "0.06em",
+                fontFamily: "Geist, sans-serif", zIndex: 1,
               }}>
                 WILL BE ACTIVE
               </div>
@@ -492,21 +492,21 @@ export default function CreateListingPage() {
             {/* Impact card — only on step 1 */}
             {step === 1 && (
               <div style={{
-                background: "#fff", border: "1.5px solid #E0DDD8",
-                borderRadius: "22px", padding: "32px",
-                boxShadow: "3px 3px 8px rgba(0,0,0,0.03)",
+                background: "#fff", border: "1px solid #E5E7EB",
+                borderRadius: "16px", padding: "28px",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
                 flex: 1,
                 display: "flex", flexDirection: "column", justifyContent: "space-between",
               }}>
                 <div>
-                  <div style={{ fontSize: "11px", fontWeight: 600, color: "#AAA", textTransform: "uppercase", letterSpacing: "0.09em", marginBottom: "14px" }}>
+                  <div style={{ fontSize: "11px", fontWeight: 500, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "14px" }}>
                     Estimated Impact
                   </div>
                   <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
-                    <span style={{ fontFamily: "Syne, sans-serif", fontSize: "48px", fontWeight: 800, color: "#1D9E75" }}>
+                    <span style={{ fontFamily: "Geist, sans-serif", fontSize: "44px", fontWeight: 700, color: "#10B981" }}>
                       {quantityKg ? Math.round(Number(quantityKg) * 2.5) : 0}
                     </span>
-                    <span style={{ fontSize: "14px", color: "#888" }}>meals enabled</span>
+                    <span style={{ fontSize: "14px", color: "#6B7280" }}>meals enabled</span>
                   </div>
                   <div style={{ fontSize: "12px", color: "#CCC", marginTop: "8px" }}>
                     Based on 2.5 meals per kg of surplus food
@@ -514,40 +514,40 @@ export default function CreateListingPage() {
                 </div>
 
                 {/* Divider */}
-                <div style={{ borderTop: "1px solid #F0EDE8", margin: "28px 0" }} />
+                <div style={{ borderTop: "1px solid #F3F4F6", margin: "24px 0" }} />
 
                 {/* Secondary impact metrics */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
                   <div>
-                    <div style={{ fontFamily: "Syne, sans-serif", fontSize: "24px", fontWeight: 800, color: "#E8450A" }}>
+                    <div style={{ fontFamily: "Geist, sans-serif", fontSize: "24px", fontWeight: 700, color: "#E8450A" }}>
                       {quantityKg ? Number(quantityKg).toFixed(1) : "0.0"} <span style={{ fontSize: "14px" }}>kg</span>
                     </div>
-                    <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>Food rescued</div>
+                    <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>Food rescued</div>
                   </div>
                   <div>
-                    <div style={{ fontFamily: "Syne, sans-serif", fontSize: "24px", fontWeight: 800, color: "#185FA5" }}>
+                    <div style={{ fontFamily: "Geist, sans-serif", fontSize: "24px", fontWeight: 700, color: "#185FA5" }}>
                       {quantityKg ? (Number(quantityKg) * 2.5).toFixed(1) : "0.0"} <span style={{ fontSize: "14px" }}>kg</span>
                     </div>
-                    <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>CO₂ offset</div>
+                    <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>CO₂ offset</div>
                   </div>
                 </div>
 
                 {/* Bottom illustration strip */}
                 <div style={{
-                  marginTop: "28px", paddingTop: "24px", borderTop: "1px solid #F0EDE8",
+                  marginTop: "24px", paddingTop: "20px", borderTop: "1px solid #F3F4F6",
                   display: "flex", alignItems: "center", gap: "14px",
                 }}>
                   <div style={{
                     width: "40px", height: "40px", borderRadius: "10px",
-                    background: "#FEF0EA", display: "flex", alignItems: "center", justifyContent: "center",
+                    background: "#FFF4ED", display: "flex", alignItems: "center", justifyContent: "center",
                     flexShrink: 0,
                   }}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
                     </svg>
                   </div>
-                  <div style={{ fontSize: "12px", color: "#888", fontWeight: 300, lineHeight: 1.5 }}>
-                    Every listing you post helps reduce Mumbai&apos;s <strong style={{ color: "#1A1714", fontWeight: 600 }}>7.4K tonnes</strong> of daily food waste.
+                  <div style={{ fontSize: "12px", color: "#6B7280", fontWeight: 400, lineHeight: 1.5 }}>
+                    Every listing you post helps reduce Mumbai&apos;s <strong style={{ color: "#111111", fontWeight: 600 }}>7.4K tonnes</strong> of daily food waste.
                   </div>
                 </div>
               </div>

@@ -54,8 +54,8 @@ function statusColor(s: PickupStatus) {
         claimed: { bg: "rgba(24,95,165,0.1)", fg: "#185FA5" },
         assigned: { bg: "rgba(186,117,23,0.1)", fg: "#BA7517" },
         in_progress: { bg: "rgba(186,117,23,0.1)", fg: "#BA7517" },
-        completed: { bg: "rgba(29,158,117,0.12)", fg: "#1D9E75" },
-        cancelled: { bg: "rgba(136,136,128,0.12)", fg: "#888880" },
+        completed: { bg: "rgba(29,158,117,0.12)", fg: "#10B981" },
+        cancelled: { bg: "rgba(136,136,128,0.12)", fg: "#6B7280" },
     };
     return map[s];
 }
@@ -64,11 +64,11 @@ function statusColor(s: PickupStatus) {
 function EmptyPickups() {
     return (
         <svg width="130" height="100" viewBox="0 0 130 100" fill="none">
-            <rect x="15" y="20" width="100" height="64" rx="10" fill="#fff" stroke="#E0DDD8" strokeWidth="1.5" />
-            <rect x="28" y="36" width="36" height="5" rx="2.5" fill="#E0DDD8" />
-            <rect x="28" y="48" width="56" height="5" rx="2.5" fill="#F0EDE8" />
-            <rect x="28" y="60" width="44" height="5" rx="2.5" fill="#F0EDE8" />
-            <circle cx="100" cy="28" r="14" fill="#FEF0EA" stroke="#E8450A" strokeWidth="1.5" strokeDasharray="3 3" />
+            <rect x="15" y="20" width="100" height="64" rx="10" fill="#fff" stroke="#E5E7EB" strokeWidth="1.5" />
+            <rect x="28" y="36" width="36" height="5" rx="2.5" fill="#E5E7EB" />
+            <rect x="28" y="48" width="56" height="5" rx="2.5" fill="#FAFAFA" />
+            <rect x="28" y="60" width="44" height="5" rx="2.5" fill="#FAFAFA" />
+            <circle cx="100" cy="28" r="14" fill="#FFF4ED" stroke="#E8450A" strokeWidth="1.5" strokeDasharray="3 3" />
             <path d="M100 23v8M96 27h8" stroke="#E8450A" strokeWidth="2" strokeLinecap="round" />
         </svg>
     );
@@ -170,7 +170,7 @@ export default function NGOPickupsPage() {
     const completed = pickups.filter((p) => p.status === "completed");
 
     return (
-        <div style={{ minHeight: "100vh", background: "#F0EDE8", fontFamily: "DM Sans, sans-serif", display: "flex" }}>
+        <div style={{ minHeight: "100vh", background: "#FAFAFA", fontFamily: "Geist, sans-serif", display: "flex" }}>
 
             {navigating && <PageLoader label="Loading..." />}
             {loading && <PageLoader label="Loading pickups..." />}
@@ -185,14 +185,14 @@ export default function NGOPickupsPage() {
                 ]}
             />
 
-            <main style={{ marginLeft: "240px", flex: 1, padding: "44px 52px 60px" }}>
+            <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
 
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "40px" }}>
                     <div>
-                        <h1 style={{ fontFamily: "Syne, sans-serif", fontSize: "32px", fontWeight: 800, color: "#1A1714", letterSpacing: "-0.5px" }}>
+                        <h1 style={{ fontFamily: "Geist, sans-serif", fontSize: "32px", fontWeight: 700, color: "#111111", letterSpacing: "-0.02em" }}>
                             Active Pickups
                         </h1>
-                        <p style={{ fontSize: "14px", color: "#888", marginTop: "6px", fontWeight: 300 }}>
+                        <p style={{ fontSize: "14px", color: "#6B7280", marginTop: "6px", fontWeight: 400 }}>
                             Track and manage your claimed food listings
                         </p>
                     </div>
@@ -201,8 +201,8 @@ export default function NGOPickupsPage() {
                         style={{
                             height: "46px", padding: "0 22px", borderRadius: "999px",
                             background: "#E8450A", color: "#fff",
-                            fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700,
-                            border: "2px solid #1A1714", boxShadow: "3px 3px 0px #1A1714",
+                            fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700,
+                            border: "2px solid #111111", boxShadow: "3px 3px 0px #111111",
                             cursor: "pointer", display: "flex", alignItems: "center", gap: "8px",
                         }}
                     >
@@ -214,26 +214,26 @@ export default function NGOPickupsPage() {
                 {error && (
                     <div style={{
                         background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "12px",
-                        padding: "14px 18px", fontSize: "13px", color: "#DC2626", marginBottom: "24px",
+                        padding: "14px 18px", fontSize: "13px", color: "#EF4444", marginBottom: "24px",
                         display: "flex", alignItems: "center", justifyContent: "space-between",
                     }}>
                         <span>{error}</span>
                         <button onClick={() => setError("")} style={{
-                            background: "none", border: "none", color: "#DC2626",
+                            background: "none", border: "none", color: "#EF4444",
                             cursor: "pointer", fontSize: "16px", lineHeight: 1,
                         }}>×</button>
                     </div>
                 )}
 
                 {!loading && pickups.length === 0 && (
-                    <div style={{ background: "#fff", border: "2px dashed #E0DDD8", borderRadius: "22px", padding: "64px 32px", textAlign: "center" }}>
+                    <div style={{ background: "#fff", border: "1px dashed #E5E7EB", borderRadius: "16px", padding: "64px 32px", textAlign: "center" }}>
                         <div style={{ display: "flex", justifyContent: "center", marginBottom: "18px" }}>
                             <EmptyPickups />
                         </div>
-                        <div style={{ fontFamily: "Syne, sans-serif", fontSize: "20px", fontWeight: 700, color: "#1A1714", marginBottom: "8px" }}>
+                        <div style={{ fontFamily: "Geist, sans-serif", fontSize: "20px", fontWeight: 700, color: "#111111", marginBottom: "8px" }}>
                             No pickups yet
                         </div>
-                        <div style={{ fontSize: "14px", color: "#AAA", marginBottom: "26px", fontWeight: 300 }}>
+                        <div style={{ fontSize: "14px", color: "#9CA3AF", marginBottom: "26px", fontWeight: 400 }}>
                             Claim a listing from the live map to get started.
                         </div>
                         <button
@@ -241,8 +241,8 @@ export default function NGOPickupsPage() {
                             style={{
                                 height: "48px", padding: "0 32px", borderRadius: "12px",
                                 background: "#E8450A", color: "#fff",
-                                fontFamily: "Syne, sans-serif", fontSize: "14px", fontWeight: 700,
-                                border: "2px solid #1A1714", boxShadow: "3px 3px 0px #1A1714", cursor: "pointer",
+                                fontFamily: "Geist, sans-serif", fontSize: "14px", fontWeight: 700,
+                                border: "2px solid #111111", boxShadow: "3px 3px 0px #111111", cursor: "pointer",
                             }}
                         >
                             Go to Live Map →
@@ -252,7 +252,7 @@ export default function NGOPickupsPage() {
 
                 {!loading && active.length > 0 && (
                     <>
-                        <div style={{ fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700, color: "#1A1714", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: "16px" }}>
+                        <div style={{ fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700, color: "#111111", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "16px" }}>
                             In Progress — {active.length}
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "36px" }}>
@@ -273,7 +273,7 @@ export default function NGOPickupsPage() {
 
                 {!loading && completed.length > 0 && (
                     <>
-                        <div style={{ fontFamily: "Syne, sans-serif", fontSize: "13px", fontWeight: 700, color: "#1A1714", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: "16px" }}>
+                        <div style={{ fontFamily: "Geist, sans-serif", fontSize: "13px", fontWeight: 700, color: "#111111", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "16px" }}>
                             Completed — {completed.length}
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
@@ -319,14 +319,14 @@ function PickupCard({
 
     return (
         <div style={{
-            background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "16px",
+            background: "#fff", border: "1px solid #E5E7EB", borderRadius: "16px",
             padding: "20px 24px",
-            boxShadow: "2px 2px 6px rgba(0,0,0,0.04)",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
         }}>
             <div style={{ display: "grid", gridTemplateColumns: "56px 1fr auto", gap: "18px", alignItems: "center" }}>
                 <div style={{
                     width: "56px", height: "56px", borderRadius: "12px",
-                    overflow: "hidden", background: "#F0EDE8", flexShrink: 0, position: "relative",
+                    overflow: "hidden", background: "#FAFAFA", flexShrink: 0, position: "relative",
                     display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
                     {l.photo_url
@@ -336,16 +336,16 @@ function PickupCard({
                 </div>
 
                 <div>
-                    <div style={{ fontFamily: "Syne, sans-serif", fontSize: "15px", fontWeight: 700, color: "#1A1714", marginBottom: "3px" }}>
+                    <div style={{ fontFamily: "Geist, sans-serif", fontSize: "15px", fontWeight: 700, color: "#111111", marginBottom: "3px" }}>
                         {l.food_name || l.food_type}
                     </div>
-                    <div style={{ fontSize: "12px", color: "#888", fontWeight: 300 }}>
+                    <div style={{ fontSize: "12px", color: "#6B7280", fontWeight: 400 }}>
                         {l.food_type} · {l.quantity_kg} kg · {l.address.split(",")[0]}
                     </div>
-                    <div style={{ fontSize: "11px", color: "#AAA", marginTop: "4px" }}>
+                    <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>
                         Claimed {new Date(pickup.claimed_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
                         {pickup.volunteers && (
-                            <span style={{ marginLeft: "10px", color: "#1D9E75" }}>
+                            <span style={{ marginLeft: "10px", color: "#10B981" }}>
                                 · Volunteer: {pickup.volunteers.vol_name || pickup.volunteers.users?.email?.split("@")[0] || "Assigned"}
                             </span>
                         )}
@@ -356,14 +356,14 @@ function PickupCard({
                     <span style={{
                         background: sc.bg, color: sc.fg,
                         fontSize: "10px", fontWeight: 700,
-                        fontFamily: "Syne, sans-serif",
-                        letterSpacing: "0.07em", textTransform: "uppercase",
+                        fontFamily: "Geist, sans-serif",
+                        letterSpacing: "0.04em", textTransform: "uppercase",
                         padding: "4px 10px", borderRadius: "999px",
                     }}>
                         {pickup.status.replace("_", " ")}
                     </span>
                     {pickup.status === "completed" && pickup.completed_at && (
-                        <span style={{ fontSize: "11px", color: "#AAA" }}>
+                        <span style={{ fontSize: "11px", color: "#9CA3AF" }}>
                             {new Date(pickup.completed_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
                         </span>
                     )}
@@ -372,15 +372,15 @@ function PickupCard({
 
             {/* Assign Volunteer button — only for claimed pickups without a volunteer */}
             {canAssign && (
-                <div style={{ marginTop: "14px", borderTop: "1px solid #F0EDE8", paddingTop: "14px" }}>
+                <div style={{ marginTop: "14px", borderTop: "1px solid #FAFAFA", paddingTop: "14px" }}>
                     <button
                         onClick={onToggleAssign}
                         style={{
                             height: "36px", padding: "0 18px", borderRadius: "10px",
-                            background: isAssigning ? "#F0EDE8" : "#fff",
-                            color: "#1A1714",
-                            fontFamily: "Syne, sans-serif", fontSize: "12px", fontWeight: 700,
-                            border: "1.5px solid #E0DDD8", cursor: "pointer",
+                            background: isAssigning ? "#FAFAFA" : "#fff",
+                            color: "#111111",
+                            fontFamily: "Geist, sans-serif", fontSize: "12px", fontWeight: 700,
+                            border: "1px solid #E5E7EB", cursor: "pointer",
                             display: "flex", alignItems: "center", gap: "6px",
                             transition: "all 0.15s",
                         }}
@@ -395,11 +395,11 @@ function PickupCard({
                     {/* Volunteer selector dropdown */}
                     {isAssigning && (
                         <div style={{
-                            marginTop: "12px", background: "#FAFAF8", border: "1.5px solid #E0DDD8",
+                            marginTop: "12px", background: "#FAFAF8", border: "1px solid #E5E7EB",
                             borderRadius: "14px", padding: "14px", maxHeight: "240px", overflowY: "auto",
                         }}>
                             {volunteers.length === 0 ? (
-                                <div style={{ fontSize: "13px", color: "#AAA", textAlign: "center", padding: "12px 0" }}>
+                                <div style={{ fontSize: "13px", color: "#9CA3AF", textAlign: "center", padding: "12px 0" }}>
                                     No volunteers available
                                 </div>
                             ) : (
@@ -412,7 +412,7 @@ function PickupCard({
                                             style={{
                                                 display: "flex", alignItems: "center", justifyContent: "space-between",
                                                 padding: "10px 14px", borderRadius: "10px",
-                                                background: "#fff", border: "1px solid #E0DDD8",
+                                                background: "#fff", border: "1px solid #E5E7EB",
                                                 cursor: assignLoading ? "wait" : "pointer",
                                                 transition: "all 0.15s",
                                                 width: "100%", textAlign: "left",
@@ -420,17 +420,17 @@ function PickupCard({
                                         >
                                             <div>
                                                 <div style={{
-                                                    fontFamily: "Syne, sans-serif", fontSize: "13px",
-                                                    fontWeight: 700, color: "#1A1714",
+                                                    fontFamily: "Geist, sans-serif", fontSize: "13px",
+                                                    fontWeight: 700, color: "#111111",
                                                 }}>
                                                     {vol.vol_name || vol.users?.email?.split("@")[0] || "Volunteer"}
                                                 </div>
-                                                <div style={{ fontSize: "11px", color: "#888", marginTop: "2px" }}>
+                                                <div style={{ fontSize: "11px", color: "#6B7280", marginTop: "2px" }}>
                                                     {vol.tasks_completed} tasks · {Number(vol.rating).toFixed(1)} rating · {Number(vol.hours_logged).toFixed(0)}h logged
                                                 </div>
                                             </div>
                                             <div style={{
-                                                fontSize: "11px", fontWeight: 700, fontFamily: "Syne, sans-serif",
+                                                fontSize: "11px", fontWeight: 700, fontFamily: "Geist, sans-serif",
                                                 color: "#E8450A", display: "flex", alignItems: "center", gap: "4px",
                                             }}>
                                                 {assignLoading ? <Spinner /> : "Assign"}
@@ -447,7 +447,7 @@ function PickupCard({
             {/* Show assigned volunteer info for assigned/in_progress pickups */}
             {(pickup.status === "assigned" || pickup.status === "in_progress") && pickup.volunteers && (
                 <div style={{
-                    marginTop: "14px", borderTop: "1px solid #F0EDE8", paddingTop: "14px",
+                    marginTop: "14px", borderTop: "1px solid #FAFAFA", paddingTop: "14px",
                     display: "flex", alignItems: "center", gap: "10px",
                 }}>
                     <div style={{
@@ -455,15 +455,15 @@ function PickupCard({
                         background: "rgba(29,158,117,0.08)",
                         display: "flex", alignItems: "center", justifyContent: "center",
                     }}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
                         </svg>
                     </div>
                     <div>
-                        <span style={{ fontSize: "12px", color: "#1A1714", fontWeight: 500 }}>
+                        <span style={{ fontSize: "12px", color: "#111111", fontWeight: 500 }}>
                             {pickup.volunteers.vol_name || pickup.volunteers.users?.email?.split("@")[0] || "Volunteer"}
                         </span>
-                        <span style={{ fontSize: "11px", color: "#AAA", marginLeft: "8px" }}>
+                        <span style={{ fontSize: "11px", color: "#9CA3AF", marginLeft: "8px" }}>
                             {pickup.status === "assigned" ? "Awaiting acceptance" : "En route"}
                         </span>
                     </div>

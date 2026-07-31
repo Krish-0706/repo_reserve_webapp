@@ -99,7 +99,7 @@ export default function ListingDetailPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F0EDE8", fontFamily: "DM Sans, sans-serif", display: "flex" }}>
+    <div style={{ minHeight: "100vh", background: "#FAFAFA", fontFamily: "Geist, sans-serif", display: "flex" }}>
 
       {navigating && <PageLoader label="Back to dashboard..." />}
       {loading && <PageLoader label="Loading listing..." />}
@@ -114,7 +114,7 @@ export default function ListingDetailPage() {
         ]}
       />
 
-      <main style={{ marginLeft: "240px", flex: 1, padding: "44px 52px 60px" }}>
+      <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
 
         {/* Back link */}
         <button
@@ -122,7 +122,7 @@ export default function ListingDetailPage() {
           style={{
             display: "flex", alignItems: "center", gap: "6px",
             background: "none", border: "none", cursor: "pointer",
-            fontSize: "13px", color: "#888", fontFamily: "DM Sans, sans-serif",
+            fontSize: "13px", color: "#6B7280", fontFamily: "Geist, sans-serif",
             marginBottom: "24px", padding: 0,
           }}
         >
@@ -132,14 +132,14 @@ export default function ListingDetailPage() {
 
         {/* Error */}
         {!loading && error && (
-          <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "10px", padding: "14px 16px", fontSize: "13px", color: "#DC2626" }}>
+          <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "10px", padding: "14px 16px", fontSize: "13px", color: "#EF4444" }}>
             {error}
           </div>
         )}
 
         {/* Deleted confirmation */}
         {deleted && (
-          <div style={{ background: "#E6F7F2", border: "1px solid #1D9E75", borderRadius: "10px", padding: "14px 16px", fontSize: "13px", color: "#1D9E75" }}>
+          <div style={{ background: "#E6F7F2", border: "1px solid #10B981", borderRadius: "10px", padding: "14px 16px", fontSize: "13px", color: "#10B981" }}>
             Listing expired. Redirecting to dashboard...
           </div>
         )}
@@ -159,7 +159,7 @@ export default function ListingDetailPage() {
               {listing.photo_url ? (
                 <div style={{
                   width: "100%", height: "300px", borderRadius: "16px", overflow: "hidden",
-                  marginBottom: "20px", border: "1.5px solid #E0DDD8",
+                  marginBottom: "20px", border: "1px solid #E5E7EB",
                   boxShadow: "4px 4px 10px rgba(0,0,0,0.05)", position: "relative",
                 }}>
                   <Image src={listing.photo_url} alt={listing.food_name} fill style={{ objectFit: "cover" }} unoptimized />
@@ -167,23 +167,23 @@ export default function ListingDetailPage() {
               ) : (
                 <div style={{
                   width: "100%", height: "200px", borderRadius: "16px",
-                  background: "#F0EDE8", border: "1.5px dashed #E0DDD8",
+                  background: "#FAFAFA", border: "1.5px dashed #E5E7EB",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   marginBottom: "20px",
                 }}>
-                  <span style={{ fontSize: "13px", color: "#AAA" }}>No photo uploaded</span>
+                  <span style={{ fontSize: "13px", color: "#9CA3AF" }}>No photo uploaded</span>
                 </div>
               )}
 
               {/* Title + badge (stacked) */}
               <div style={{ marginBottom: "20px" }}>
                 <h1 style={{
-                  fontFamily: "Syne, sans-serif", fontSize: "24px", fontWeight: 700,
-                  color: "#1A1714", letterSpacing: "-0.3px", marginBottom: "4px",
+                  fontFamily: "Geist, sans-serif", fontSize: "24px", fontWeight: 700,
+                  color: "#111111", letterSpacing: "-0.3px", marginBottom: "4px",
                 }}>
                   {listing.food_name || listing.food_type}
                 </h1>
-                <p style={{ fontSize: "14px", color: "#888", fontWeight: 300, marginBottom: "10px" }}>
+                <p style={{ fontSize: "14px", color: "#6B7280", fontWeight: 400, marginBottom: "10px" }}>
                   {listing.food_type} · {listing.quantity_kg} kg · {listing.address}
                 </p>
                 {/* Status badge – below title */}
@@ -193,13 +193,13 @@ export default function ListingDetailPage() {
                     : listing.status === "claimed" ? "rgba(24,95,165,0.1)"
                       : listing.status === "completed" ? "rgba(29,158,117,0.12)"
                         : "rgba(136,136,128,0.12)",
-                  color: listing.status === "active" ? "#1D9E75"
+                  color: listing.status === "active" ? "#10B981"
                     : listing.status === "claimed" ? "#185FA5"
-                      : listing.status === "completed" ? "#1D9E75"
-                        : "#888880",
+                      : listing.status === "completed" ? "#10B981"
+                        : "#6B7280",
                   fontSize: "11px", fontWeight: 700,
-                  fontFamily: "Syne, sans-serif",
-                  letterSpacing: "0.08em", textTransform: "uppercase",
+                  fontFamily: "Geist, sans-serif",
+                  letterSpacing: "0.06em", textTransform: "uppercase",
                   padding: "5px 14px", borderRadius: "999px",
                 }}>
                   {listing.status}
@@ -214,9 +214,9 @@ export default function ListingDetailPage() {
                   style={{
                     display: "inline-flex", alignItems: "center", gap: "6px",
                     height: "44px", padding: "0 20px", borderRadius: "10px",
-                    border: "1.5px solid #E0DDD8", background: "#F8F6F3",
+                    border: "1px solid #E5E7EB", background: "#F9FAFB",
                     color: "#555", fontSize: "13px", fontWeight: 500,
-                    textDecoration: "none", fontFamily: "DM Sans, sans-serif",
+                    textDecoration: "none", fontFamily: "Geist, sans-serif",
                   }}
                 >
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="10" r="3" /><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /></svg>
@@ -231,7 +231,7 @@ export default function ListingDetailPage() {
                       border: "1.5px solid #E24B4A", background: "transparent",
                       color: "#E24B4A", fontSize: "13px", fontWeight: 500,
                       cursor: deleting ? "not-allowed" : "pointer",
-                      fontFamily: "DM Sans, sans-serif", opacity: deleting ? 0.6 : 1,
+                      fontFamily: "Geist, sans-serif", opacity: deleting ? 0.6 : 1,
                       display: "flex", alignItems: "center", gap: "8px",
                     }}
                   >
@@ -246,7 +246,7 @@ export default function ListingDetailPage() {
             <div>
               {/* Info grid */}
               <div style={{
-                background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "14px",
+                background: "#fff", border: "1px solid #E5E7EB", borderRadius: "14px",
                 overflow: "hidden", marginBottom: "20px",
                 boxShadow: "3px 3px 8px rgba(0,0,0,0.04)",
               }}>
@@ -274,14 +274,14 @@ export default function ListingDetailPage() {
                     style={{
                       display: "flex", justifyContent: "space-between", alignItems: "center",
                       padding: "14px 20px",
-                      borderBottom: i < arr.length - 1 ? "1px solid #F0EDE8" : "none",
+                      borderBottom: i < arr.length - 1 ? "1px solid #FAFAFA" : "none",
                     }}
                   >
-                    <span style={{ fontSize: "12px", color: "#888", fontWeight: 400 }}>{row.label}</span>
+                    <span style={{ fontSize: "12px", color: "#6B7280", fontWeight: 400 }}>{row.label}</span>
                     <span style={{
                       fontSize: "13px", fontWeight: 500,
-                      color: row.highlight ? "#E8450A" : "#1A1714",
-                      fontFamily: row.highlight ? "Syne, sans-serif" : "DM Sans, sans-serif",
+                      color: row.highlight ? "#E8450A" : "#111111",
+                      fontFamily: row.highlight ? "Geist, sans-serif" : "Geist, sans-serif",
                     }}>
                       {row.value}
                     </span>
@@ -291,13 +291,13 @@ export default function ListingDetailPage() {
 
               {/* Status timeline */}
               <div style={{
-                background: "#fff", border: "1.5px solid #E0DDD8", borderRadius: "14px",
+                background: "#fff", border: "1px solid #E5E7EB", borderRadius: "14px",
                 padding: "20px 24px",
                 boxShadow: "3px 3px 8px rgba(0,0,0,0.04)",
               }}>
                 <div style={{
-                  fontFamily: "Syne, sans-serif", fontSize: "11px", fontWeight: 600,
-                  color: "#888", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "16px",
+                  fontFamily: "Geist, sans-serif", fontSize: "11px", fontWeight: 600,
+                  color: "#6B7280", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "16px",
                 }}>
                   Status Timeline
                 </div>
@@ -311,15 +311,15 @@ export default function ListingDetailPage() {
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
                           <div style={{
                             width: "16px", height: "16px", borderRadius: "50%",
-                            background: done ? "#E8450A" : "#E0DDD8",
-                            border: `2px solid ${done ? "#E8450A" : "#E0DDD8"}`,
+                            background: done ? "#E8450A" : "#E5E7EB",
+                            border: `2px solid ${done ? "#E8450A" : "#E5E7EB"}`,
                             boxShadow: active ? "0 0 0 4px rgba(232,69,10,0.12)" : "none",
                             transition: "all 0.2s", flexShrink: 0,
                           }} />
                           <span style={{
                             fontSize: "10px", fontWeight: done ? 600 : 400,
                             color: done ? "#E8450A" : "#AAA",
-                            fontFamily: "Syne, sans-serif",
+                            fontFamily: "Geist, sans-serif",
                             textTransform: "uppercase", letterSpacing: "0.06em", whiteSpace: "nowrap",
                           }}>
                             {step}
@@ -328,7 +328,7 @@ export default function ListingDetailPage() {
                         {i < 2 && (
                           <div style={{
                             flex: 1, height: "2px",
-                            background: i < current ? "#E8450A" : "#E0DDD8",
+                            background: i < current ? "#E8450A" : "#E5E7EB",
                             margin: "0 4px", marginBottom: "22px",
                             transition: "background 0.2s",
                           }} />

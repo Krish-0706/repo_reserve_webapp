@@ -150,8 +150,8 @@ export default function MapView({ listings, selectedId, onPinClickAction }: MapV
 
                 // Tooltip on hover
                 marker.bindTooltip(
-                    `<div style="font-family:'DM Sans',sans-serif;font-size:12px;padding:2px 0;">
-            <strong style="font-family:'Syne',sans-serif;color:#1A1714;">${listing.food_name || listing.food_type}</strong><br/>
+                    `<div style="font-family:'Geist',sans-serif;font-size:12px;padding:2px 0;">
+            <strong style="font-family:'Geist',sans-serif;color:#111111;">${listing.food_name || listing.food_type}</strong><br/>
             ${listing.quantity_kg} kg · ${listing.address.split(",")[0]}
           </div>`,
                     { direction: "top", offset: [0, -30], opacity: 0.97 }

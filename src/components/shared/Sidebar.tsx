@@ -62,8 +62,8 @@ export default function Sidebar({ role, items }: SidebarProps) {
 
   return (
     <aside style={{
-      width: "240px",
-      background: "#1A1714",
+      width: "220px",
+      background: "#111111",
       display: "flex",
       flexDirection: "column",
       padding: "28px 18px",
@@ -93,9 +93,9 @@ export default function Sidebar({ role, items }: SidebarProps) {
           </svg>
         </div>
         <span style={{
-          fontFamily: "Syne, sans-serif",
-          fontSize: "20px", fontWeight: 800,
-          color: "#E8450A", letterSpacing: "-0.5px",
+          fontFamily: "Geist, sans-serif",
+          fontSize: "20px", fontWeight: 700,
+          color: "#E8450A", letterSpacing: "-0.02em",
         }}>
           ReServe
         </span>
@@ -114,14 +114,14 @@ export default function Sidebar({ role, items }: SidebarProps) {
                 padding: "11px 12px",
                 borderRadius: "10px",
                 border: "none",
-                background: active ? "rgba(232,69,10,0.14)" : "transparent",
-                color: active ? "#F0EDE8" : "rgba(240,237,232,0.4)",
-                fontSize: "13px",
+                background: active ? "rgba(255,255,255,0.08)" : "transparent",
+                color: active ? "#FFFFFF" : "rgba(255,255,255,0.5)",
+                fontSize: "14px",
                 fontWeight: active ? 500 : 400,
                 cursor: "pointer",
                 textAlign: "left",
                 width: "100%",
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "Geist, sans-serif",
                 transition: "all 0.15s",
                 position: "relative",
               }}
@@ -150,7 +150,7 @@ export default function Sidebar({ role, items }: SidebarProps) {
                   background: "#E8450A", color: "#fff",
                   fontSize: "9px", fontWeight: 700,
                   padding: "2px 7px", borderRadius: "999px",
-                  fontFamily: "Syne, sans-serif",
+                  fontFamily: "Geist, sans-serif",
                 }}>
                   {item.badge}
                 </span>
@@ -166,11 +166,11 @@ export default function Sidebar({ role, items }: SidebarProps) {
         style={{
           display: "flex", alignItems: "center", gap: "10px",
           padding: "11px 12px", borderRadius: "10px",
-          fontSize: "12px", color: "rgba(240,237,232,0.3)",
+          fontSize: "12px", color: "rgba(255,255,255,0.35)",
           cursor: "pointer",
-          border: "1px solid rgba(240,237,232,0.08)",
+          border: "1px solid rgba(255,255,255,0.06)",
           background: "none", width: "100%",
-          fontFamily: "DM Sans, sans-serif",
+          fontFamily: "Geist, sans-serif",
           transition: "all 0.15s",
           marginTop: "12px",
         }}
@@ -179,8 +179,8 @@ export default function Sidebar({ role, items }: SidebarProps) {
           (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(232,69,10,0.3)";
         }}
         onMouseLeave={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.color = "rgba(240,237,232,0.3)";
-          (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(240,237,232,0.08)";
+          (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.35)";
+          (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.06)";
         }}
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
