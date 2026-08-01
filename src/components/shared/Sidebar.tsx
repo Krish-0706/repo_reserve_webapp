@@ -51,7 +51,7 @@ function Icon({ name }: { name: IconName }) {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 // ─── Component ────────────────────────────────────────────────────────────────
-export default function Sidebar({ role, items }: SidebarProps) {
+export default function Sidebar({ items }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
