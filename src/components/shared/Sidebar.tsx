@@ -16,6 +16,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type IconName = "grid" | "plus" | "chart" | "bell" | "map" | "truck" | "list" | "users" | "shield" | "star";
 
@@ -49,11 +50,12 @@ function Icon({ name }: { name: IconName }) {
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// ─── Component ────────────────────────────────────────────────────────────────
 export default function Sidebar({ role, items }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
+  const isMobile = useIsMobile();
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -62,47 +64,72 @@ export default function Sidebar({ role, items }: SidebarProps) {
 
   return (
     <aside style={{
-      width: "220px",
       background: "#111111",
       display: "flex",
-      flexDirection: "column",
-      padding: "28px 18px",
       position: "fixed",
-      top: 0, left: 0, bottom: 0,
-      zIndex: 10,
+      left: 0,
+      ...(isMobile ? {
+        width: "100%",
+        flexDirection: "row",
+        padding: "10px 16px",
+        bottom: 0,
+        zIndex: 100,
+        justifyContent: "space-between",
+        alignItems: "center",
+      } : {
+        width: "220px",
+        flexDirection: "column",
+        padding: "28px 18px",
+        top: 0,
+        bottom: 0,
+        zIndex: 10,
+      }),
     }}>
 
-      {/* Logo */}
-      <div
-        onClick={() => router.push(items[0]?.href ?? "/")}
-        style={{
-          display: "flex", alignItems: "center", gap: "10px",
-          padding: "0 10px", marginBottom: "16px",
-          cursor: "pointer",
-        }}
-      >
-        <div style={{
-          width: "32px", height: "32px",
-          border: "2px solid #E8450A", borderRadius: "50%",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          flexShrink: 0,
-        }}>
-          <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="7" stroke="#E8450A" strokeWidth="1.5" />
-            <path d="M7 10h6M10 7v6" stroke="#E8450A" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
+      {/* Logo (Desktop only) */}
+      {!isMobile && (
+        <div
+          onClick={() => router.push(items[0]?.href ?? "/")}
+          style={{
+            display: "flex", alignItems: "center", gap: "10px",
+            padding: "0 10px", marginBottom: "16px",
+            cursor: "pointer",
+          }}
+        >
+          <div style={{
+            width: "32px", height: "32px",
+            border: "2px solid #E8450A", borderRadius: "50%",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            flexShrink: 0,
+          }}>
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="7" stroke="#E8450A" strokeWidth="1.5" />
+              <path d="M7 10h6M10 7v6" stroke="#E8450A" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </div>
+          <span style={{
+            fontFamily: "Geist, sans-serif",
+            fontSize: "20px", fontWeight: 700,
+            color: "#E8450A", letterSpacing: "-0.02em",
+          }}>
+            ReServe
+          </span>
         </div>
-        <span style={{
-          fontFamily: "Geist, sans-serif",
-          fontSize: "20px", fontWeight: 700,
-          color: "#E8450A", letterSpacing: "-0.02em",
-        }}>
-          ReServe
-        </span>
-      </div>
+      )}
 
       {/* Nav items */}
-      <nav style={{ display: "flex", flexDirection: "column", gap: "3px", flex: 1 }}>
+      <nav style={{ 
+        display: "flex", 
+        flex: 1, 
+        ...(isMobile ? {
+          flexDirection: "row",
+          justifyContent: "space-around",
+          gap: "8px",
+        } : {
+          flexDirection: "column",
+          gap: "3px",
+        })
+      }}>
         {items.map((item) => {
           const active = pathname === item.href || pathname?.startsWith(item.href + "/");
           return (
@@ -110,20 +137,32 @@ export default function Sidebar({ role, items }: SidebarProps) {
               key={item.href}
               onClick={() => router.push(item.href)}
               style={{
-                display: "flex", alignItems: "center", gap: "12px",
-                padding: "11px 12px",
-                borderRadius: "10px",
+                display: "flex", alignItems: "center",
                 border: "none",
                 background: active ? "rgba(255,255,255,0.08)" : "transparent",
                 color: active ? "#FFFFFF" : "rgba(255,255,255,0.5)",
-                fontSize: "14px",
                 fontWeight: active ? 500 : 400,
                 cursor: "pointer",
-                textAlign: "left",
-                width: "100%",
                 fontFamily: "Geist, sans-serif",
                 transition: "all 0.15s",
                 position: "relative",
+                ...(isMobile ? {
+                  flexDirection: "column",
+                  gap: "4px",
+                  padding: "8px 0",
+                  flex: 1,
+                  fontSize: "10px",
+                  borderRadius: "8px",
+                  textAlign: "center",
+                } : {
+                  flexDirection: "row",
+                  gap: "12px",
+                  padding: "11px 12px",
+                  width: "100%",
+                  fontSize: "14px",
+                  borderRadius: "10px",
+                  textAlign: "left",
+                }),
               }}
               onMouseEnter={(e) => {
                 if (!active) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.04)";
@@ -135,17 +174,41 @@ export default function Sidebar({ role, items }: SidebarProps) {
               {/* Active indicator bar */}
               {active && (
                 <span style={{
-                  position: "absolute", left: 0, top: "50%",
-                  transform: "translateY(-50%)",
-                  width: "3px", height: "16px",
-                  background: "#E8450A", borderRadius: "0 3px 3px 0",
+                  position: "absolute",
+                  background: "#E8450A", 
+                  ...(isMobile ? {
+                    top: 0, left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "16px", height: "3px",
+                    borderRadius: "0 0 3px 3px",
+                  } : {
+                    left: 0, top: "50%",
+                    transform: "translateY(-50%)",
+                    width: "3px", height: "16px",
+                    borderRadius: "0 3px 3px 0",
+                  })
                 }} />
               )}
-              <span style={{ color: active ? "#E8450A" : "currentColor", display: "flex", flexShrink: 0 }}>
+              
+              <span style={{ color: active ? "#E8450A" : "currentColor", display: "flex", flexShrink: 0, position: "relative" }}>
                 <Icon name={item.icon} />
+                {isMobile && item.badge !== undefined && item.badge > 0 && (
+                  <span style={{
+                    position: "absolute",
+                    top: "-4px", right: "-8px",
+                    background: "#E8450A", color: "#fff",
+                    fontSize: "8px", fontWeight: 700,
+                    padding: "1px 4px", borderRadius: "999px",
+                    fontFamily: "Geist, sans-serif",
+                  }}>
+                    {item.badge}
+                  </span>
+                )}
               </span>
-              <span style={{ flex: 1 }}>{item.label}</span>
-              {item.badge !== undefined && item.badge > 0 && (
+              
+              <span style={{ flex: isMobile ? "none" : 1 }}>{item.label}</span>
+              
+              {!isMobile && item.badge !== undefined && item.badge > 0 && (
                 <span style={{
                   background: "#E8450A", color: "#fff",
                   fontSize: "9px", fontWeight: 700,
@@ -158,36 +221,57 @@ export default function Sidebar({ role, items }: SidebarProps) {
             </button>
           );
         })}
+        {/* Sign out (Mobile only, inside nav to flex equally) */}
+        {isMobile && (
+          <button
+            onClick={logout}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              flexDirection: "column", gap: "4px", padding: "8px 0",
+              flex: 1, fontSize: "10px", borderRadius: "8px",
+              border: "none", background: "transparent",
+              color: "rgba(255,255,255,0.5)", cursor: "pointer",
+              fontFamily: "Geist, sans-serif", transition: "all 0.15s",
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
+            </svg>
+            Sign out
+          </button>
+        )}
       </nav>
 
-      {/* Sign out */}
-      <button
-        onClick={logout}
-        style={{
-          display: "flex", alignItems: "center", gap: "10px",
-          padding: "11px 12px", borderRadius: "10px",
-          fontSize: "12px", color: "rgba(255,255,255,0.35)",
-          cursor: "pointer",
-          border: "1px solid rgba(255,255,255,0.06)",
-          background: "none", width: "100%",
-          fontFamily: "Geist, sans-serif",
-          transition: "all 0.15s",
-          marginTop: "12px",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.color = "#E8450A";
-          (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(232,69,10,0.3)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.35)";
-          (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.06)";
-        }}
-      >
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
-        </svg>
-        Sign out
-      </button>
+      {/* Sign out (Desktop only) */}
+      {!isMobile && (
+        <button
+          onClick={logout}
+          style={{
+            display: "flex", alignItems: "center", gap: "10px",
+            padding: "11px 12px", borderRadius: "10px",
+            fontSize: "12px", color: "rgba(255,255,255,0.35)",
+            cursor: "pointer",
+            border: "1px solid rgba(255,255,255,0.06)",
+            background: "none", width: "100%",
+            fontFamily: "Geist, sans-serif",
+            transition: "all 0.15s",
+            marginTop: "12px",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.color = "#E8450A";
+            (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(232,69,10,0.3)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.35)";
+            (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.06)";
+          }}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Sign out
+        </button>
+      )}
     </aside>
   );
 }

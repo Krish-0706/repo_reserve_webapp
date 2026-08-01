@@ -1,15 +1,20 @@
+"use client";
 // src/app/page.tsx
 // ReServe Landing Page — no <style> tags, all CSS in reserve.css
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import heroImg from "./images/hero.jpg";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function LandingPage() {
+  const isMobile = useIsMobile();
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
       {/* NAV */}
-      <nav className="nav">
+      <nav className="nav" style={{ padding: isMobile ? "16px 20px" : undefined }}>
         <a href="/" className="nav-logo">
           <div className="nav-logo-mark">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
@@ -19,19 +24,62 @@ export default function LandingPage() {
           </div>
           ReServe
         </a>
-        <ul className="nav-links">
-          <li><a href="#how-it-works">How it works</a></li>
-          <li><a href="#modules">Modules</a></li>
-          <li><a href="#roles">Who it&apos;s for</a></li>
-        </ul>
-        <div className="nav-cta">
-          <Link href="/login" className="btn-ghost">Sign in</Link>
-          <Link href="/register" className="btn-primary">Get started →</Link>
-        </div>
+
+        {isMobile ? (
+          <button 
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center" }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round">
+              {menuOpen ? (
+                <path d="M18 6L6 18M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        ) : (
+          <>
+            <ul className="nav-links">
+              <li><a href="#how-it-works">How it works</a></li>
+              <li><a href="#modules">Modules</a></li>
+              <li><a href="#roles">Who it&apos;s for</a></li>
+            </ul>
+            <div className="nav-cta">
+              <Link href="/login" className="btn-ghost">Sign in</Link>
+              <Link href="/register" className="btn-primary">Get started →</Link>
+            </div>
+          </>
+        )}
+
+        {/* Mobile Dropdown */}
+        {isMobile && menuOpen && (
+          <div style={{
+            position: "absolute", top: "100%", left: 0, right: 0,
+            background: "#fff", borderBottom: "1px solid #E5E7EB",
+            padding: "20px", display: "flex", flexDirection: "column", gap: "20px",
+            boxShadow: "0 10px 20px rgba(0,0,0,0.05)", zIndex: 100,
+          }}>
+            <a href="#how-it-works" onClick={() => setMenuOpen(false)} style={{ color: "#111", textDecoration: "none", fontWeight: 600 }}>How it works</a>
+            <a href="#modules" onClick={() => setMenuOpen(false)} style={{ color: "#111", textDecoration: "none", fontWeight: 600 }}>Modules</a>
+            <a href="#roles" onClick={() => setMenuOpen(false)} style={{ color: "#111", textDecoration: "none", fontWeight: 600 }}>Who it&apos;s for</a>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
+              <Link href="/login" onClick={() => setMenuOpen(false)} className="btn-ghost" style={{ width: "100%", textAlign: "center", justifyContent: "center" }}>Sign in</Link>
+              <Link href="/register" onClick={() => setMenuOpen(false)} className="btn-primary" style={{ width: "100%", textAlign: "center", justifyContent: "center" }}>Get started →</Link>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* HERO */}
-      <section className="hero">
+      <section className="hero" style={{ 
+        display: isMobile ? "flex" : undefined, 
+        flexDirection: isMobile ? "column-reverse" : undefined,
+        paddingTop: isMobile ? "100px" : undefined,
+        gap: isMobile ? "32px" : undefined,
+        height: isMobile ? "auto" : undefined,
+        minHeight: isMobile ? "auto" : undefined
+      }}>
         <div className="hero-bg-grid" />
         <div className="hero-bg-glow" />
 

@@ -19,6 +19,7 @@ import { createClient } from "@/lib/supabase/client";
 import Sidebar from "@/components/shared/Sidebar";
 import { Spinner } from "@/components/shared/Loader";
 import { useUnreadCount } from "@/hooks/useUnreadCount";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // Leaflet must be dynamically imported — it uses browser-only APIs
 const MapView = dynamic(() => import("@/components/ngo/MapView"), {
@@ -104,10 +105,10 @@ function ListingPanel({
       <div style={{ flex: 1, overflow: "auto", padding: "20px" }}>
         {/* Back button */}
         <button onClick={onClose} style={{
-          display: "flex", alignItems: "center", gap: "5px",
+          display: "flex", alignItems: "center", gap: "6px",
           background: "none", border: "none", cursor: "pointer",
-          fontSize: "12px", color: "#6B7280", padding: 0, marginBottom: "14px",
-          fontFamily: "Geist, sans-serif",
+          fontSize: "14px", color: "#6B7280", padding: "8px 0", marginBottom: "8px",
+          fontFamily: "Geist, sans-serif", fontWeight: 500
         }}>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M15 18l-6-6 6-6" />
@@ -261,6 +262,7 @@ function ListingCard({ listing, onClick }: { listing: MapListing; onClick: () =>
 export default function NGOMapPage() {
   const supabase = createClient();
   const unread = useUnreadCount();
+  const isMobile = useIsMobile();
   const [listings, setListings] = useState<MapListing[]>([]);
   const [selected, setSelected] = useState<MapListing | null>(null);
   const [loading, setLoading] = useState(true);
@@ -353,10 +355,10 @@ export default function NGOMapPage() {
       />
 
       {/* Main area — map + right panel */}
-      <div style={{ marginLeft: "220px", flex: 1, display: "flex", height: "100vh", overflow: "hidden" }}>
+      <div style={{ marginLeft: isMobile ? 0 : "220px", flex: 1, display: "flex", height: "100vh", overflow: "hidden", position: "relative" }}>
 
         {/* Left — Map (60%) */}
-        <div style={{ flex: "0 0 60%", position: "relative", background: "#E8E4DE" }}>
+        <div style={{ flex: isMobile ? "1" : "0 0 60%", position: "relative", background: "#E8E4DE" }}>
           {loading ? (
             <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Spinner size={28} color="#E8450A" />
@@ -396,9 +398,26 @@ export default function NGOMapPage() {
 
         {/* Right — Panel (40%) */}
         <div style={{
-          flex: "0 0 40%", display: "flex",
-          flexDirection: "column", background: "#fff",
-          borderLeft: "1px solid #E5E7EB", overflow: "hidden",
+          ...(isMobile ? {
+            position: "absolute",
+            bottom: "64px",
+            left: 0,
+            right: 0,
+            height: selected ? "80vh" : "40vh",
+            background: "#fff",
+            borderTopLeftRadius: "24px",
+            borderTopRightRadius: "24px",
+            boxShadow: "0 -4px 20px rgba(0,0,0,0.15)",
+            zIndex: 50,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            transition: "height 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          } : {
+            flex: "0 0 40%", display: "flex",
+            flexDirection: "column", background: "#fff",
+            borderLeft: "1px solid #E5E7EB", overflow: "hidden",
+          })
         }}>
 
           {/* Panel header */}

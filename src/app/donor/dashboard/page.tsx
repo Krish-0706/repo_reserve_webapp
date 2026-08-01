@@ -12,6 +12,7 @@ import Image from "next/image";
 import Sidebar from "@/components/shared/Sidebar";
 import { PageLoader } from "@/components/shared/Loader";
 import { useUnreadCount } from "@/hooks/useUnreadCount";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type ListingStatus = "active" | "claimed" | "completed" | "expired";
 
@@ -69,6 +70,7 @@ function EmptyListingsIllustration() {
 export default function DonorDashboard() {
   const router = useRouter();
   const unread = useUnreadCount();
+  const isMobile = useIsMobile();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -110,10 +112,22 @@ export default function DonorDashboard() {
         ]}
       />
 
-      <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
+      <main style={{ 
+        marginLeft: isMobile ? 0 : "220px", 
+        flex: 1, 
+        padding: isMobile ? "20px" : "40px",
+        marginBottom: isMobile ? "64px" : 0 
+      }}>
 
         {/* Top bar */}
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "32px" }}>
+        <div style={{ 
+          display: "flex", 
+          flexDirection: isMobile ? "column" : "row",
+          alignItems: isMobile ? "flex-start" : "center", 
+          justifyContent: "space-between", 
+          gap: isMobile ? "16px" : 0,
+          marginBottom: "32px" 
+        }}>
           <div>
             <h1 style={{ fontFamily: "Geist, sans-serif", fontSize: "28px", fontWeight: 700, color: "#111111", letterSpacing: "-0.02em" }}>
               Donor Dashboard
@@ -131,6 +145,8 @@ export default function DonorDashboard() {
               border: "2px solid #111111", boxShadow: "3px 3px 0px #111111",
               cursor: "pointer", letterSpacing: "0.01em",
               display: "flex", alignItems: "center", gap: "8px",
+              justifyContent: "center",
+              width: isMobile ? "100%" : "auto",
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
             onMouseEnter={(e) => {
@@ -148,7 +164,7 @@ export default function DonorDashboard() {
         </div>
 
         {/* Stats */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "32px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "16px", marginBottom: "32px" }}>
           {[
             { label: "Total Donated", value: `${totalKg.toFixed(1)} kg`, sub: "Across all listings", color: "#E8450A" },
             { label: "Meals Enabled", value: totalMeals, sub: "Est. at 2.5 meals / kg", color: "#10B981" },
@@ -236,8 +252,9 @@ export default function DonorDashboard() {
                 onClick={() => navigate(`/donor/listings/${listing.id}`, "Loading listing details...")}
                 style={{
                   background: "#fff", border: "1px solid #E5E7EB", borderRadius: "12px",
-                  padding: "18px 24px", display: "grid",
-                  gridTemplateColumns: "64px 1fr auto", gap: "20px", alignItems: "center",
+                  padding: "18px 24px", display: "flex",
+                  flexDirection: isMobile ? "column" : "row",
+                  gap: "20px", alignItems: isMobile ? "flex-start" : "center",
                   cursor: "pointer", transition: "box-shadow 0.15s, transform 0.15s",
                   boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
                 }}
@@ -250,33 +267,46 @@ export default function DonorDashboard() {
                   (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
                 }}
               >
-                <div style={{
-                  width: "64px", height: "64px", borderRadius: "12px", overflow: "hidden",
-                  background: "#F9FAFB", flexShrink: 0, position: "relative",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  {listing.photo_url ? (
-                    <Image src={listing.photo_url} alt={listing.food_name} fill style={{ objectFit: "cover" }} unoptimized />
-                  ) : (
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5">
-                      <rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
-                    </svg>
-                  )}
+                <div style={{ display: "flex", alignItems: "center", gap: "16px", flex: 1, width: "100%" }}>
+                  {/* Photo */}
+                  <div style={{
+                    width: "64px", height: "64px", borderRadius: "8px",
+                    background: "#FAFAFA", overflow: "hidden", position: "relative",
+                    flexShrink: 0,
+                  }}>
+                    {listing.photo_url ? (
+                      <Image src={listing.photo_url} alt="" fill style={{ objectFit: "cover" }} unoptimized />
+                    ) : (
+                      <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
+                      </div>
+                    )}
+                  </div>
+                  {/* Info */}
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "Geist, sans-serif", fontSize: "16px", fontWeight: 600, color: "#111111", marginBottom: "4px" }}>
+                      {listing.food_name || listing.food_type}
+                    </div>
+                    <div style={{ fontSize: "13px", color: "#6B7280", fontWeight: 400 }}>
+                      {listing.food_type} · {listing.quantity_kg} kg
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <div style={{ fontFamily: "Geist, sans-serif", fontSize: "15px", fontWeight: 600, color: "#111111", marginBottom: "4px" }}>
-                    {listing.food_name || listing.food_type}
-                  </div>
-                  <div style={{ fontSize: "12px", color: "#6B7280", fontWeight: 400 }}>
-                    {listing.food_type} · {listing.quantity_kg} kg · {listing.address.split(",")[0]}
-                  </div>
+                {/* Status */}
+                <div style={{ 
+                  display: "flex", 
+                  flexDirection: isMobile ? "row" : "column", 
+                  alignItems: isMobile ? "center" : "flex-end",
+                  justifyContent: isMobile ? "space-between" : "flex-end",
+                  gap: "6px",
+                  width: isMobile ? "100%" : "auto",
+                  borderTop: isMobile ? "1px solid #F3F4F6" : "none",
+                  paddingTop: isMobile ? "12px" : 0,
+                }}>
                   <div style={{ fontSize: "11px", color: listing.status === "active" ? "#E8450A" : "#9CA3AF", marginTop: "5px" }}>
                     {listing.status === "active" ? timeRemaining(listing.pickup_end) : ""}
                   </div>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "12px" }}>
                   <span style={statusStyle(listing.status)}>{listing.status}</span>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
                 </div>

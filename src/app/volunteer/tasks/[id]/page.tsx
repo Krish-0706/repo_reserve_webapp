@@ -10,6 +10,7 @@ import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import Sidebar from "@/components/shared/Sidebar";
 import { PageLoader, Spinner } from "@/components/shared/Loader";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TaskStatus = "assigned" | "in_progress" | "completed" | "cancelled";
@@ -106,6 +107,7 @@ export default function TaskDetailPage() {
     const router = useRouter();
     const params = useParams();
     const pickupId = params.id as string;
+    const isMobile = useIsMobile();
 
     const [task, setTask] = useState<TaskDetail | null>(null);
     const [loading, setLoading] = useState(true);
@@ -224,14 +226,20 @@ export default function TaskDetailPage() {
                 ]}
             />
 
-            <main style={{ marginLeft: "220px", flex: 1, padding: "40px", maxWidth: "900px" }}>
+            <main style={{ 
+                marginLeft: isMobile ? 0 : "220px", 
+                flex: 1, 
+                padding: isMobile ? "20px" : "40px", 
+                maxWidth: "900px",
+                marginBottom: isMobile ? "64px" : 0 
+            }}>
                 {/* ─── Back button + header ────────────────────────────────── */}
                 <button
                     onClick={() => nav("/volunteer/tasks")}
                     style={{
                         display: "flex", alignItems: "center", gap: "6px",
                         background: "none", border: "none", color: "#6B7280",
-                        fontSize: "13px", cursor: "pointer", marginBottom: "24px",
+                        fontSize: "14px", cursor: "pointer", marginBottom: "16px", padding: "8px 0",
                         fontFamily: "Geist, sans-serif", fontWeight: 500,
                     }}
                 >
@@ -251,7 +259,7 @@ export default function TaskDetailPage() {
                 )}
 
                 {task && l && (
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: "24px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 280px", gap: "24px" }}>
                         {/* ─── Left column: Details ───────────────────────── */}
                         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                             {/* Listing card */}
@@ -290,7 +298,7 @@ export default function TaskDetailPage() {
                                 )}
 
                                 {/* Info grid */}
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                                <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "16px" }}>
                                     <div>
                                         <div style={{ fontSize: "11px", color: "#9CA3AF", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Food Type</div>
                                         <div style={{ fontSize: "14px", color: "#111111", fontWeight: 500 }}>{l.food_type}</div>

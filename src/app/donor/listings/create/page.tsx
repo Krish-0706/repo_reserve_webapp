@@ -11,6 +11,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/shared/Sidebar";
 import { Spinner, PageLoader } from "@/components/shared/Loader";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type FoodType = "Cooked" | "Raw" | "Baked" | "Packaged" | "Beverages" | "Other";
 const FOOD_TYPES: FoodType[] = ["Cooked", "Raw", "Baked", "Packaged", "Beverages", "Other"];
@@ -46,6 +47,7 @@ function FoodBowlIllustration() {
 
 export default function CreateListingPage() {
   const router = useRouter();
+  const isMobile = useIsMobile();
 
   const [step, setStep] = useState<1 | 2>(1);
   const [navigating, setNavigating] = useState(false);
@@ -182,7 +184,12 @@ export default function CreateListingPage() {
         ]}
       />
 
-      <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
+      <main style={{ 
+        marginLeft: isMobile ? 0 : "220px", 
+        flex: 1, 
+        padding: isMobile ? "20px" : "40px",
+        marginBottom: isMobile ? "64px" : 0 
+      }}>
 
         {/* Top bar */}
         <div style={{ marginBottom: "10px" }}>
@@ -194,12 +201,14 @@ export default function CreateListingPage() {
             }}>
               STEP {step} OF 2
             </span>
-            <span style={{ fontSize: "13px", color: "#9CA3AF" }}>
-              {step === 1 ? "Tell us what you're donating" : "Where and when can it be picked up?"}
-            </span>
+            {!isMobile && (
+              <span style={{ fontSize: "13px", color: "#9CA3AF" }}>
+                {step === 1 ? "Tell us what you're donating" : "Where and when can it be picked up?"}
+              </span>
+            )}
           </div>
           <h1 style={{
-            fontFamily: "Geist, sans-serif", fontSize: "28px", fontWeight: 700,
+            fontFamily: "Geist, sans-serif", fontSize: isMobile ? "24px" : "28px", fontWeight: 700,
             color: "#111111", letterSpacing: "-0.02em",
           }}>
             {step === 1 ? "What's on the menu?" : "Set the pickup details"}
@@ -225,12 +234,17 @@ export default function CreateListingPage() {
         )}
 
         {/* ═══ TWO-COLUMN LAYOUT ═══ */}
-        <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: "32px", alignItems: "start" }}>
+        <div style={{ 
+          display: "grid", 
+          gridTemplateColumns: isMobile ? "1fr" : "1.3fr 1fr", 
+          gap: isMobile ? "24px" : "32px", 
+          alignItems: "start" 
+        }}>
 
           {/* ── LEFT — FORM ── */}
           <div style={{
             background: "#fff", border: "1px solid #E5E7EB",
-            borderRadius: "16px", padding: "32px",
+            borderRadius: "16px", padding: isMobile ? "24px" : "32px",
             boxShadow: "0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.04)",
           }}>
 

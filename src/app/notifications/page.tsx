@@ -11,6 +11,7 @@ import Sidebar from "@/components/shared/Sidebar";
 import { PageLoader, Spinner } from "@/components/shared/Loader";
 import { useUnreadCount } from "@/hooks/useUnreadCount";
 import { getNavItems } from "@/lib/navConfig";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type Notification = {
     id: string;
@@ -88,6 +89,7 @@ function EmptyState() {
 export default function NotificationsPage() {
     const supabase = createClient();
     const unread = useUnreadCount();
+    const isMobile = useIsMobile();
     const [role, setRole] = useState<string>("donor");
     const [items, setItems] = useState<Notification[]>([]);
     const [loading, setLoading] = useState(true);
@@ -139,7 +141,7 @@ export default function NotificationsPage() {
             onClick={() => !n.is_read && markRead(n.id)}
             style={{
                 display: "flex", alignItems: "flex-start", gap: "13px",
-                padding: "15px 18px", borderRadius: "12px",
+                padding: isMobile ? "16px" : "15px 18px", borderRadius: "12px",
                 background: n.is_read ? "#fff" : "#FFF4ED",
                 border: "1px solid #E5E7EB",
                 cursor: n.is_read ? "default" : "pointer",
@@ -190,8 +192,20 @@ export default function NotificationsPage() {
 
             <Sidebar role={role.charAt(0).toUpperCase() + role.slice(1)} items={getNavItems(role, unread)} />
 
-            <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "28px" }}>
+            <main style={{ 
+                marginLeft: isMobile ? 0 : "220px", 
+                flex: 1, 
+                padding: isMobile ? "20px" : "40px",
+                marginBottom: isMobile ? "64px" : 0 
+            }}>
+                <div style={{ 
+                    display: "flex", 
+                    flexDirection: isMobile ? "column" : "row",
+                    alignItems: isMobile ? "flex-start" : "center", 
+                    justifyContent: "space-between", 
+                    gap: isMobile ? "12px" : 0,
+                    marginBottom: "28px" 
+                }}>
                     <div>
                         <h1 style={{ fontFamily: "Geist, sans-serif", fontSize: "24px", fontWeight: 700, color: "#111111" }}>
                             Notifications

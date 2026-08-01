@@ -11,6 +11,7 @@ import Image from "next/image";
 import Sidebar from "@/components/shared/Sidebar";
 import { PageLoader, Spinner } from "@/components/shared/Loader";
 import { useUnreadCount } from "@/hooks/useUnreadCount";
+import { useIsMobile } from "@/hooks/useIsMobile";
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TaskStatus = "assigned" | "in_progress";
 
@@ -110,6 +111,7 @@ function StarIcon() {
 export default function VolunteerTasksPage() {
     const router = useRouter();
     const unread = useUnreadCount();
+    const isMobile = useIsMobile();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [stats, setStats] = useState<VolunteerStats>({ hours_logged: 0, rating: 0, tasks_completed: 0 });
     const [loading, setLoading] = useState(true);
@@ -180,9 +182,14 @@ export default function VolunteerTasksPage() {
                 ]}
             />
 
-            <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
+            <main style={{ 
+                marginLeft: isMobile ? 0 : "220px", 
+                flex: 1, 
+                padding: isMobile ? "20px" : "40px",
+                marginBottom: isMobile ? "64px" : 0 
+            }}>
                 {/* ─── Header ─────────────────────────────────────────────── */}
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "36px" }}>
+                <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "center", justifyContent: "space-between", gap: isMobile ? "12px" : 0, marginBottom: "36px" }}>
                     <div>
                         <h1 style={{ fontFamily: "Geist, sans-serif", fontSize: "32px", fontWeight: 700, color: "#111111", letterSpacing: "-0.02em" }}>
                             Task Feed
@@ -202,7 +209,7 @@ export default function VolunteerTasksPage() {
                 </div>
 
                 {/* ─── Stat cards ─────────────────────────────────────────── */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "18px", marginBottom: "36px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "18px", marginBottom: "36px" }}>
                     {/* Tasks completed */}
                     <div style={{
                         background: "#fff", borderRadius: "12px", padding: "22px 26px",
@@ -371,8 +378,9 @@ function TaskCard({
             padding: "22px 26px",
             boxShadow: "3px 3px 10px rgba(0,0,0,0.03)",
             transition: "box-shadow 0.2s",
+            display: "flex", flexDirection: "column",
         }}>
-            <div style={{ display: "grid", gridTemplateColumns: "56px 1fr auto", gap: "18px", alignItems: "start" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "18px", alignItems: "start" }}>
                 {/* Thumbnail */}
                 <div
                     onClick={onView}
@@ -414,20 +422,22 @@ function TaskCard({
                 </div>
 
                 {/* Status badge */}
-                <span style={{
-                    background: sc.bg, color: sc.fg,
-                    fontSize: "10px", fontWeight: 700,
-                    fontFamily: "Geist, sans-serif",
-                    letterSpacing: "0.04em", textTransform: "uppercase",
-                    padding: "4px 10px", borderRadius: "999px",
-                    whiteSpace: "nowrap",
-                }}>
-                    {task.status.replace("_", " ")}
-                </span>
+                <div style={{ width: "100%", display: "flex", justifyContent: "flex-start", marginTop: "8px" }}>
+                    <span style={{
+                        background: sc.bg, color: sc.fg,
+                        fontSize: "10px", fontWeight: 700,
+                        fontFamily: "Geist, sans-serif",
+                        letterSpacing: "0.04em", textTransform: "uppercase",
+                        padding: "4px 10px", borderRadius: "999px",
+                        whiteSpace: "nowrap",
+                    }}>
+                        {task.status.replace("_", " ")}
+                    </span>
+                </div>
             </div>
 
             {/* Actions */}
-            <div style={{ display: "flex", gap: "10px", marginTop: "16px", justifyContent: "flex-end" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "16px", justifyContent: "flex-end" }}>
                 {/* View Details — always shown */}
                 <button
                     onClick={onView}

@@ -11,6 +11,7 @@ import Image from "next/image";
 import { useRouter, useParams } from "next/navigation";
 import Sidebar from "@/components/shared/Sidebar";
 import { Spinner, PageLoader } from "@/components/shared/Loader";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type ListingStatus = "active" | "claimed" | "completed" | "expired";
 
@@ -68,6 +69,7 @@ export default function ListingDetailPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
+  const isMobile = useIsMobile();
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
@@ -114,7 +116,12 @@ export default function ListingDetailPage() {
         ]}
       />
 
-      <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
+      <main style={{ 
+        marginLeft: isMobile ? 0 : "220px", 
+        flex: 1, 
+        padding: isMobile ? "20px" : "40px",
+        marginBottom: isMobile ? "64px" : 0 
+      }}>
 
         {/* Back link */}
         <button
@@ -122,8 +129,8 @@ export default function ListingDetailPage() {
           style={{
             display: "flex", alignItems: "center", gap: "6px",
             background: "none", border: "none", cursor: "pointer",
-            fontSize: "13px", color: "#6B7280", fontFamily: "Geist, sans-serif",
-            marginBottom: "24px", padding: 0,
+            fontSize: "14px", color: "#6B7280", fontFamily: "Geist, sans-serif",
+            marginBottom: "16px", padding: "8px 0", fontWeight: 500
           }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
@@ -149,8 +156,8 @@ export default function ListingDetailPage() {
           <div style={{
             maxWidth: "1040px",
             display: "grid",
-            gridTemplateColumns: "380px 1fr",
-            gap: "32px",
+            gridTemplateColumns: isMobile ? "1fr" : "380px 1fr",
+            gap: isMobile ? "24px" : "32px",
           }}>
 
             {/* ── Left column ── */}
