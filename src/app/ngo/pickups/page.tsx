@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Sidebar from "@/components/shared/Sidebar";
 import { PageLoader, Spinner } from "@/components/shared/Loader";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type PickupStatus = "claimed" | "assigned" | "in_progress" | "completed" | "cancelled";
 
@@ -76,6 +77,7 @@ function EmptyPickups() {
 
 export default function NGOPickupsPage() {
     const router = useRouter();
+    const isMobile = useIsMobile();
 
     const [pickups, setPickups] = useState<Pickup[]>([]);
     const [loading, setLoading] = useState(true);
@@ -185,9 +187,21 @@ export default function NGOPickupsPage() {
                 ]}
             />
 
-            <main style={{ marginLeft: "220px", flex: 1, padding: "40px" }}>
+            <main style={{ 
+                marginLeft: isMobile ? 0 : "220px", 
+                flex: 1, 
+                padding: isMobile ? "20px" : "40px",
+                marginBottom: isMobile ? "64px" : 0 
+            }}>
 
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "40px" }}>
+                <div style={{ 
+                    display: "flex", 
+                    flexDirection: isMobile ? "column" : "row",
+                    alignItems: isMobile ? "stretch" : "flex-start", 
+                    gap: isMobile ? "16px" : 0,
+                    justifyContent: "space-between", 
+                    marginBottom: "40px" 
+                }}>
                     <div>
                         <h1 style={{ fontFamily: "Geist, sans-serif", fontSize: "32px", fontWeight: 700, color: "#111111", letterSpacing: "-0.02em" }}>
                             Active Pickups
@@ -265,6 +279,7 @@ export default function NGOPickupsPage() {
                                     volunteers={volunteers}
                                     onToggleAssign={() => openAssignSelector(pickup.id)}
                                     onAssign={(volId) => handleAssign(pickup.id, volId)}
+                                    isMobile={isMobile}
                                 />
                             ))}
                         </div>
@@ -284,8 +299,9 @@ export default function NGOPickupsPage() {
                                     isAssigning={false}
                                     assignLoading={false}
                                     volunteers={[]}
-                                    onToggleAssign={() => {}}
-                                    onAssign={() => {}}
+                                    onToggleAssign={() => { }}
+                                    onAssign={() => { }}
+                                    isMobile={isMobile}
                                 />
                             ))}
                         </div>
@@ -303,6 +319,7 @@ function PickupCard({
     volunteers,
     onToggleAssign,
     onAssign,
+    isMobile,
 }: {
     pickup: Pickup;
     isAssigning: boolean;
@@ -310,6 +327,7 @@ function PickupCard({
     volunteers: AvailableVolunteer[];
     onToggleAssign: () => void;
     onAssign: (volunteerId: string) => void;
+    isMobile: boolean;
 }) {
     const sc = statusColor(pickup.status);
     const l = pickup.listings;
@@ -323,36 +341,43 @@ function PickupCard({
             padding: "20px 24px",
             boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
         }}>
-            <div style={{ display: "grid", gridTemplateColumns: "56px 1fr auto", gap: "18px", alignItems: "center" }}>
-                <div style={{
-                    width: "56px", height: "56px", borderRadius: "12px",
-                    overflow: "hidden", background: "#FAFAFA", flexShrink: 0, position: "relative",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                    {l.photo_url
-                        ? <Image src={l.photo_url} alt="" fill style={{ objectFit: "cover" }} unoptimized />
-                        : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
-                    }
+            <div style={{ 
+                display: "flex", 
+                flexDirection: isMobile ? "column" : "row", 
+                gap: "18px", 
+                alignItems: isMobile ? "flex-start" : "center" 
+            }}>
+                <div style={{ display: "flex", gap: "16px", width: isMobile ? "100%" : "auto", flex: 1 }}>
+                    <div style={{
+                        width: "56px", height: "56px", borderRadius: "12px",
+                        overflow: "hidden", background: "#FAFAFA", flexShrink: 0, position: "relative",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                    }}>
+                        {l.photo_url
+                            ? <Image src={l.photo_url} alt="" fill style={{ objectFit: "cover" }} unoptimized />
+                            : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CCC" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
+                        }
+                    </div>
+
+                    <div style={{ flex: 1 }}>
+                        <div style={{ fontFamily: "Geist, sans-serif", fontSize: "15px", fontWeight: 700, color: "#111111", marginBottom: "3px" }}>
+                            {l.food_name || l.food_type}
+                        </div>
+                        <div style={{ fontSize: "12px", color: "#6B7280", fontWeight: 400 }}>
+                            {l.food_type} · {l.quantity_kg} kg · {l.address.split(",")[0]}
+                        </div>
+                        <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>
+                            Claimed {new Date(pickup.claimed_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                            {pickup.volunteers && (
+                                <span style={{ marginLeft: "10px", color: "#10B981", display: isMobile ? "block" : "inline", marginTop: isMobile ? "4px" : 0 }}>
+                                    {isMobile ? "" : "· "}Volunteer: {pickup.volunteers.vol_name || pickup.volunteers.users?.email?.split("@")[0] || "Assigned"}
+                                </span>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <div style={{ fontFamily: "Geist, sans-serif", fontSize: "15px", fontWeight: 700, color: "#111111", marginBottom: "3px" }}>
-                        {l.food_name || l.food_type}
-                    </div>
-                    <div style={{ fontSize: "12px", color: "#6B7280", fontWeight: 400 }}>
-                        {l.food_type} · {l.quantity_kg} kg · {l.address.split(",")[0]}
-                    </div>
-                    <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px" }}>
-                        Claimed {new Date(pickup.claimed_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
-                        {pickup.volunteers && (
-                            <span style={{ marginLeft: "10px", color: "#10B981" }}>
-                                · Volunteer: {pickup.volunteers.vol_name || pickup.volunteers.users?.email?.split("@")[0] || "Assigned"}
-                            </span>
-                        )}
-                    </div>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px" }}>
+                <div style={{ display: "flex", flexDirection: isMobile ? "row" : "column", alignItems: isMobile ? "center" : "flex-end", justifyContent: "space-between", gap: "10px", width: isMobile ? "100%" : "auto" }}>
                     <span style={{
                         background: sc.bg, color: sc.fg,
                         fontSize: "10px", fontWeight: 700,
