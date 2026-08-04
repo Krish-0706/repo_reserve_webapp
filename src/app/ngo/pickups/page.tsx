@@ -329,6 +329,38 @@ function PickupCard({
     onAssign: (volunteerId: string) => void;
     isMobile: boolean;
 }) {
+    const [rating, setRating] = useState(0);
+    const [hoverRating, setHoverRating] = useState(0);
+    const [submittingRating, setSubmittingRating] = useState(false);
+    const [rated, setRated] = useState(false);
+
+    useEffect(() => {
+        const ratedPickups = JSON.parse(localStorage.getItem('rated_pickups') || '[]');
+        if (ratedPickups.includes(pickup.id)) {
+            setRated(true);
+        }
+    }, [pickup.id]);
+
+    const submitRating = async (val: number) => {
+        setSubmittingRating(true);
+        try {
+            const res = await fetch(`/api/pickups/${pickup.id}/rate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rating: val })
+            });
+            if (res.ok) {
+                setRated(true);
+                setRating(val);
+                const ratedPickups = JSON.parse(localStorage.getItem('rated_pickups') || '[]');
+                ratedPickups.push(pickup.id);
+                localStorage.setItem('rated_pickups', JSON.stringify(ratedPickups));
+            }
+        } catch {
+            console.error("Failed to rate");
+        }
+        setSubmittingRating(false);
+    };
     const sc = statusColor(pickup.status);
     const l = pickup.listings;
     if (!l) return null;
@@ -492,6 +524,44 @@ function PickupCard({
                             {pickup.status === "assigned" ? "Awaiting acceptance" : "En route"}
                         </span>
                     </div>
+                </div>
+            )}
+            
+            {/* Show rating system for completed pickups */}
+            {pickup.status === "completed" && pickup.volunteer_id && !rated && (
+                <div style={{
+                    marginTop: "14px", borderTop: "1px solid #FAFAFA", paddingTop: "14px",
+                    display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px",
+                }}>
+                    <div style={{ fontSize: "13px", color: "#6B7280", fontWeight: 500 }}>
+                        Rate your experience with this volunteer:
+                    </div>
+                    <div style={{ display: "flex", gap: "4px" }}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <svg 
+                                key={star}
+                                onClick={() => !submittingRating && submitRating(star)}
+                                onMouseEnter={() => setHoverRating(star)}
+                                onMouseLeave={() => setHoverRating(0)}
+                                width="20" height="20" viewBox="0 0 24 24" 
+                                fill={(hoverRating || rating) >= star ? "#E8450A" : "none"} 
+                                stroke={(hoverRating || rating) >= star ? "#E8450A" : "#D1D5DB"} 
+                                strokeWidth="2" 
+                                style={{ cursor: submittingRating ? "wait" : "pointer", transition: "all 0.15s" }}
+                            >
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                        ))}
+                    </div>
+                </div>
+            )}
+            {rated && (
+                <div style={{
+                    marginTop: "14px", borderTop: "1px solid #FAFAFA", paddingTop: "14px",
+                    display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#10B981", fontWeight: 500
+                }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    Thanks for rating!
                 </div>
             )}
         </div>
