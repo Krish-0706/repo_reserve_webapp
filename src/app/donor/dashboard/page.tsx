@@ -92,7 +92,9 @@ export default function DonorDashboard() {
     router.push(path);
   };
 
-  const totalKg = listings.reduce((sum, l) => sum + l.quantity_kg, 0);
+  const totalKg = listings
+    .filter((l) => l.status !== "expired")
+    .reduce((sum, l) => sum + l.quantity_kg, 0);
   const totalMeals = Math.round(totalKg * 2.5);
   const activeCount = listings.filter((l) => l.status === "active").length;
   const claimedCount = listings.filter((l) => l.status === "claimed").length;
