@@ -3,10 +3,12 @@
 // import from here — editing an array in one place keeps both in sync,
 // instead of duplicating (and eventually mismatching) the same list.
 
+export type IconName = "grid" | "plus" | "chart" | "bell" | "map" | "truck" | "list" | "users" | "shield" | "star";
+
 export type NavItem = {
     label: string;
     href: string;
-    icon: "grid" | "plus" | "chart" | "bell" | "map" | "truck" | "list" | "users" | "shield" | "star";
+    icon: IconName;
     badge?: number;
 };
 
@@ -34,10 +36,9 @@ export function getNavItems(role: string, unreadCount: number): NavItem[] {
             ];
         case "admin":
             return [
-                { label: "KYC Queue", href: "/admin/kyc", icon: "shield" },
+                { label: "Approval Queue", href: "/admin/kyc", icon: "shield" },
                 { label: "Users", href: "/admin/users", icon: "users" },
-                { label: "Analytics", href: "/admin/analytics", icon: "chart" },
-                { label: "Notifications", href: "/notifications", icon: "bell", badge: unreadCount },
+                { label: "Audit Log", href: "/admin/audit", icon: "list" },
             ];
         default:
             return [{ label: "Notifications", href: "/notifications", icon: "bell", badge: unreadCount }];

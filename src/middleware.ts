@@ -92,6 +92,37 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // NGO pending guard: force pending NGOs to the KYC submission page
+  if (user && pathname.startsWith("/ngo") && pathname !== "/ngo/kyc") {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("status, role")
+      .eq("id", user.id)
+      .single();
+    
+    if (profile?.role === "ngo" && profile?.status === "pending") {
+      return NextResponse.redirect(new URL("/ngo/kyc", request.url));
+    }
+  }
+  // Admin role guard: only admin users can access /admin/* routes
+  if (user && pathname.startsWith("/admin")) {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.role !== "admin") {
+      const destinations: Record<string, string> = {
+        donor:     "/donor/dashboard",
+        ngo:       "/ngo/map",
+        volunteer: "/volunteer/tasks",
+      };
+      const dest = destinations[profile?.role ?? ""] ?? "/login";
+      return NextResponse.redirect(new URL(dest, request.url));
+    }
+  }
+
   return response;
 }
 

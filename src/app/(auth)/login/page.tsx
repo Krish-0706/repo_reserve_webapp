@@ -53,7 +53,15 @@ export default function LoginPage() {
       await supabase.auth.signOut();
       setError("Account suspended. Contact support."); setLoading(false); return;
     }
+    if (profile.status === "rejected") {
+      await supabase.auth.signOut();
+      setError("Account registration rejected. Contact support."); setLoading(false); return;
+    }
     if (profile.status === "pending") {
+      if (profile.role === "ngo") {
+        window.location.href = "/ngo/kyc";
+        return;
+      }
       await supabase.auth.signOut();
       setError("Account pending admin approval."); setLoading(false); return;
     }

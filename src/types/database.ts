@@ -4,31 +4,35 @@
 //   npx supabase gen types typescript --project-id <your-id> > src/types/database.ts
 
 export type UserRole    = "donor" | "ngo" | "volunteer" | "admin";
-export type UserStatus  = "pending" | "active" | "suspended";
+export type UserStatus  = "pending" | "active" | "rejected" | "suspended";
 export type ListingStatus = "active" | "claimed" | "completed" | "expired";
 export type PickupStatus  = "claimed" | "assigned" | "in_progress" | "completed" | "cancelled";
 export type KYCStatus     = "pending" | "approved" | "rejected";
+export type AuditAction   = "approve" | "reject" | "suspend";
 
 export interface Database {
   public: {
     Tables: {
       users: {
         Row: {
-          id:         string;
-          email:      string;
-          role:       UserRole;
-          status:     UserStatus;
-          created_at: string;
+          id:             string;
+          email:          string;
+          role:           UserRole;
+          status:         UserStatus;
+          kyc_documents:  string[];
+          created_at:     string;
         };
         Insert: {
-          id:         string;   // must match auth.users UUID
-          email:      string;
-          role:       UserRole;
-          status?:    UserStatus;
+          id:             string;   // must match auth.users UUID
+          email:          string;
+          role:           UserRole;
+          status?:        UserStatus;
+          kyc_documents?: string[];
         };
         Update: Partial<{
-          role:   UserRole;
-          status: UserStatus;
+          role:           UserRole;
+          status:         UserStatus;
+          kyc_documents:  string[];
         }>;
       };
       listings: {
@@ -98,6 +102,18 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["notifications"]["Row"], "id" | "created_at">;
         Update: Partial<Pick<Database["public"]["Tables"]["notifications"]["Row"], "is_read">>;
+      };
+      audit_log: {
+        Row: {
+          id:              string;
+          admin_id:        string;
+          action_type:     AuditAction;
+          target_user_id:  string;
+          reason:          string;
+          created_at:      string;
+        };
+        Insert: Omit<Database["public"]["Tables"]["audit_log"]["Row"], "id" | "created_at">;
+        Update: never;  // Audit logs are append-only / immutable
       };
     };
   };
