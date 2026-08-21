@@ -73,8 +73,21 @@ export interface Database {
           org_name:      string;
           kyc_status:    KYCStatus;
           contact_phone: string;
+          state:         string | null;
+          district:      string | null;
+          city:          string | null;
+          landmark:      string | null;
         };
-        Insert: Database["public"]["Tables"]["ngos"]["Row"];
+        Insert: {
+          id:             string;
+          org_name:       string;
+          kyc_status?:    KYCStatus;
+          contact_phone:  string;
+          state?:         string | null;
+          district?:      string | null;
+          city?:          string | null;
+          landmark?:      string | null;
+        };
         Update: Partial<Omit<Database["public"]["Tables"]["ngos"]["Row"], "id">>;
       };
       volunteers: {

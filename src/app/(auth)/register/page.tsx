@@ -19,6 +19,10 @@ export default function RegisterPage() {
   const [role,         setRole]         = useState<Role | "">("");
   const [orgName,      setOrgName]      = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [ngoState,     setNgoState]     = useState("");
+  const [ngoDistrict,  setNgoDistrict]  = useState("");
+  const [ngoCity,      setNgoCity]      = useState("");
+  const [ngoLandmark,  setNgoLandmark]  = useState("");
   const [volName,      setVolName]      = useState("");
   const [email,        setEmail]        = useState("");
   const [password,     setPassword]     = useState("");
@@ -33,6 +37,8 @@ export default function RegisterPage() {
     if (!role)                                         { setError("Please select a role."); return false; }
     if (role === "ngo" && !orgName.trim())             { setError("Organisation name is required."); return false; }
     if (role === "ngo" && !contactPhone.trim())        { setError("Contact phone number is required."); return false; }
+    if (role === "ngo" && !ngoState.trim())             { setError("State is required for NGOs."); return false; }
+    if (role === "ngo" && !ngoCity.trim())              { setError("City is required for NGOs."); return false; }
     if (role === "volunteer" && !volName.trim())       { setError("Your name is required."); return false; }
     if (!email.includes("@") || !email.includes(".")) { setError("Enter a valid email address."); return false; }
     if (password.length < 8)                          { setError("Password must be at least 8 characters."); return false; }
@@ -65,6 +71,8 @@ export default function RegisterPage() {
     if (role === "ngo") {
       await supabase.from("ngos").insert({
         id: userId, org_name: orgName.trim(), kyc_status: "pending", contact_phone: contactPhone.trim(),
+        state: ngoState.trim() || null, district: ngoDistrict.trim() || null,
+        city: ngoCity.trim() || null, landmark: ngoLandmark.trim() || null,
       });
     }
     if (role === "volunteer") {
@@ -165,6 +173,46 @@ export default function RegisterPage() {
                       placeholder="e.g. +91 98765 43210"
                       value={contactPhone}
                       onChange={(e) => setContactPhone(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">State *</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g. Maharashtra"
+                      value={ngoState}
+                      onChange={(e) => setNgoState(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">District</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g. Mumbai Suburban"
+                      value={ngoDistrict}
+                      onChange={(e) => setNgoDistrict(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">City *</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g. Mumbai"
+                      value={ngoCity}
+                      onChange={(e) => setNgoCity(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Landmark</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g. Near Andheri Station"
+                      value={ngoLandmark}
+                      onChange={(e) => setNgoLandmark(e.target.value)}
                     />
                   </div>
                 </>
