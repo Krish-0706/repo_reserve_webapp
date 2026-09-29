@@ -1,5 +1,4 @@
 "use client";
-// src/app/(auth)/login/page.tsx
 
 import { useState } from "react";
 import Link from "next/link";

@@ -1,4 +1,3 @@
-// src/app/api/listings/nearby/route.ts
 //
 // GET /api/listings/nearby?lat=&lng=&radius=
 //

@@ -1,4 +1,3 @@
-// src/app/api/admin/audit/route.ts
 //
 // GET /api/admin/audit
 //

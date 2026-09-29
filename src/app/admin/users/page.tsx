@@ -1,11 +1,4 @@
 "use client";
-// src/app/admin/users/page.tsx
-//
-// M6 — User Management
-//
-// Shared Sidebar + navConfig.
-// Fetch all non-pending users from API (active, suspended, rejected).
-// Searchable by email. Table with Suspend action.
 
 import { useState, useEffect, useCallback } from "react";
 import Sidebar from "@/components/shared/Sidebar";

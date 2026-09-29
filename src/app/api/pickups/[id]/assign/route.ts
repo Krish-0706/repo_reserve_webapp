@@ -1,8 +1,5 @@
-// src/app/api/pickups/[id]/assign/route.ts
-//
-// PATCH /api/pickups/:id/assign
-// NGO assigns a volunteer to a claimed pickup.
-// Body: { volunteer_id: string }
+
+
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";

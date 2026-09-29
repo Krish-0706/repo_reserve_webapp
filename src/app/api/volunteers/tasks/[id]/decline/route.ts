@@ -1,7 +1,5 @@
-// src/app/api/volunteers/tasks/[id]/decline/route.ts
-//
-// PATCH /api/volunteers/tasks/:id/decline
-// Volunteer declines an assigned task → status reverts to 'claimed', volunteer_id cleared
+
+
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";

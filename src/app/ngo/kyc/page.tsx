@@ -1,10 +1,4 @@
 "use client";
-// src/app/ngo/kyc/page.tsx
-//
-// M6 — NGO KYC Submission Page
-//
-// Allows pending NGOs to upload their KYC documents (URLs) via Cloudinary
-// and save them to users.kyc_documents. Once saved, they await admin approval.
 
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/shared/Sidebar";

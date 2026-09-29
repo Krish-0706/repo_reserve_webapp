@@ -1,10 +1,4 @@
 "use client";
-// src/app/admin/audit/page.tsx
-//
-// M6 — Audit Log
-//
-// Shared Sidebar + navConfig.
-// Read-only view of the audit_log table, fetched via GET /api/admin/audit.
 
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/shared/Sidebar";

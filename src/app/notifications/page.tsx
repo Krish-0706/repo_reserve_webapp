@@ -1,9 +1,4 @@
 "use client";
-// src/app/notifications/page.tsx
-//
-// Shared across all roles. Fetches the current user's role to build the
-// FULL sidebar nav (via navConfig)
-// mark-all-as-read, and a real empty-state illustration.
 
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";

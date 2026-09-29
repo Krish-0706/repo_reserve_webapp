@@ -1,10 +1,4 @@
 "use client";
-// src/app/(donor)/listings/[id]/page.tsx
-//
-// Reverted to original single-column design, with:
-//  - food_name added to title + info grid
-//  - shared Sidebar component
-//  - Spinner / PageLoader for loading states
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";

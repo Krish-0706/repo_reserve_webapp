@@ -1,5 +1,4 @@
 "use client";
-// src/app/(auth)/register/page.tsx
 
 import { useState } from "react";
 import Link from "next/link";
@@ -42,6 +41,7 @@ export default function RegisterPage() {
     if (role === "volunteer" && !volName.trim())       { setError("Your name is required."); return false; }
     if (!email.includes("@") || !email.includes(".")) { setError("Enter a valid email address."); return false; }
     if (password.length < 8)                          { setError("Password must be at least 8 characters."); return false; }
+    if (password.length > 12)                         { setError("Password must be at most 12 characters."); return false; }
     if (password !== confirm)                          { setError("Passwords do not match."); return false; }
     return true;
   };
@@ -86,7 +86,6 @@ export default function RegisterPage() {
     setLoading(false);
   };
 
-  // ── Success screen ────────────────────────────────────────────────────────
   if (success) {
     return (
       <div className="success-root">
@@ -107,7 +106,6 @@ export default function RegisterPage() {
     );
   }
 
-  // ── Register form ─────────────────────────────────────────────────────────
   return (
     <div className="reg-root">
 
@@ -249,10 +247,11 @@ export default function RegisterPage() {
                   <input
                     type={showPass ? "text" : "password"}
                     className="form-input"
-                    placeholder="Min. 8 characters"
+                    placeholder="8–12 characters"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete="new-password"
+                    maxLength={12}
                     style={{ paddingRight: "40px" }}
                   />
                   <button type="button" className="pass-toggle" onClick={() => setShowPass(v => !v)}>
@@ -274,6 +273,7 @@ export default function RegisterPage() {
                     value={confirm}
                     onChange={(e) => setConfirm(e.target.value)}
                     autoComplete="new-password"
+                    maxLength={12}
                     style={{ paddingRight: "40px" }}
                   />
                   <button type="button" className="pass-toggle" onClick={() => setShowConfirm(v => !v)}>

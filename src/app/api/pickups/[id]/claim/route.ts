@@ -1,8 +1,5 @@
-// src/app/api/pickups/[id]/claim/route.ts
-//
-// POST /api/pickups/[id]/claim
-//
-// Claims a listing for the authenticated NGO.
+
+
 // [id] is the listing_id (not pickup_id).
 //
 // What this route does atomically:

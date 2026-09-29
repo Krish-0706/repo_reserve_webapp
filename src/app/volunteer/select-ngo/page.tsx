@@ -1,11 +1,4 @@
 "use client";
-// src/app/volunteer/select-ngo/page.tsx
-//
-// Onboarding page — shown after first volunteer login.
-// Volunteer picks which NGO they want to work with.
-// Now includes a search bar and cascading location filters
-// (state → district → city → landmark) so volunteers can
-// find NGOs near them.
 
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";

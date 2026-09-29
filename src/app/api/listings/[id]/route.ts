@@ -1,8 +1,5 @@
-// src/app/api/listings/[id]/route.ts
-//
-// GET    /api/listings/[id]  — fetch a single listing (donor sees own, NGO sees active)
-// PATCH  /api/listings/[id]  — donor edits own listing (status, etc.)
-// DELETE /api/listings/[id]  — donor or admin deletes/expires listing
+
+
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";

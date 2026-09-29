@@ -1,9 +1,4 @@
 "use client";
-// src/app/volunteer/tasks/[id]/page.tsx
-//
-// M3 — Volunteer Task Detail
-// Shows full task details, directions deeplink, status timeline,
-// and completion with Cloudinary photo proof upload.
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";

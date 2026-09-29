@@ -1,18 +1,5 @@
 "use client";
-// src/components/shared/Sidebar.tsx
-//
-// Shared sidebar for all role dashboards (donor, ngo, volunteer, admin).
-// Pass `role` and `items` — active item is determined by current pathname.
-//
-// Usage:
-//   <Sidebar
-//     role="donor"
-//     items={[
-//       { label: "Dashboard", href: "/donor/dashboard", icon: "grid" },
-//       { label: "Post Listing", href: "/donor/listings/create", icon: "plus" },
-//       { label: "Impact", href: "/donor/impact", icon: "chart" },
-//     ]}
-//   />
+
 
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -28,7 +15,7 @@ type NavItem = {
 };
 
 type SidebarProps = {
-  role: string;        // displayed under logo, e.g. "Donor Account"
+  role: string;
   items: NavItem[];
 };
 

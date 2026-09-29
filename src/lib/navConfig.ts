@@ -1,7 +1,3 @@
-// Single source of truth for each role's sidebar nav items.
-// Both each role's own dashboard AND the shared /notifications page
-// import from here — editing an array in one place keeps both in sync,
-// instead of duplicating (and eventually mismatching) the same list.
 
 export type IconName = "grid" | "plus" | "chart" | "bell" | "map" | "truck" | "list" | "users" | "shield" | "star";
 

@@ -1,7 +1,3 @@
-// src/types/database.ts
-// Manual stub matching ReServe schema (PRD Section 5)
-// Replace with generated types after running:
-//   npx supabase gen types typescript --project-id <your-id> > src/types/database.ts
 
 export type UserRole    = "donor" | "ngo" | "volunteer" | "admin";
 export type UserStatus  = "pending" | "active" | "rejected" | "suspended";

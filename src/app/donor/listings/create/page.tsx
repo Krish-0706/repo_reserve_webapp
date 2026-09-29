@@ -1,11 +1,4 @@
 "use client";
-// src/app/(donor)/listings/create/page.tsx
-//
-// v2 changes:
-//  - Step 2 location tip card removed → replaced with "What happens next" timeline card
-//  - PageLoader shown during photo upload, final submit, and navigation
-//  - Spinner inside buttons during async actions
-//  - Refined spacing throughout
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";

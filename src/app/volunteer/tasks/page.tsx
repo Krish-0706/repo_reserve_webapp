@@ -1,9 +1,4 @@
 "use client";
-// src/app/volunteer/tasks/page.tsx
-//
-// M3 — Volunteer Task Feed
-// Shows assigned + in-progress tasks with accept/decline actions.
-// Stat cards at top: Tasks Completed, Hours Logged, Rating.
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";

@@ -1,12 +1,3 @@
-// src/lib/leaflet-fix.ts
-//
-// Fixes Leaflet's default marker icon resolution failure in Next.js.
-// Webpack cannot resolve Leaflet's internal image paths at build time.
-// This override uses CDN URLs instead.
-//
-// Import this file at the top of any component that uses Leaflet:
-//   import "@/lib/leaflet-fix";
-
 import L from "leaflet";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

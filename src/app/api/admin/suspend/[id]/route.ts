@@ -1,8 +1,5 @@
-// src/app/api/admin/suspend/[id]/route.ts
-//
-// POST /api/admin/suspend/:id
-//
-// Suspends an active user account with cascading effects.
+
+
 // Thin route: auth-check → call SECURITY DEFINER → return result.
 
 import { NextRequest, NextResponse } from "next/server";

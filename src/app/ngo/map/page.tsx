@@ -1,16 +1,4 @@
 "use client";
-// src/app/(ngo)/map/page.tsx
-//
-// M2 — NGO Discovery & Claim
-//
-// Layout:
-//   Left (60%) — full-height Leaflet map with listing pins
-//   Right (40%) — sidebar panel:
-//       • Default: listing feed cards (scrollable)
-//       • On pin click: listing detail with Claim button
-//
-// Realtime: Supabase subscription on public.listings keeps pins live.
-// Claim: POST /api/pickups/[id]/claim → removes pin, updates panel.
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
@@ -269,6 +257,7 @@ export default function NGOMapPage() {
   const [claiming, setClaiming] = useState(false);
   const [claimError, setClaimError] = useState("");
 
+
   const [toast, setToast] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -276,16 +265,34 @@ export default function NGOMapPage() {
     setTimeout(() => setToast(null), 3000);
   };
 
-  // Fetch active listings
-  const fetchListings = useCallback(async () => {
-    const res = await fetch("/api/listings/nearby");
+  // Fetch active listings — pass NGO's lat/lng to activate Haversine filter
+  const fetchListings = useCallback(async (loc?: { lat: number; lng: number }) => {
+    const params = loc
+      ? `?lat=${loc.lat}&lng=${loc.lng}&radius=10`
+      : "";
+    const res = await fetch(`/api/listings/nearby${params}`);
     const json = await res.json();
     if (!json.error) setListings(json.data ?? []);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchListings();
+    // Get NGO's browser location, then fetch filtered listings
+    if (typeof navigator !== "undefined" && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          fetchListings(loc);
+        },
+        () => {
+          // Permission denied or unavailable — fall back to all listings
+          fetchListings();
+        },
+        { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+      );
+    } else {
+      fetchListings();
+    }
 
     // Supabase Realtime — subscribe to public.listings changes
     const channel = supabase
@@ -393,6 +400,7 @@ export default function NGOMapPage() {
               {listings.length} ACTIVE
             </span>
           </div>
+
           <style>{`@keyframes reserve-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }`}</style>
         </div>
 

@@ -1,7 +1,5 @@
-// src/app/api/volunteers/tasks/[id]/accept/route.ts
-//
-// PATCH /api/volunteers/tasks/:id/accept
-// Volunteer accepts an assigned task → status becomes 'in_progress'
+
+
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";

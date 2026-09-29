@@ -1,6 +1,4 @@
 "use client";
-// src/app/page.tsx
-// ReServe Landing Page — no <style> tags, all CSS in reserve.css
 
 import { useState } from "react";
 import Link from "next/link";

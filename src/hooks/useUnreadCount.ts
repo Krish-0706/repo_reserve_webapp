@@ -1,8 +1,4 @@
 "use client";
-// Live unread notification count for the current user.
-// Used to feed the badge on the Sidebar's "Notifications" nav item —
-// import this in any dashboard page and pass the value straight into
-// that page's items array.
 
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";

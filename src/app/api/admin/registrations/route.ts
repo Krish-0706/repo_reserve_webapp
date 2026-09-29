@@ -1,4 +1,3 @@
-// src/app/api/admin/registrations/route.ts
 //
 // GET /api/admin/registrations
 //

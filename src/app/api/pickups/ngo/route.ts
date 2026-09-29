@@ -1,4 +1,3 @@
-// src/app/api/pickups/ngo/route.ts
 //
 // GET /api/pickups/ngo
 // Returns all pickups for the authenticated NGO,

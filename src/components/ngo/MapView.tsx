@@ -1,11 +1,4 @@
 "use client";
-// src/components/ngo/MapView.tsx
-//
-// Leaflet map component — dynamically imported (no SSR).
-// Renders listing pins colour-coded by time urgency.
-// Clicking a pin triggers onPinClickAction with the full listing object.
-//
-// Import leaflet-fix before Leaflet to patch marker icon resolution.
 
 import { useEffect, useRef } from "react";
 import type { MapListing } from "@/app/ngo/map/page";

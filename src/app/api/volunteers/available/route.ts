@@ -1,4 +1,3 @@
-// src/app/api/volunteers/available/route.ts
 //
 // GET /api/volunteers/available
 // Returns all active volunteers for NGO volunteer assignment.

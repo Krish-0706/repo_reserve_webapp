@@ -1,10 +1,4 @@
 "use client";
-// src/app/(donor)/dashboard/page.tsx
-//
-// v2 changes:
-//  - PageLoader shown while navigating to create/detail pages
-//  - Refined spacing (more breathing room between sections)
-//  - Loading skeletons use shimmer animation
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";

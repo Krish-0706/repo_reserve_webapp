@@ -1,15 +1,4 @@
 "use client";
-// src/app/admin/kyc/page.tsx
-//
-// M6 — KYC Approval Queue
-//
-// Refactored to:
-//  - Use shared Sidebar + navConfig (consistent with all dashboards)
-//  - Fetch from GET /api/admin/registrations (not direct Supabase query)
-//  - Display uploaded KYC documents (Cloudinary thumbnails)
-//  - Approve/Reject via POST /api/admin/approve|reject/:id
-//  - Show role-specific info (org_name for NGOs)
-//  - Custom-SVG empty state (consistent with other dashboards)
 
 import { useState, useEffect, useCallback } from "react";
 import Sidebar from "@/components/shared/Sidebar";

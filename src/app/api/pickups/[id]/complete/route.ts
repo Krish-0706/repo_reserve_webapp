@@ -1,8 +1,5 @@
-// src/app/api/pickups/[id]/complete/route.ts
-//
-// PATCH /api/pickups/:id/complete
-// Volunteer completes a task with photo proof.
-// Body: { proof_photo_url: string }
+
+
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";

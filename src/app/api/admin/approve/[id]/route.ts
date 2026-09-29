@@ -1,8 +1,5 @@
-// src/app/api/admin/approve/[id]/route.ts
-//
-// POST /api/admin/approve/:id
-//
-// Approves a pending user registration.
+
+
 // Thin route: auth-check → call SECURITY DEFINER → return result.
 // All business logic lives in admin_approve_user() in the DB.
 

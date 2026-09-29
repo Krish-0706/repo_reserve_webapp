@@ -1,8 +1,5 @@
-// src/app/api/admin/reject/[id]/route.ts
-//
-// POST /api/admin/reject/:id
-//
-// Rejects a pending user registration.
+
+
 // Thin route: auth-check → call SECURITY DEFINER → return result.
 
 import { NextRequest, NextResponse } from "next/server";

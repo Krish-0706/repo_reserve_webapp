@@ -1,9 +1,4 @@
 "use client";
-// src/app/(ngo)/pickups/page.tsx
-//
-// Active Pickups — shows all pickups claimed by this NGO
-// Status: claimed → assigned → in_progress → completed
-// NGO can assign a volunteer from this page
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";

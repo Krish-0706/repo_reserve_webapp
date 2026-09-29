@@ -1,9 +1,4 @@
 "use client";
-// src/components/shared/Loader.tsx
-//
-// Two exports:
-//  - <Spinner />     small inline spinner for inside buttons
-//  - <PageLoader />  full-screen overlay shown during navigation / page transitions
 
 export function Spinner({ size = 16, color = "#fff" }: { size?: number; color?: string }) {
   return (

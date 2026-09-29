@@ -1,4 +1,3 @@
-// src/app/api/volunteers/tasks/route.ts
 //
 // GET /api/volunteers/tasks
 // Returns all pickups assigned to the authenticated volunteer,

@@ -1,4 +1,3 @@
-// src/app/api/listings/route.ts
 // Updated: now accepts and validates `food_name`
 
 import { NextRequest, NextResponse } from "next/server";
